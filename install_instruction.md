@@ -14,6 +14,10 @@ start the backend
     python3 manage.py runserver
 
 go to  `http://127.0.0.1:8000/admin` in browser
-login with 
+
+login to the admin page login with the following credentials 
     user: admin
-    pass: password123
+    password: password
+
+to view the restful API go to`http://127.0.0.1:8000/api` in browser
+
