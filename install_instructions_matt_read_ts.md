@@ -1,9 +1,13 @@
-after cloning the repo:
+Clone the Repo
+    git clone https://github.com/andreas-04/iCare
+
 start a virtual enviorment
     python3 -m venv venv
 
-install django 
+install dependencies  
     pip install django
+    pip install djangorestframework
+    pip install django-cors-headers
 
 start the backend
     cd backend
