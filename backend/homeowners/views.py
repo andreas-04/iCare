@@ -1,18 +1,39 @@
 from django.shortcuts import render
-
 from django.contrib.auth.models import User
-from rest_framework import viewsets
+from rest_framework.response import Response
+from django.contrib.auth import authenticate, login
+from rest_framework import viewsets, status
+from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from homeowners.serializers import UserSerializer
 from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, ServicePlan
-from .serializers import MortgageInsuranceSerializer, LawnSerializer, InteriorSerializer, InternetSerializer, PhoneSerializer, ServicePlanSerializer
+from .serializers import UserSerializer, MortgageInsuranceSerializer, LawnSerializer, InteriorSerializer, InternetSerializer, PhoneSerializer, ServicePlanSerializer
 
+class RegisterView(APIView):
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class LoginView(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            login(request, user)
+            return Response({"detail": "Login successful"})
+        return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
+
+
 
 class MortgageInsuranceViewSet(viewsets.ModelViewSet):
     queryset = MortgageInsurance.objects.all()
