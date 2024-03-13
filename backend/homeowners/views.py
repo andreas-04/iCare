@@ -9,6 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 from homeowners.serializers import UserSerializer
 from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, ServicePlan
 from .serializers import UserSerializer, MortgageInsuranceSerializer, LawnSerializer, InteriorSerializer, InternetSerializer, PhoneSerializer, ServicePlanSerializer
+from django.http import JsonResponse
+from django.contrib.auth import logout
 
 class RegisterView(APIView):
     def post(self, request):
@@ -27,6 +29,10 @@ class LoginView(APIView):
             login(request, user)
             return Response({"detail": "Login successful"})
         return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+def logout_view(request):
+    logout(request)
+    return JsonResponse({'message': 'Successfully logged out.'})
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

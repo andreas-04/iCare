@@ -20,6 +20,16 @@ export default{
             throw error; // Rethrow the error so it can be caught and handled in the calling function
         }
     },
+    logout: async () => {
+        try {
+            const response = await apiClient.post('/logout/', {}, { withCredentials: true });
+            console.log(response.data);
+            // Handle successful logout, e.g., redirect to login page
+        } catch (error) {
+            console.error('Error logging out:', error);
+            // Handle errors, e.g., show an error message
+        }
+    },
     
     
 }

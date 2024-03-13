@@ -10,7 +10,7 @@ const apiClient = axios.create({
     withCredentials: true,
 });
 
-const Authentication = () => {
+const Authentication = ({ onAuthenticated }) => {
     const [view, setView] = useState('login'); // Default view is login
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -31,6 +31,7 @@ const Authentication = () => {
                 });
                 console.log(response.data);
                 console.log("Success!!")
+                onAuthenticated();
                 // Handle successful login
             } else {
                 const response = await apiClient.post(`/register/`, {
