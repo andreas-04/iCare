@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Card, Input, Typography, Button, Select, Option } from '@mui/joy';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:8000/api',
@@ -54,7 +55,8 @@ const Authentication = ({ onAuthenticated }) => {
     };
 
     return (
-        <Card>
+        <Card sx={{ width:"30%", display: 'flex', flexDirection: 'column', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'
+    }}>
             <Typography level='h2' color='primary' align='left'>{view.charAt(0).toUpperCase() + view.slice(1)}</Typography>
             {view === 'login' ? (
                 <>
@@ -89,6 +91,10 @@ const Authentication = ({ onAuthenticated }) => {
 
         </Card>
     );
+};
+
+Authentication.propTypes = {
+    onAuthenticated: PropTypes.func.isRequired,
 };
 
 export default Authentication;

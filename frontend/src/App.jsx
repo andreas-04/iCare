@@ -9,12 +9,17 @@ function App() {
     const sessionId = document.cookie.split('; ').find(row => row.startsWith('sessionid='));
     if (sessionId) {
       setIsAuthenticated(true);
+    }else{
+      console.log("No sesh ID found :(");
+      console.log(document.cookie);
     }
   }, []);
+  console.log(isAuthenticated);
+
 
   return (
     <>
-      {isAuthenticated ? <Root /> : <Authentication onAuthenticated={() => setIsAuthenticated(true)} />}
+      {isAuthenticated ? <Root/> : <Authentication onAuthenticated={() => setIsAuthenticated(true)} />}
     </>
   )
 }

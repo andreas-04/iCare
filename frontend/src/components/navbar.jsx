@@ -5,13 +5,17 @@ import HomeIcon from '@mui/icons-material/Home';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
-import logout from '../api.js';
-
+import api from '../api.js';
 
 export default function Navbar() {
     const handleLogout = () => {
-        logout();
-        // Optionally, redirect the user to the login page
+        api.logout()
+        .then(() => {
+           console.log('Logged out successfully');
+        })
+        .catch(error => {
+           console.error('Error logging out:', error);
+        });
     };
     return (
       <ButtonGroup

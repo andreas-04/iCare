@@ -5,7 +5,6 @@ import Navbar from "./navbar";
 import Profile from "./Profile"
 import Notifications from "./Notifications";
 import Dashboard  from "./Dashboard";
-import { Padding } from "@mui/icons-material";
 const Root = () => {
     return(
     <>
@@ -13,7 +12,7 @@ const Root = () => {
       container 
       spacing={2}
       sx={{ flexGrow: 1 }}
-      alignItems="stretch"
+       alignItems="stretch"
       >
         <Grid item xs={1} sx={{padding: "25px"}}>
             <Navbar/>
@@ -21,7 +20,7 @@ const Root = () => {
         <Grid item xs={11} sx={{padding: "25px"}}>
             <Sheet
             variant='outlined'
-            sx={{ borderRadius: '10px', padding: '20px'}}>
+            sx={{ borderRadius: '10px', padding: '20px',}}>
                 <Typography align="left" level="h1">iCare</Typography>
                 <Divider orientation="horizontal" flexitem="true" sx={{ width: '50%' }} />
                 <Card sx={{margin: "25px"}}>

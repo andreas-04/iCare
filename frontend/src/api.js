@@ -22,7 +22,16 @@ export default{
     },
     logout: async () => {
         try {
-            const response = await apiClient.post('/logout/', {}, { withCredentials: true });
+            // Retrieve the CSRF token from cookies or another source
+            const csrfToken = document.cookie.split('; ').find(row => row.startsWith('csrftoken')).split('=')[1];
+
+            // Include the CSRF token in the request headers
+            const response = await apiClient.post('/logout/', {}, {
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                },
+                withCredentials: true,
+            });
             console.log(response.data);
             // Handle successful logout, e.g., redirect to login page
         } catch (error) {
