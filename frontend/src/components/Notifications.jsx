@@ -12,7 +12,7 @@ import AccordionSummary, {
 const Notifications = () => {
     return(
         <>
-            <Typography textAlign="left" level='h3' paddingLeft={"1%"}>My Notifications</Typography>
+            <Typography textAlign="left" level='h3' paddingLeft={"1%"}>My Matches</Typography>
             <Table aria-label="basic table" size='md'>
                 <thead>
                     <tr>
@@ -61,7 +61,7 @@ const Notifications = () => {
                             <AccordionDetails variant="soft">
                                 <Grid container spacing={2} sx={{ flexGrow: 1 }} alignItems="stretch">
                                     <Grid item xs={9}>
-                                        <Card variant='outlined'>
+                                        <Card variant='outlined' >
                                             <Typography level="title-md" align="left">Service Description </Typography>
                                             <Divider orientation="horizontal" flexitem="true" ></Divider>
                                             <Typography level="body-md" align="left">Transform your outdoor space with our expert lawn mowing and hedge trimming services, tailored to enhance the beauty and health of your property. Our skilled team provides meticulous lawn mowing, ensuring a uniform and well-manicured appearance that instantly boosts curb appeal. Additionally, our hedge trimming service shapes and maintains your hedges with precision, creating clean lines and defined borders that elevate the overall aesthetic of your landscape. With our attention to detail and commitment to quality, you can trust us to keep your outdoor space looking its best year-round.</Typography>
