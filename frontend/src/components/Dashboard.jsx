@@ -14,7 +14,7 @@ const Dashboard = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                height: '100%', // This makes the Box take up the full height of the viewport
+                height: '100%', 
             }}
         >
             <Card sx={{ width: "50%", height: "30%" }}>

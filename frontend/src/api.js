@@ -14,7 +14,9 @@ export default{
     userLogin: async (credentials) => {
         try {
             const response = await apiClient.post('/login/', credentials);
+            console.log(response);
             return response; // Ensure the response is returned
+            
         } catch (error) {
             console.error(error);
             throw error; // Rethrow the error so it can be caught and handled in the calling function
@@ -39,6 +41,20 @@ export default{
             // Handle errors, e.g., show an error message
         }
     },
+    getProperties(userId){
+        return apiClient.get(`/users/${userId}/properties`);
+    },
+    addProperty(userId){
+        return apiClient.post(`/properties/`, userId);
+    },
+    deleteProperty(propertyId){
+        return apiClient.delete(`/properties/${propertyId}`);
+    },
+    putProperty(propertyId, propertyData){
+        return apiClient.put(`/properties/${propertyId}`, propertyData);
+    },
+
+
     
     
 }
