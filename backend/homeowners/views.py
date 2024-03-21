@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import authenticate, login
 from rest_framework import viewsets, status
@@ -7,8 +8,10 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from homeowners.serializers import UserSerializer
-from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, ServicePlan
-from .serializers import UserSerializer, MortgageInsuranceSerializer, LawnSerializer, InteriorSerializer, InternetSerializer, PhoneSerializer, ServicePlanSerializer
+from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, ServicePlan, Property
+from .serializers import UserSerializer, MortgageInsuranceSerializer, LawnSerializer, InteriorSerializer, InternetSerializer, PhoneSerializer, ServicePlanSerializer, PropertySerializer
+from django.http import JsonResponse
+from django.contrib.auth import logout
 
 class RegisterView(APIView):
     def post(self, request):
@@ -25,14 +28,28 @@ class LoginView(APIView):
         user = authenticate(username=username, password=password)
         if user:
             login(request, user)
-            return Response({"detail": "Login successful"})
+            response = JsonResponse({"detail": "Login successful"}, status=status.HTTP_200_OK)
+            response.set_cookie('user_id', user.id, httponly=True, secure=True, samesite='Strict')
+            return response
+        
         return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+def logout_view(request):
+    logout(request)
+    return JsonResponse({'message': 'Successfully logged out.'})
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
+    @action(detail=True, methods=['get'])
+    def properties(self, request, pk=None):
+        user = self.get_object()
+        properties = Property.objects.filter(user=user)
+        serializer = PropertySerializer(properties, many=True)
+        return Response(serializer.data)
+    
 
 
 class MortgageInsuranceViewSet(viewsets.ModelViewSet):
@@ -58,6 +75,10 @@ class PhoneViewSet(viewsets.ModelViewSet):
 class ServicePlanViewSet(viewsets.ModelViewSet):
     queryset = ServicePlan.objects.all()
     serializer_class = ServicePlanSerializer
+
+class PropertyViewSet(viewsets.ModelViewSet):
+    queryset = Property.objects.all()
+    serializer_class = PropertySerializer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
