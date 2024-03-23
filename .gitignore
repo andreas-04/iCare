@@ -1,5 +1,11 @@
 venv/
 
 # Ignore package lock files
-package-loc.json
+package-lock.json
 package.json
+
+frontend/node_modules
+frontend/package-lock.json
+frontend/package.json
+
+node_modules
