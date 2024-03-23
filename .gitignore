@@ -1,1 +1,5 @@
 venv/
+
+# Ignore package lock files
+package-loc.json
+package.json
