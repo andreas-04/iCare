@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, ServicePlan, Property
+from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, LawnServicePlan, Property, InteriorServicePlan, InternetServicePlan, PhoneServicePlan
 
 class UserSerializer(serializers.ModelSerializer):
     groups = serializers.SlugRelatedField(
@@ -45,11 +45,23 @@ class PhoneSerializer(serializers.ModelSerializer):
         model = Phone
         fields = '__all__'
 
-class ServicePlanSerializer(serializers.ModelSerializer):
+class LawnServicePlanSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ServicePlan
+        model = LawnServicePlan
         fields = '__all__'
-
+class InteriorServicePlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InteriorServicePlan
+        fields = '__all__'
+class InternetServicePlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InternetServicePlan
+        fields = '__all__'
+class PhoneServicePlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PhoneServicePlan
+        fields = '__all__'
+        
 class PropertySerializer(serializers.ModelSerializer):
     class Meta:
         model = Property
