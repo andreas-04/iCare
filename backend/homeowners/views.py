@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -12,6 +12,8 @@ from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, Property
 from .serializers import UserSerializer, MortgageInsuranceSerializer, LawnSerializer, InteriorSerializer, InternetSerializer, PhoneSerializer, LawnServicePlanSerializer, InteriorServicePlanSerializer, InternetServicePlanSerializer, PhoneServicePlanSerializer, PropertySerializer
 from django.http import JsonResponse
 from django.contrib.auth import logout
+from .complex_scoring_functions import calculate_internet_score, calculate_lawn_score, calculate_phone_score
+from .serializers import ScoredLawnServicePlanSerializer
 
 class RegisterView(APIView):
     def post(self, request):
@@ -92,5 +94,29 @@ class PropertyViewSet(viewsets.ModelViewSet):
 
 
 
-def calculate_lawn_score(self, service_plan, lawn):
-    score = 
+
+class ScoredLawnPlans(APIView):
+    def get(self, request, property_id):
+        # Fetch the Lawn instance associated with the property
+        lawn = get_object_or_404(Lawn, property_id=property_id)
+        
+        # Fetch all LawnServicePlans
+        service_plans = LawnServicePlan.objects.all()
+        
+        # Calculate scores for each service plan and store them in a list
+        scored_service_plans = []
+        for plan in service_plans:
+            score = calculate_lawn_score(plan.cost, lawn.budget, lawn.budget_tolerance, lawn.budget_weight, plan.frequency, lawn.frequency, lawn.frequency_weight)
+            # Append the plan and its score to the list
+            scored_service_plans.append({
+                'service_plan': plan,
+                'score': score
+            })
+        
+        # Sort the scored service plans by score in descending order
+        scored_service_plans.sort(key=lambda x: x['score'], reverse=True)
+        
+        # Serialize the scored service plans
+        serializer = ScoredLawnServicePlanSerializer(scored_service_plans, many=True)
+        
+        return Response(serializer.data)

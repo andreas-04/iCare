@@ -108,8 +108,3 @@ class PhoneServicePlan(models.Model):
     )
     notification_sent = models.BooleanField(default=False)
     notification_date = models.DateTimeField(null=True, blank=True)
-
-    
-
-    
-

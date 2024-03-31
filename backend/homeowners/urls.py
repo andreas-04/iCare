@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import RegisterView, LoginView, UserViewSet, MortgageInsuranceViewSet, LawnViewSet, InteriorViewSet, InternetViewSet, PhoneViewSet, LawnServicePlanViewSet, InteriorServicePlanViewSet, InternetServicePlanViewSet, PhoneServicePlanViewSet, logout_view, PropertyViewSet
+from .views import RegisterView, LoginView, UserViewSet, MortgageInsuranceViewSet, LawnViewSet, InteriorViewSet, InternetViewSet, PhoneViewSet, LawnServicePlanViewSet, InteriorServicePlanViewSet, InternetServicePlanViewSet, PhoneServicePlanViewSet, logout_view, PropertyViewSet, ScoredLawnPlans
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -19,6 +19,7 @@ router.register(r'property', PropertyViewSet )
 urlpatterns = [
     path('', include(router.urls)),
     path('register/', RegisterView.as_view(), name='register'),
+    path('scored-lawn-plans/<int:property_id>/', ScoredLawnPlans.as_view(), name='scored-lawn-plans'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', logout_view, name='logout'),
 

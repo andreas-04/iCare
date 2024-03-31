@@ -28,6 +28,7 @@ const Root = () => {
                         <Route path="/" element={<Dashboard/>}/>
                         <Route path = "/profile" element={<Profile/>}/>
                         <Route path = "/notifications" element={<Notifications/>}/>
+                        {/* <Route path = "/testing" element={<RandomNewElement/>}/> */}
                     </Routes>
                 </Card>
 

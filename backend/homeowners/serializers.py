@@ -49,6 +49,11 @@ class LawnServicePlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = LawnServicePlan
         fields = '__all__'
+
+class ScoredLawnServicePlanSerializer(serializers.Serializer):
+    service_plan = LawnServicePlanSerializer(read_only=True)
+    score = serializers.FloatField()
+
 class InteriorServicePlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = InteriorServicePlan
@@ -61,7 +66,7 @@ class PhoneServicePlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = PhoneServicePlan
         fields = '__all__'
-        
+
 class PropertySerializer(serializers.ModelSerializer):
     class Meta:
         model = Property
@@ -78,5 +83,6 @@ class PropertySerializer(serializers.ModelSerializer):
         Phone.objects.create(property=property_instance)
 
         return property_instance
+
 
 
