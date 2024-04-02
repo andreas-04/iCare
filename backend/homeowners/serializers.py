@@ -58,14 +58,25 @@ class InteriorServicePlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = InteriorServicePlan
         fields = '__all__'
+class ScoredInteriorServicePlanSerializer(serializers.ModelSerializer):
+    service_plan = InteriorServicePlan(read_only=True)
+    score = serializers.FloatField()
+
 class InternetServicePlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = InternetServicePlan
         fields = '__all__'
+class ScoredInternetServicePlanSerializer(serializers.ModelSerializer):
+    service_plan = InternetServicePlan(read_only=True)
+    score = serializers.FloatField()
+
 class PhoneServicePlanSerializer(serializers.ModelSerializer):
     class Meta:
         model = PhoneServicePlan
         fields = '__all__'
+class ScoredPhoneServicePlanSerializer(serializers.ModelSerializer):
+    service_plan = PhoneServicePlan(read_only=True)
+    score = serializers.FloatField()
 
 class PropertySerializer(serializers.ModelSerializer):
     class Meta:

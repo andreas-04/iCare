@@ -1,4 +1,4 @@
-def calculate_lawn_score(cost, budget, budget_tolerance, cost_weight, frequency, desired_frequency, frequency_weight):
+def calculate_lawn_interior_score(cost, budget, budget_tolerance, cost_weight, frequency, desired_frequency, frequency_weight):
     cost = cost * frequency
     if(cost > budget + (budget * budget_tolerance)):
         return 0.0

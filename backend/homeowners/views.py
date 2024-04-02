@@ -12,8 +12,8 @@ from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, Property
 from .serializers import UserSerializer, MortgageInsuranceSerializer, LawnSerializer, InteriorSerializer, InternetSerializer, PhoneSerializer, LawnServicePlanSerializer, InteriorServicePlanSerializer, InternetServicePlanSerializer, PhoneServicePlanSerializer, PropertySerializer
 from django.http import JsonResponse
 from django.contrib.auth import logout
-from .complex_scoring_functions import calculate_internet_score, calculate_lawn_score, calculate_phone_score
-from .serializers import ScoredLawnServicePlanSerializer
+from .complex_scoring_functions import calculate_internet_score, calculate_lawn_interior_score, calculate_phone_score
+from .serializers import ScoredLawnServicePlanSerializer, ScoredInteriorServicePlanSerializer, ScoredInternetServicePlanSerializer, ScoredPhoneServicePlanSerializer
 
 class RegisterView(APIView):
     def post(self, request):
@@ -106,7 +106,7 @@ class ScoredLawnPlans(APIView):
         # Calculate scores for each service plan and store them in a list
         scored_service_plans = []
         for plan in service_plans:
-            score = calculate_lawn_score(plan.cost, lawn.budget, lawn.budget_tolerance, lawn.budget_weight, plan.frequency, lawn.frequency, lawn.frequency_weight)
+            score = calculate_lawn_interior_score(plan.cost, lawn.budget, lawn.budget_tolerance, lawn.budget_weight, plan.frequency, lawn.frequency, lawn.frequency_weight)
             # Append the plan and its score to the list
             scored_service_plans.append({
                 'service_plan': plan,
@@ -118,5 +118,82 @@ class ScoredLawnPlans(APIView):
         
         # Serialize the scored service plans
         serializer = ScoredLawnServicePlanSerializer(scored_service_plans, many=True)
+        
+        return Response(serializer.data)
+
+class ScoredInteriorPlans(APIView):
+    def get(self, request, property_id):
+        # Fetch the Interior instance associated with the property
+        interior = get_object_or_404(Interior, property_id=property_id)
+        
+        # Fetch all InteriorServicePlans
+        service_plans = InteriorServicePlan.objects.all()
+        
+        # Calculate scores for each service plan and store them in a list
+        scored_service_plans = []
+        for plan in service_plans:
+            score = calculate_lawn_interior_score(plan.cost, interior.budget, interior.budget_tolerance, interior.budget_weight, plan.frequency, interior.frequency, interior.frequency_weight)
+            # Append the plan and its score to the list
+            scored_service_plans.append({
+                'service_plan': plan,
+                'score': score
+            })
+        
+        # Sort the scored service plans by score in descending order
+        scored_service_plans.sort(key=lambda x: x['score'], reverse=True)
+        
+        # Serialize the scored service plans
+        serializer = ScoredInteriorServicePlanSerializer(scored_service_plans, many=True)
+        
+        return Response(serializer.data)
+    
+class ScoredInternetPlans(APIView):
+    def get(self, request, property_id):
+        # Fetch the Internet instance associated with the property
+        internet = get_object_or_404(Internet, property_id=property_id)
+        
+        # Fetch all InternetServicePlans
+        service_plans = InternetServicePlan.objects.all()
+        
+        # Calculate scores for each service plan and store them in a list
+        scored_service_plans = []
+        for plan in service_plans:
+            score = calculate_internet_score(plan.cost, internet.budget, internet.budget_tolerance, internet.budget_weight, plan.frequency, internet.frequency, internet.frequency_weight)
+            # Append the plan and its score to the list
+            scored_service_plans.append({
+                'service_plan': plan,
+                'score': score
+            })
+        
+        # Sort the scored service plans by score in descending order
+        scored_service_plans.sort(key=lambda x: x['score'], reverse=True)
+        
+        # Serialize the scored service plans
+        serializer = ScoredInternetServicePlanSerializer(scored_service_plans, many=True)
+        
+        return Response(serializer.data)
+class ScoredPhonePlans(APIView):
+    def get(self, request, property_id):
+        # Fetch the Phone instance associated with the property
+        phone = get_object_or_404(Phone, property_id=property_id)
+        
+        # Fetch all PhoneServicePlans
+        service_plans = PhoneServicePlan.objects.all()
+        
+        # Calculate scores for each service plan and store them in a list
+        scored_service_plans = []
+        for plan in service_plans:
+            score = calculate_phone_score(plan.cost, phone.budget, phone.budget_tolerance, phone.budget_weight, plan.frequency, phone.frequency, phone.frequency_weight)
+            # Append the plan and its score to the list
+            scored_service_plans.append({
+                'service_plan': plan,
+                'score': score
+            })
+        
+        # Sort the scored service plans by score in descending order
+        scored_service_plans.sort(key=lambda x: x['score'], reverse=True)
+        
+        # Serialize the scored service plans
+        serializer = ScoredPhoneServicePlanSerializer(scored_service_plans, many=True)
         
         return Response(serializer.data)
