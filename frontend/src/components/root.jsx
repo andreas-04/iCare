@@ -5,6 +5,7 @@ import Navbar from "./navbar";
 import Profile from "./Profile"
 import Notifications from "./Notifications";
 import Dashboard  from "./Dashboard";
+import Service_Plan_Form from "./service_form_temp";
 const Root = () => {
     return(
     <>
@@ -28,7 +29,7 @@ const Root = () => {
                         <Route path="/" element={<Dashboard/>}/>
                         <Route path = "/profile" element={<Profile/>}/>
                         <Route path = "/notifications" element={<Notifications/>}/>
-                        {/* <Route path = "/testing" element={<RandomNewElement/>}/> */}
+                        <Route path = "/test" element={<Service_Plan_Form/>}/>
                     </Routes>
                 </Card>
 

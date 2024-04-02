@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, Card, Input, Button, Grid, Divider, Select, Option, selectClasses } from "@mui/joy";
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
-import axios from 'axios';
 import Cookies from 'js-cookie'; // Import js-cookie
 import api from '../api'; // Import the api.js file
 

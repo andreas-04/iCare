@@ -31,7 +31,7 @@ class LoginView(APIView):
         if user:
             login(request, user)
             response = JsonResponse({"detail": "Login successful"}, status=status.HTTP_200_OK)
-            response.set_cookie('user_id', user.id, httponly=True, secure=True, samesite='Strict')
+            response.set_cookie('user_id', user.id, httponly=False, secure=False, samesite='None')
             return response
         
         return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)

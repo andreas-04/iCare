@@ -8,9 +8,23 @@ const apiClient = axios.create({
     },
 
     withCredentials: true,
-  });
+    });
 
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    const postPlan = async (plan, planType) => {
+        const csrfToken = getCookie('csrftoken'); // Adjust the cookie name if necessary
+        return apiClient.post(`/${planType}_service_plan/`, plan, {
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+        });
+    };
 export default{
+    postPlan,
     userLogin: async (credentials) => {
         try {
             const response = await apiClient.post('/login/', credentials);
@@ -41,6 +55,7 @@ export default{
             // Handle errors, e.g., show an error message
         }
     },
+
     getProperties(userId){
         return apiClient.get(`/users/${userId}/properties`);
     },
@@ -53,7 +68,6 @@ export default{
     putProperty(propertyId, propertyData){
         return apiClient.put(`/properties/${propertyId}`, propertyData);
     },
-
 
     
     
