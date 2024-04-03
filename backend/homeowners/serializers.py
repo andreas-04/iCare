@@ -59,7 +59,7 @@ class InteriorServicePlanSerializer(serializers.ModelSerializer):
         model = InteriorServicePlan
         fields = '__all__'
 class ScoredInteriorServicePlanSerializer(serializers.ModelSerializer):
-    service_plan = InteriorServicePlan(read_only=True)
+    service_plan = InteriorServicePlanSerializer(read_only=True)
     score = serializers.FloatField()
 
 class InternetServicePlanSerializer(serializers.ModelSerializer):
@@ -67,7 +67,7 @@ class InternetServicePlanSerializer(serializers.ModelSerializer):
         model = InternetServicePlan
         fields = '__all__'
 class ScoredInternetServicePlanSerializer(serializers.ModelSerializer):
-    service_plan = InternetServicePlan(read_only=True)
+    service_plan = InternetServicePlanSerializer(read_only=True)
     score = serializers.FloatField()
 
 class PhoneServicePlanSerializer(serializers.ModelSerializer):
@@ -75,7 +75,7 @@ class PhoneServicePlanSerializer(serializers.ModelSerializer):
         model = PhoneServicePlan
         fields = '__all__'
 class ScoredPhoneServicePlanSerializer(serializers.ModelSerializer):
-    service_plan = PhoneServicePlan(read_only=True)
+    service_plan = PhoneServicePlanSerializer(read_only=True)
     score = serializers.FloatField()
 
 class PropertySerializer(serializers.ModelSerializer):

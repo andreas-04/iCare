@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Typography, Card, Input, Button, Grid, Divider, Select, Option, selectClasses, Textarea } from "@mui/joy";
+import { useState } from 'react';
+import { Typography, Card, Input, Button, Divider, Select, Option, selectClasses, Textarea } from "@mui/joy";
 import PropTypes from 'prop-types';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import api from '../api'; // Adjust the import path as necessary
@@ -10,7 +10,7 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 const Service_Plan_Form = ({form_type}) => {
-    form_type = "lawn";
+    form_type = "phone";
     const userId = getCookie('user_id');
     console.log('User ID from cookie:', userId);
 
@@ -134,7 +134,7 @@ const Service_Plan_Form = ({form_type}) => {
                                     }
                                 }}
                                 endDecorator={
-                                    <Typography >gbs +/-</Typography>
+                                    <Typography >mbs +/-</Typography>
                                 }
 
                             />
@@ -155,8 +155,6 @@ const Service_Plan_Form = ({form_type}) => {
                                     }
                                 }}
                                 placeholder='Users:'
-                                defaultValue={0}
-
                             />
 
                             <Select

@@ -183,7 +183,7 @@ class ScoredPhonePlans(APIView):
         # Calculate scores for each service plan and store them in a list
         scored_service_plans = []
         for plan in service_plans:
-            score = calculate_phone_score(plan.cost, phone.budget, phone.budget_tolerance, phone.budget_weight, plan.frequency, phone.frequency, phone.frequency_weight)
+            score = calculate_phone_score(plan.cost, phone.budget, phone.budget_tolerance, phone.budget_weight, phone.users, plan.users, phone.users_weight, phone.preferred_plan_type, plan.plan_type, phone.plan_weight)
             # Append the plan and its score to the list
             scored_service_plans.append({
                 'service_plan': plan,

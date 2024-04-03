@@ -46,9 +46,12 @@ class Internet(models.Model):
 
 class Phone(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
-    number_of_cell_phones = models.IntegerField(null=True, blank=True)
     budget = models.FloatField(null=True, blank=True)
-    tolerance = models.FloatField(null=True, blank=True)
+    budget_tolerance = models.FloatField(null=True, blank=True)
+    budget_weight = models.FloatField(null=True, blank=True)
+    users = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
+    users_weight = models.FloatField(null=True, blank=True)
+ 
     preferred_plan_type = models.CharField(
         max_length=255,
         choices=[
@@ -57,6 +60,8 @@ class Phone(models.Model):
             ('unlimited','Unlimited Plan'),
         ], null=True, blank=True
     )
+    plan_weight = models.FloatField(null=True, blank=True)
+
 
 
 
