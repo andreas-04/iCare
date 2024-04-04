@@ -6,6 +6,7 @@ import Profile from "./Profile"
 import Notifications from "./Notifications";
 import Dashboard  from "./Dashboard";
 import Service_Plan_Form from "./service_form_temp";
+import Homepage from "./matttest";
 
 const Root = () => {
     return(
@@ -27,10 +28,12 @@ const Root = () => {
                 <Divider orientation="horizontal" flexitem="true" sx={{ width: '50%' }} />
                 <Card sx={{margin: "25px"}}>
                     <Routes>
-                        <Route path="/" element={<Dashboard/>}/>
+                        {/* <Route path="/" element={<Dashboard/>}/> */}
+                        <Route path = "/" element={<Homepage/>}/>
                         <Route path = "/profile" element={<Profile/>}/>
                         <Route path = "/notifications" element={<Notifications/>}/>
                         <Route path = "/test" element={<Service_Plan_Form/>}/>
+                        {/* <Route path = "/homepage_test" element={<Homepage/>}/> */}
                     </Routes>
                 </Card>
 
