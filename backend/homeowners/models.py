@@ -4,15 +4,19 @@ from django.core.validators import MinValueValidator
 
 class Property(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    lawn = models.OneToOneField('Lawn', on_delete=models.CASCADE, null=True, blank=True, related_name='property_lawn')
+    phone = models.OneToOneField('Phone', on_delete=models.CASCADE, null=True, blank=True, related_name='property_phone')
+    internet = models.OneToOneField('Internet', on_delete=models.CASCADE, null=True, blank=True, related_name='property_internet')
+    interior = models.OneToOneField('Interior', on_delete=models.CASCADE, null=True, blank=True, related_name='property_interior')
 
- 
+  
 class MortgageInsurance(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
     mortgage_details = models.TextField()
     insurance_details = models.TextField()
 
 class Lawn(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True, related_name='lawns')
     lawn_size = models.FloatField(null=True, blank=True)
     budget = models.FloatField(null=True, blank=True)
     budget_tolerance = models.FloatField(null=True, blank=True) 
@@ -21,7 +25,7 @@ class Lawn(models.Model):
     frequency_weight = models.FloatField(null=True, blank=True)
 
 class Interior(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True, related_name='interiors')
     number_of_rooms = models.IntegerField(null=True, blank=True)
     floor_space = models.FloatField(null=True, blank=True)
     budget = models.FloatField(null=True, blank=True)
@@ -32,7 +36,7 @@ class Interior(models.Model):
 
 
 class Internet(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True, related_name='internets')
     users = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
     users_weight = models.FloatField(null=True, blank=True)
     speed_requirements = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
@@ -45,7 +49,7 @@ class Internet(models.Model):
 
 
 class Phone(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True, related_name='phones')
     budget = models.FloatField(null=True, blank=True)
     budget_tolerance = models.FloatField(null=True, blank=True)
     budget_weight = models.FloatField(null=True, blank=True)
