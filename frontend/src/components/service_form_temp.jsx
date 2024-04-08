@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Typography, Card, Input, Button, Divider, Select, Option, selectClasses, Textarea } from "@mui/joy";
+import { Typography, Card, Input, Button, Divider,Select, Option, selectClasses, Textarea } from "@mui/joy";
 import PropTypes from 'prop-types';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import api from '../api'; // Adjust the import path as necessary
@@ -10,22 +10,22 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 const Service_Plan_Form = ({form_type}) => {
-    form_type = "phone";
+    // form_type = "phone";
     const userId = getCookie('user_id');
-    console.log('User ID from cookie:', userId);
-
-
     const [formData, setFormData] = useState({
         service_name: "",
         service_description: "",
         cost: null,
-        frequency: null,
         business: null,
+        frequency: form_type === "lawn" || form_type === "interior" ? "" : undefined,
+        users: form_type === "internet" || form_type === "phone" ? "" : undefined,
+        speed: form_type === "internet" ? "" : undefined,
+        preferred_plan_type: form_type === "phone" ? "" : undefined,
     });
     const [errors, setErrors] = useState({});
-
     const handleInputChange = (event) => {
         const { name, value } = event.target;
+        console.log(`Name: ${name}, Value: ${value}`); // Debugging line
         setFormData({ ...formData, [name]: value });
     };
     const validateForm = () => {
@@ -44,7 +44,6 @@ const Service_Plan_Form = ({form_type}) => {
         if (validateForm()) {
             try {
                 formData.business = userId;
-                console.log(formData);
                 const response = await api.postPlan(formData, form_type);
                 console.log(response);
                 // Handle successful submission, e.g., show a success message or redirect
@@ -53,6 +52,12 @@ const Service_Plan_Form = ({form_type}) => {
                 // Handle errors, e.g., show an error message
             }
         }
+    };
+    const handleSelectChange = (event, newValue) => {
+        setFormData(prevState => ({
+            ...prevState,
+            preferred_plan_type: newValue
+        }));
     };
     return(
         <>
@@ -85,25 +90,23 @@ const Service_Plan_Form = ({form_type}) => {
                 />
                 {form_type === ("lawn" || "interior")
                     ?
-                    <>
-                    <Input
-                        variant="outlined"
-                        name='frequency'
-                        onChange={handleInputChange}
-                        slotProps={{
-                            input:{
-                                min: 0,
+                        <>
+                        <Input
+                            variant="outlined"
+                            name='frequency'
+                            onChange={handleInputChange}
+                            slotProps={{
+                                input:{
+                                    min: 0,
 
+                                }
+                            }}
+                            placeholder="Plan Frequency"
+                            endDecorator={
+                                <Typography variant="body2">per month</Typography>
                             }
-                        }}
-                        placeholder="Plan Frequency"
-                        endDecorator={
-                            <Typography variant="body2">per month</Typography>
-                        }
-
-                    />
-        
-                    </>
+                        />
+                        </>
                     :
                     <></>
                 }
@@ -112,6 +115,8 @@ const Service_Plan_Form = ({form_type}) => {
                     <>
          
                             <Input
+                                name='users'
+                                onChange={handleInputChange}
                                 variant="outlined"
                                 placeholder='Users:'
                                 slotProps={{
@@ -121,12 +126,12 @@ const Service_Plan_Form = ({form_type}) => {
                                     }
                                 }}
                                 error={errors.cost}
-
-
                             />
                             <Input
                                 variant="outlined"
                                 placeholder='Speed:'
+                                name="speed"
+                                onChange={handleInputChange}
                                 slotProps={{
                                     input:{
                                         min: 0,
@@ -136,7 +141,6 @@ const Service_Plan_Form = ({form_type}) => {
                                 endDecorator={
                                     <Typography >mbs +/-</Typography>
                                 }
-
                             />
                 
                     </>
@@ -147,6 +151,8 @@ const Service_Plan_Form = ({form_type}) => {
                     ?
                     <>
                             <Input
+                                name="users"
+
                                 variant="outlined"
                                 slotProps={{
                                     input:{
@@ -155,9 +161,12 @@ const Service_Plan_Form = ({form_type}) => {
                                     }
                                 }}
                                 placeholder='Users:'
-                            />
+                                onChange={handleInputChange}
 
+                            />
                             <Select
+                                name="preferred_plan_type"
+                                onChange={(event) => handleSelectChange(event, "preferred_plan_type")}
                                 placeholder="Select Plan Type"
                                 indicator={<KeyboardArrowDown />}
                                 sx={{
@@ -172,7 +181,7 @@ const Service_Plan_Form = ({form_type}) => {
                                     <Option value="prepaid">Prepaid</Option>
                                     <Option value="postpaid">Postpaid</Option>
                                     <Option value="unlimited">Unlimited</Option>
-                                </Select>                    
+                            </Select>                    
                     </>
                     :
                     <></>

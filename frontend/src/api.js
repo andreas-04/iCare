@@ -68,6 +68,30 @@ export default{
     putProperty(propertyId, propertyData){
         return apiClient.put(`/properties/${propertyId}`, propertyData);
     },
+    getLawn(lawnId){
+        return apiClient.get(`/lawn/${lawnId}/`);
+    },
+    getInterior(interiorId){
+        return apiClient.get(`/interior/${interiorId}/`);
+    },
+    getInternet(internetId){
+        return apiClient.get(`/internet/${internetId}/`);
+    },
+    getPhone(phoneId){
+        return apiClient.get(`/phone/${phoneId}/`);
+    },
+    putLawn(lawnId, lawnData){
+        return apiClient.put(`/lawn/${lawnId}/`, lawnData);
+    },
+    putInterior(interiorId, interiorData){
+        return apiClient.put(`/interior/${interiorId}/`, interiorData);
+    },
+    putInternet(internetId, internetData){
+        return apiClient.put(`/internet/${internetId}/`, internetData);
+    },
+    putPhone(phoneId, phoneData){
+        return apiClient.put(`/lawn/${phoneId}/`, phoneData);
+    },
 
     
     

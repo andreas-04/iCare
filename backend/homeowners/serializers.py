@@ -83,16 +83,25 @@ class PropertySerializer(serializers.ModelSerializer):
         model = Property
         fields = '__all__'
 
-    def create(self, validated_data):
+    def create(self, validated_data): 
         # Create the Property instance
         property_instance = Property.objects.create(**validated_data)
 
         # Create instances of Lawn, Interior, Internet, and Phone models linked to the Property instance
-        Lawn.objects.create(property=property_instance)
-        Interior.objects.create(property=property_instance)
-        Internet.objects.create(property=property_instance)
-        Phone.objects.create(property=property_instance)
-
+        lawn = Lawn.objects.create(property=property_instance)
+        # property_instance.lawn = lawn
+        interior = Interior.objects.create(property=property_instance)
+        # property_instance.interior = interior
+        internet = Internet.objects.create(property=property_instance)
+        # property_instance.internet = internet
+        phone = Phone.objects.create(property=property_instance)
+        # property_instance.phone = phone
+        
+        property_instance.lawn = lawn
+        property_instance.interior = interior
+        property_instance.internet = internet
+        property_instance.phone = phone
+        property_instance.save()
         return property_instance
 
 
