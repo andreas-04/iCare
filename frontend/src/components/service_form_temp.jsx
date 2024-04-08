@@ -10,7 +10,7 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 const Service_Plan_Form = ({form_type}) => {
-    form_type = "phone";
+    // form_type = "phone";
     const userId = getCookie('user_id');
     const [formData, setFormData] = useState({
         service_name: "",
@@ -44,7 +44,6 @@ const Service_Plan_Form = ({form_type}) => {
         if (validateForm()) {
             try {
                 formData.business = userId;
-                console.log(formData);
                 const response = await api.postPlan(formData, form_type);
                 console.log(response);
                 // Handle successful submission, e.g., show a success message or redirect
@@ -55,7 +54,6 @@ const Service_Plan_Form = ({form_type}) => {
         }
     };
     const handleSelectChange = (event, newValue) => {
-        console.log(`New Value: ${newValue}`); // Debugging line
         setFormData(prevState => ({
             ...prevState,
             preferred_plan_type: newValue

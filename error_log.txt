@@ -1,0 +1,8 @@
+- session persistence 
+- creating service plans doesnt include some fields
+    - issue from form_data json definition 
+    - different definition for different form_types
+    - FIXED
+
+- Phone service plan creation plan_type not functional
+
