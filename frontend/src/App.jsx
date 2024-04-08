@@ -18,10 +18,13 @@ function App() {
 
 
   return (
+    //<>
+    //  {isAuthenticated ? <Root/> : <Authentication onAuthenticated={() => setIsAuthenticated(true)} />}
+    //</>
     <>
-      {isAuthenticated ? <Root/> : <Authentication onAuthenticated={() => setIsAuthenticated(true)} />}
+      {isAuthenticated && <Root />}
     </>
-  )
+  );
 }
 
 export default App

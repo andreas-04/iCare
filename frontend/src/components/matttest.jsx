@@ -1,12 +1,27 @@
 import { useState } from 'react';
-import React from 'react';
-import ReactDOM from 'react';
-import { Container, Card, Grid, Typography, Button, CardContent } from "@mui/material";
+import { Card, CardContent, Container, Grid, Typography, Button, Dialog, DialogContent, AppBar, Toolbar, IconButton } from "@mui/material";
+import { AccountCircle } from "@mui/icons-material";
 
 const Homepage = () => {
-    
+    const [openLogin, setOpenLogin] = useState(false);
+
+    const handleOpenLogin = () => {
+        setOpenLogin(true);
+    };
+
+    const handleCloseLogin = () => {
+        setOpenLogin(false);
+    };
+
     return (
         <Container maxWidth="lg">
+            <AppBar position="static" color="transparent" elevation={0}>
+                <Toolbar sx={{ justifyContent: 'flex-end' }}>
+                    <IconButton onClick={handleOpenLogin} color="inherit" edge="end">
+                        <AccountCircle />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
             {/* Hero Section */}
             <Grid container spacing={2} justifyContent="center" alignItems="center" style={{ minHeight: '80vh' }}>
                 <Grid item xs={12} md={6}>
@@ -37,10 +52,10 @@ const Homepage = () => {
                     <Card variant="outlined" sx={{ height: '100%' }}>
                         <CardContent>
                             <Typography variant="h5" gutterBottom>
-                                Feature 1
+                                Communication
                             </Typography>
                             <Typography variant="body1">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                Be able to contact your business or customer!
                             </Typography>
                         </CardContent>
                     </Card>
@@ -85,7 +100,16 @@ const Homepage = () => {
                     </Button>
                 </Grid>
             </Grid>
+
+            {/* Login/Signup Dialog */}
+            <Dialog open={openLogin} onClose={handleCloseLogin}>
+                <DialogContent>
+                    {/* Include your login/signup component here */}
+                    {/* Example: <LoginSignupComponent /> */}
+                </DialogContent>
+            </Dialog>
         </Container>
     );
 };
+
 export default Homepage;
