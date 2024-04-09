@@ -7,7 +7,11 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   useEffect(() => {
     const sessionId = document.cookie.split('; ').find(row => row.startsWith('sessionid='));
-    if (sessionId) {
+    const userId = document.cookie.split('; ').find(row => row.startsWith('user_id='));
+    if (sessionId ) {
+      setIsAuthenticated(true);
+      //set userID cookie
+    }else if(userId){
       setIsAuthenticated(true);
     }else{
       console.log("No sesh ID found :(");

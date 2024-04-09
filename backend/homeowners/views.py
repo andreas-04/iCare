@@ -31,14 +31,17 @@ class LoginView(APIView):
         if user:
             login(request, user)
             response = JsonResponse({"detail": "Login successful"}, status=status.HTTP_200_OK)
-            response.set_cookie('user_id', user.id, httponly=False, secure=False, samesite='None')
+            response.set_cookie('user_id', user.id, max_age=30*24*60*60, httponly=False, secure=False, samesite='None')
             return response
         
         return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 def logout_view(request):
     logout(request)
-    return JsonResponse({'message': 'Successfully logged out.'})
+    response = JsonResponse({'message': 'Successfully logged out.'})
+    response.delete_cookie('user_id')
+    response.delete_cookie('csrftoken')
+    return response
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
