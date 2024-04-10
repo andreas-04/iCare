@@ -1,5 +1,5 @@
 import  { useEffect, useState } from 'react';
-import { Typography, Card, Input, Button, Grid } from "@mui/joy";
+import { Typography, Card, Button, Grid } from "@mui/joy";
 import Cookies from 'js-cookie'; // Import js-cookie
 import api from '../api'; // Import the api.js file
 import PropertyForm from './PropertyForm';
@@ -12,14 +12,13 @@ const Profile = () => {
             api.getProperties(userId)
                 .then(response => {
                     setProperties(response.data);
-                    console.log(response.data)
+                    //console.log(response.data)
                 })
                 .catch(error => {
                     console.error('Error fetching properties:', error);
                 });
         }
     }, []);
-    console.log(properties)
     return(
         <>
         <Typography level="h3" align="left">My Properties</Typography>
