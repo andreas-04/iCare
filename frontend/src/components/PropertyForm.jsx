@@ -1,101 +1,73 @@
-import  { useEffect, useState } from 'react';
+import  { useEffect, useState, useCallback } from 'react';
 import { Button,Typography, Card, Input, Grid, Divider, Select, Option, selectClasses } from "@mui/joy";
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import PropTypes from 'prop-types';
 import api from '../api';
 
 const PropertyForm = ({ property }) => {
-    const [details, setDetails] = useState({
-        lawn:{
-            lawnSize: '',
-            lawnBudget: '',
-            lawnBudgetTolerance: '',
-            lawnBudgetWeight: '',
-            lawnFrequency: '',
-            lawnFrequencyWeight: '',
-        },
+    const [isLawnEditMode, setLawnEditMode] = useState(false);
+    const [isInteriorEditMode, setInteriorEditMode] = useState(false);
+    const [isPhoneEditMode, setPhoneEditMode] = useState(false);
+    const [isInternetEditMode, setInternetEditMode] = useState(false);
 
-        phone:{
-            phoneUsers: '',
-            phoneUsersWeight: '',
-            phonePreferredPlanType: '',
-            phonePlanWeight: '',
-            phoneBudget: '',
-            phoneBudgetTolerance: '',
-            phoneBudgetWeight: '',
-    
-        },
-        internet:{
-            internetUsers: '',
-            internetUsersWeight: '',
-            internetSpeed: '',
-            internetSpeedTolerance: '',
-            internetSpeedWeight: '',
-            internetBudget: '',
-            internetBudgetTolerance: '',
-            internetBudgetWeight: '',
-        },
-        interior:{
-            interiorNumRooms: '',
-            interiorSize: '',
-            interiorBudget: '',
-            interiorBudgetTolerance: '',
-            interiorBudgetWeight: '',
-            interiorFrequency: '',
-            interiorFrequencyWeight: '',
-        }
+    const [lawnDetails, setLawnDetails] = useState({
+        lawn_size: null,
+        budget: null,
+        budget_tolerance: null,
+        budget_weight: null,
+        frequency: null,
+        frequency_weight: null,
+    });
+    const [phoneDetails, setPhoneDetails] = useState({
+        users: null,
+        users_weight: null,
+        preferred_plan_type: "unlimited",
+        plan_weight: null,
+        budget: null,
+        budget_tolerance: null,
+        budget_weight: null,
+    });
+    const [internetDetails, setInternetDetails] = useState({
+        users: null,
+        users_weight: null,
+        speed_requirements: null,
+        speed_tolerance: null,
+        speed_weight: null,
+        budget: null,
+        budget_tolerance: null,
+        budget_weight: null,
+    });
+    const [interiorDetails, setInteriorDetails] = useState({
+        number_of_rooms: null,
+        floor_space: null,
+        budget: null,
+        budget_tolerance: null,
+        budget_weight: null,
+        frequency: null,
+        frequency_weight: null,
     });
 
+
     useEffect(() => {
+        //populate form
         const fetchPropertyDetails = async () => {
             try {
                 const lawnData = await api.getLawn(property.lawn);
                 const internetData = await api.getInternet(property.internet);
                 const interiorData = await api.getInterior(property.interior);
                 const phoneData = await api.getPhone(property.phone);
-                setDetails(prevDetails => ({
-                    ...prevDetails,
-                    lawn: {
-                        ...prevDetails.lawn,
-                        lawnSize: lawnData.data.lawn_size || prevDetails.lawn.lawnSize,
-                        lawnBudget: lawnData.data.budget || prevDetails.lawn.lawnBudget,
-                        lawnBudgetTolerance: lawnData.data.budget_tolerance || prevDetails.lawn.lawnBudgetTolerance,
-                        lawnBudgetWeight: lawnData.data.budget_weight || prevDetails.lawn.lawnBudgetWeight,
-                        lawnFrequency: lawnData.data.frequency || prevDetails.lawn.lawnFrequency,
-                        lawnFrequencyWeight: lawnData.data.frequency_weight || prevDetails.lawn.lawnFrequencyWeight,
-                    },
-                    internet: {
-                        ...prevDetails.internet,
-                        internetSpeed: internetData.internetSpeed || prevDetails.internet.internetSpeed,
-                        internetUsers: internetData.internetUsers || prevDetails.internet.internetUsers,
-                        internetUsersWeight: internetData.internetUsersWeight || prevDetails.internet.internetUsersWeight,
-                        internetSpeedTolerance: internetData.internetSpeedTolerance || prevDetails.internet.internetSpeedTolerance,
-                        internetSpeedWeight: internetData.internetSpeedWeight || prevDetails.internet.internetSpeedWeight,
-                        internetBudget: internetData.internetBudget || prevDetails.internet.internetBudget,
-                        internetBudgetTolerance: internetData.internetBudgetTolerance || prevDetails.internet.internetBudgetTolerance,
-                        internetBudgetWeight: internetData.internetBudgetWeight || prevDetails.internet.internetBudgetWeight,
-                    },
-                    interior: {
-                        ...prevDetails.interior,
-                        interiorSize: interiorData.interiorSize || prevDetails.interior.interiorSize,
-                        interiorNumRooms: interiorData.interiorNumRooms || prevDetails.interior.interiorNumRooms,
-                        interiorBudget: interiorData.interiorBudget || prevDetails.interior.interiorBudget,
-                        interiorBudgetTolerance: interiorData.interiorBudgetTolerance || prevDetails.interior.interiorBudgetTolerance,
-                        interiorBudgetWeight: interiorData.interiorBudgetWeight || prevDetails.interior.interiorBudgetWeight,
-                        interiorFrequency: interiorData.interiorFrequency || prevDetails.interior.interiorFrequency,
-                        interiorFrequencyWeight: interiorData.interiorFrequencyWeight || prevDetails.interior.interiorFrequencyWeight,
-                    },
-                    phone: {
-                        ...prevDetails.phone,
-                        phoneUsers: phoneData.phoneUsers || prevDetails.phone.phoneUsers,
-                        phoneUsersWeight: phoneData.phoneUsersWeight || prevDetails.phone.phoneUsersWeight,
-                        phonePreferredPlanType: phoneData.phonePreferredPlanType || prevDetails.phone.phonePreferredPlanType,
-                        phonePlanWeight: phoneData.phonePlanWeight || prevDetails.phone.phonePlanWeight,
-                        phoneBudget: phoneData.phoneBudget || prevDetails.phone.phoneBudget,
-                        phoneBudgetTolerance: phoneData.phoneBudgetTolerance || prevDetails.phone.phoneBudgetTolerance,
-                        phoneBudgetWeight: phoneData.phoneBudgetWeight || prevDetails.phone.phoneBudgetWeight,
-                    },
-                }));
+                setLawnDetails({
+                  ...lawnData.data
+                });
+                setInteriorDetails({
+                  ...interiorData.data
+                });
+                setInternetDetails({
+                  ...internetData.data
+                });
+                setPhoneDetails({
+                  ...phoneData.data
+                });
             } catch (error) {
                 console.error('Error fetching property details:', error);
             }
@@ -104,44 +76,100 @@ const PropertyForm = ({ property }) => {
         fetchPropertyDetails();
     }, [property]); // Depend on the property object to refetch if it changes
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        console.log(`Input name: ${name}, value: ${value}`);
-    
-        // Split the name into parts to determine the nested structure
-        const parts = name.split('.');
-        const key = parts[0]; // The first part is the key of the nested object
-        const subKey = parts[1]; // The second part is the key of the property within the nested object
-    
-    
-        // Update the nested structure
-        setDetails(prevDetails => {
-            const updatedDetails = {
-                ...prevDetails,
-                [key]: {
-                    ...prevDetails[key],
-                    [subKey]: value
-                }
-            };
-            return updatedDetails;
-        });
-    };
-    // Function to persist the changes
-    const persistChanges = async () => {
-        // Example: Update the lawn size
+
+    // Functions to persist the lawn, interior, phone, internet changes
+    const persistLawnChanges = async () => {
         try {
-            await api.putLawn(property.lawnId, { lawn_size: details.lawnSize });
-            console.log('Lawn size updated successfully');
-            // Repeat for other fields as needed
+            await api.putLawn(property.lawn, { 
+                ...lawnDetails
+            });
         } catch (error) {
+            console.error('Error updating lawn changes:', error);
+        }
+    };
+
+    const persistInteriorChanges = async () => {
+        try{
+            await api.putInterior(property.interior, 
+            {
+               ...interiorDetails
+            });
+        }catch (error) {
             console.error('Error updating property details:', error);
         }
     };
-    // if (!details.lawnSize || !details.internetSpeed || !details.interiorSize || !details.phoneUsers) {
-    //     return <div>Loading...</div>; // Or any loading indicator you prefer
-    // }
-    console.log(details);
+
+    const persistPhoneChanges = async () => {
+        try{
+            await api.putPhone(property.phone, {
+                ...phoneDetails
+            });
+        }catch (error) {
+            console.error('Error updating property details:', error);
+        }
+    };
+
+    const persistInternetChanges = async () =>
+    {
+        try{
+            await api.putInternet(property.internet, {
+                ...internetDetails
+            });
+        }catch (error) {
+            console.error('Error updating property details:', error);
+        }
+    };
+    const handleLawnInputChange = useCallback((event) => {
+        const { name, value } = event.target;
+        setLawnDetails(prevDetails => ({
+            ...prevDetails,
+            [name]: value
+        }));
+    }, []); 
+
+    const handleInteriorInputChange = useCallback((event) => {
+        const { name, value } = event.target;
+        setInteriorDetails(prevDetails => ({
+            ...prevDetails,
+            [name]: value
+        }));
+    }, []);
+    const handlePhoneInputChange = useCallback((event) =>{
+        const { name, value } = event.target;
+        setPhoneDetails(prevDetails => ({
+            ...prevDetails,
+            [name]: value
+        }));
+    }, []);
+    const handleInternetInputChange = useCallback((event) => {
+        const { name, value } = event.target;
+        setInternetDetails(prevDetails => ({
+            ...prevDetails,
+            [name]: value
+        }));
+    }, []);
+    const handleInputFocus = (event, sectionType) => {
+        const { name, value } = event.target;
+        setInitialValues(prevValues => ({
+            ...prevValues,
+            [sectionType]: {
+                ...prevValues[sectionType],
+                [name]: value
+            }
+        }));
+        //   fix function to set the edit mode for each section
+        setEditMode(sectionType, true);
+
+    const handleInputBlur = (event, sectionType) => {
+        const { name, value } = event.target;
+        if (value === initialValues[sectionType][name]) {
+            setEditMode(sectionType, false);
+        }
+    };
     return(
+    
+
+    
     <Card size="sm">
         <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
             <Grid item xs={9}>
@@ -150,96 +178,113 @@ const PropertyForm = ({ property }) => {
             
             <Grid item xs={12}>
                 <Card size="sm">
-                    <Typography align="left" level="title-lg">Lawn</Typography>
-                
+                    <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
+                        <Grid item xs={9}>
+                            <Typography align="left" level="title-lg">Lawn</Typography>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Button onClick={() => setLawnEditMode(prevMode => !prevMode)}>Edit</Button>
+                        </Grid>
+                    </Grid>
                         <Input
-                            onChange={handleInputChange}
-                            variant="outlined"
+                            onChange={handleLawnInputChange}
+                            onFocus={() => setLawnEditMode(true)}
+                            variant="soft"
                             size='md'
                             placeholder='Lawn Size'
-                            name='lawn.lawnSize'
-                            value={details.lawn.lawnSize}
+                            name='lawn_size'
+                            value={lawnDetails.lawn_size}
                             endDecorator={
                                 <Typography variant="body2">ft<sup>2</sup></Typography>
                             }
                         />
                         <Input
-                            onChange={handleInputChange}
+                            onChange={handleLawnInputChange}
+                            onFocus={() => setLawnEditMode(true)}
                             variant="outlined"
                             size='md'
                             placeholder='Budget'
-                            name='lawnBudget'
-                            value={details.lawn.lawnBudget}
+                            name='budget'
+                            value={lawnDetails.budget}
                             endDecorator={
                                 <Typography variant="body2">$</Typography>
                             }
                         />
                         <Input
-                            onChange={handleInputChange}
+                            onChange={handleLawnInputChange}
+                            onFocus={() => setLawnEditMode(true)}
                             variant="outlined"
                             placeholder='Budget Tolerance'
-                            name='lawnBudgetTolerance'
-                            value={details.lawn.lawnBudgetTolerance}
+                            name='budget_tolerance'
+                            value={lawnDetails.budget_tolerance}
                             size='md'                                        
                             endDecorator={
                                 <Typography variant="body2">%</Typography>
                             }
                         />
                         <Input
-                            onChange={handleInputChange}
+                            onChange={handleLawnInputChange}
+                            onFocus={() => setLawnEditMode(true)}
                             variant="outlined"
                             placeholder='Budget Weight'
-                            name='lawnBudgetWeight'
-                            // defaultValue={lawnDetails.data.budget_weight}
-                            value={details.lawn.lawnBudgetWeight}
+                            name='budget_weight'
+                            value={lawnDetails.budget_weight}
                             size='md'                                         
                             endDecorator={
                                 <Typography variant="body2">%</Typography>
                             }
                         />
                         <Input
-                            onChange={handleInputChange}
-                            value={details.lawn.lawnFrequency}
+                            onChange={handleLawnInputChange}
+                            onFocus={() => setLawnEditMode(true)}
+                            value={lawnDetails.frequency}
                             variant="outlined"
                             placeholder='Frequency'
-                            name='lawnFrequency'
-                            //defaultValue={lawnDetails.data.frequency}
+                            name='frequency'
                             size='md'                                       
                             endDecorator={
                                 <Typography variant="body2">per month</Typography>
                             }
                         />
                         <Input
-                            onChange={handleInputChange}
-                            value={details.lawn.lawnFrequencyWeight}
+                            onChange={handleLawnInputChange}
+                            value={lawnDetails.frequency_weight}
+                            onFocus={() => setLawnEditMode(true)}
                             variant="outlined"
                             placeholder='Frequency Weight'
-                            name='lawnFrequencyWeight'
-                            //defaultValue={lawnDetails.data.frequency_weight}
+                            name='frequency_weight'
                             size='md'                                          
                             endDecorator={
                                 <Typography variant="body2">%</Typography>
                             }
                         />
-
+                    {isLawnEditMode ? <Button onClick={persistLawnChanges}> Save</Button> : <></>}
                     <Divider></Divider>
-                    <Typography align="left" level="title-lg">Phones</Typography>
+                    <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
+                        <Grid item xs={9}>
+                            <Typography align="left" level="title-lg">Phones</Typography>
+                        </Grid>
+                        <Grid item xs={3}>
+                        <Button onClick={() => setPhoneEditMode(prevMode => !prevMode)}>Edit</Button>
+
+                        </Grid>
+                    </Grid>                    
                     <Input
-                    onChange={handleInputChange}
+                        onChange={handlePhoneInputChange}
+                        onFocus={() => setLawnEditMode(true)}
                         variant='outlined'
                         placeholder='Users'
-                        name='phoneUsers'
-                        value={details.phone.phoneUsers}
-                        //defaultValue={phoneDetails.data.users}
+                        name='Users'
+                        value={phoneDetails.users}
                         size='md'
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.phone.phoneUsersWeight} 
+                        onChange={handlePhoneInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={phoneDetails.users_weight} 
                         variant='outlined'
                         placeholder='User Weight'
-                        name='phoneUsersWeight'
-                        //defaultValue={phoneDetails.data.users_weight}
+                        name='users_weight'
                         size='md'
                         endDecorator={
                             <Typography variant="body2">%</Typography>
@@ -265,23 +310,23 @@ const PropertyForm = ({ property }) => {
                         <Option value="unlimited">Unlimited</Option>
                     </Select>
                     <Input
-                        onChange={handleInputChange}
-                        value={details.phone.phonePlanWeight}
+                        onChange={handlePhoneInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={phoneDetails.plan_weight}
                         variant="outlined"
                         size='md'
                         placeholder='Plan Weight'
-                        name='phonePlanWeight'
-                        //defaultValue={phoneDetails.data.plan_weight}
+                        name='plan_weight'
                         endDecorator={
                             <Typography variant="body2">%</Typography>
                         }
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.phone.phoneBudget}
+                        onChange={handlePhoneInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={phoneDetails.budget}
                         placeholder='Budget'
-                        name='phoneBudget'
-                        //defaultValue={phoneDetails.data.budget}
+                        name='budget'
                         variant="outlined"
                         size='md'
                         endDecorator={
@@ -289,201 +334,213 @@ const PropertyForm = ({ property }) => {
                         }
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.phone.phoneBudgetTolerance}
+                        onChange={handlePhoneInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={phoneDetails.budget_tolerance}
                         variant="outlined"
                         size='md'
                         placeholder='Budget Tolerance'
-                        name='phoneBudgetTolerance'
-                        //defaultValue={phoneDetails.data.budget_tolerance}
+                        name='budget_tolerance'
                         endDecorator={
                             <Typography variant="body2">%</Typography>
                         }
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.phone.phoneBudgetWeight}
+                        onChange={handlePhoneInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={phoneDetails.budget_weight}
                         variant="outlined"
                         size='md'
                         placeholder='Budget Weight'
-                        name='phoneBudgetWeight'
-                        //defaultValue={phoneDetails.data.budget_weight}
+                        name='budget_weight'
                         endDecorator={
                             <Typography variant="body2">%</Typography>
                         }
                     />
+                    {isPhoneEditMode ? <Button onClick={persistPhoneChanges}> Save</Button> : <></>}
+
                     <Divider></Divider>
-                    <Typography align="left" level="title-lg">Internet</Typography>
+
+                    <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
+                        <Grid item xs={9}>
+                            <Typography align="left" level="title-lg">Internet</Typography>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Button onClick={() => setInternetEditMode(prevMode => !prevMode)}>Edit</Button>
+                        </Grid>
+                    </Grid>       
                     <Input
-                        onChange={handleInputChange}
-                        value={details.internet.internetUsers}
+                        onChange={handleInternetInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={internetDetails.users}
                         variant='outlined'
                         size='md'
                         placeholder='Devices'
-                        name='internetUsers'
-                        //defaultValue={internetDetails.data.users}
+                        name='users'
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.internet.internetUsersWeight}
+                        onChange={handleInternetInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={internetDetails.users_weight}
                         variant='outlined'
                         size='md'
                         placeholder='Device Weight'
-                        name='internetUsersWeight'
-                        //defaultValue={internetDetails.data.users_weight}
+                        name='users_weight'
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.internet.internetSpeed}
+                        onChange={handleInternetInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={internetDetails.speed_requirements}
                         variant="outlined"
                         size='md'
                         placeholder='Preferred Speed:'
-                        name='internetSpeed'
-                        //defaultValue={internetDetails.data.speed_requirements}
+                        name='speed_requirements'
                         endDecorator={
                             <Typography variant="body2">mb/s</Typography>
                         }
                     />     
                     <Input
-                        onChange={handleInputChange}
-                        value={details.internet.internetSpeedTolerance}
+                        onChange={handleInternetInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={internetDetails.speed_tolerance}
                         variant='outlined'
                         size='md'
                         placeholder='Speed Tolerance'
-                        name='internetSpeedTolerance'
-                        //defaultValue={internetDetails.data.speed_tolerance}
+                        name='speed_tolerance'
                     />    
                     <Input
-                        onChange={handleInputChange}
-                        value={details.internet.internetSpeedWeight}
+                        onChange={handleInternetInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={internetDetails.speed_weight}
                         variant='outlined'
                         size='md'
                         placeholder='Speed Weight'
-                        name='internetSpeedWeight'
-                        //defaultValue={internetDetails.data.speed_weight}
+                        name='speed_weight'
                     />                       
                     <Input
-                        onChange={handleInputChange}
-                        value={details.internet.internetBudget}
+                        onChange={handleInternetInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={internetDetails.budget}
                         variant="outlined"
                         size='md'
                         placeholder='Budget'
-                        name='internetBudget'
-                        //defaultValue={internetDetails.data.budget}
+                        name='budget'
                         endDecorator={
                             <Typography variant="body2">$</Typography>
                         }
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.internet.internetBudgetTolerance}
+                        onChange={handleInternetInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={internetDetails.budget_tolerance}
                         variant="outlined"
                         size='md'
                         placeholder='Budget Tolerance'
-                        name='internetBudgetTolerance'
-                        //defaultValue={internetDetails.data.budget_tolerance}
+                        name='budget_tolerance'
                         endDecorator={
                             <Typography variant="body2">%</Typography>
                         }
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.internet.internetBudgetWeight}
+                        onChange={handleInternetInputChange}
+                        onFocus={() => setLawnEditMode(true)}
+                        value={internetDetails.budget_weight}
                         variant="outlined"
                         size='md'
                         placeholder='Budget Weight'
-                        name='internetBudgetWeight'
-                        //defaultValue={internetDetails.data.budget_weight}
+                        name='budget_weight'
                         endDecorator={
                             <Typography variant="body2">%</Typography>
                         }
                     />
+                    {isInternetEditMode ? <Button onClick={persistInternetChanges}> Save</Button> : <></>}
 
                     <Divider></Divider>
-                    <Typography align="left" level="title-lg">Interior</Typography>
+                    <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
+                        <Grid item xs={9}>
+                            <Typography align="left" level="title-lg">Interior</Typography>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Button onClick={() => setInteriorEditMode(prevMode => !prevMode)}>Edit</Button>
+                        </Grid>
+                    </Grid>                         
                     <Input
-                        onChange={handleInputChange}
-                        value={details.interior.interiorSize}
+                        onChange={handleInteriorInputChange}
+                        value={interiorDetails.floor_space}
                         variant="outlined"
                         size='md'
                         placeholder='Size'
-                        name='interiorSize'
-                        //defaultValue={interiorDetails.data.floor_space}
+                        name='floor_space'
                         endDecorator={
                             <Typography variant="body2">ft<sup>2</sup></Typography>
                         }
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.interior.interiorNumRooms}
+                        onChange={handleInteriorInputChange}
+                        value={interiorDetails.number_of_rooms}
                         variant="outlined"
                         size='md'
                         placeholder='Number of Rooms'
-                        name='interiorNumRooms'
-                        //defaultValue={interiorDetails.data.number_of_rooms}
+                        name='number_of_rooms'
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.interior.interiorBudget}
+                        onChange={handleInteriorInputChange}
+                        value={interiorDetails.budget}
                         variant="outlined"
                         size='md'
                         placeholder='Budget'
-                        name='interiorBudget'
-                        //defaultValue={interiorDetails.data.budget}
+                        name='budget'
                         endDecorator={
                             <Typography variant="body2">$</Typography>
                         }
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.interior.interiorBudgetTolerance}
+                        onChange={handleInteriorInputChange}
+                        value={interiorDetails.budget_tolerance}
                         variant="outlined"
                         placeholder='Budget Tolerance'
-                        name='interiorBudgetTolerance'
-                        //defaultValue={interiorDetails.data.budget_tolerance}
+                        name='budget_tolerance'
                         size='md'                                           
                         endDecorator={
                             <Typography variant="body2">%</Typography>
                         }
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.interior.interiorBudgetWeight}
+                        onChange={handleInteriorInputChange}
+                        value={interiorDetails.budget_weight}
                         variant="outlined"
                         placeholder='Budget Weight'
-                        name='interiorBudgetWeight'
-                        //defaultValue={interiorDetails.data.budget_weight}
+                        name='budget_weight'
                         size='md'                                          
                         endDecorator={
                             <Typography variant="body2">%</Typography>
                         }
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.interior.interiorFrequency}
+                        onChange={handleInteriorInputChange}
+                        value={interiorDetails.frequency}
                         variant="outlined"
                         placeholder='Frequency'
                         size='md'
-                        name='interiorFrequency'
-                        //defaultValue={interiorDetails.data.frequency}
+                        name='frequency'
                         endDecorator={
                             <Typography variant="body2">per month</Typography>
                         }
                     />
                     <Input
-                        onChange={handleInputChange}
-                        value={details.interior.interiorFrequencyWeight}
+                        onChange={handleInteriorInputChange}
+                        value={interiorDetails.frequency_weight}
                         variant="outlined"
                         placeholder='Frequency Weight'
-                        name='interiorFrequencyWeight'
-                        //defaultValue={interiorDetails.data.frequency_weight}
+                        name='frequency_weight'
                         size='md'
                                                                 
                         endDecorator={
                             <Typography variant="body2">%</Typography>
                         }
                     />
-                                <Button onClick={persistChanges}>Save Changes</Button>
+                    {isInteriorEditMode ? <Button onClick={persistInteriorChanges}> Save</Button> : <></>}
+
                 </Card>
             </Grid>
         </Grid>
