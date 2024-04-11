@@ -103,13 +103,17 @@ const PropertyForm = ({ property, onDelete }) => {
     
 
     
-    <Card size="sm">
+    <Card size="sm" variant='soft'  sx={{
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: '4px', 
+     }}>
         <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
-            <Grid item xs={11}>
+            <Grid item xs={10}>
                 <Typography paddingTop="6px" align="left" level="title-lg">{property.address}</Typography>
             </Grid>
-            <Grid item xs={1}>
-                <Button variant="solid" color="danger" size='sm' onClick={handleDeleteProperty} >x</Button>
+            <Grid item xs={2}>
+                <Button variant="solid" color="danger" size='sm' onClick={handleDeleteProperty} >Delete</Button>
             </Grid>
             
             <Grid item xs={6}>
@@ -308,7 +312,7 @@ const PropertyForm = ({ property, onDelete }) => {
             
 
             <Grid item xs={6}>
-                <Card size="sm">
+                <Card size="sm" variant="outlined">
                     <Typography align="left" level="title-lg">Internet</Typography>     
                     <Input
                         onChange={(event) => handleInputChange(event, setInternetDetails)}

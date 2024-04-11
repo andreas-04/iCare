@@ -24,7 +24,7 @@ const Root = () => {
             sx={{ borderRadius: '10px', padding: '20px',}}>
                 <Typography align="left" level="h1">iCare</Typography>
                 <Divider orientation="horizontal" flexitem="true" sx={{ width: '50%' }} />
-                <Card sx={{margin: "25px"}}>
+                <Card sx={{marginTop: "25px"}}>
                     <Routes>
                         <Route path="/" element={<Dashboard/>}/>
                         <Route path = "/profile" element={<Profile/>}/>

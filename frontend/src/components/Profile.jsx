@@ -1,5 +1,5 @@
 import  { useEffect, useState } from 'react';
-import { Typography, Card, Button, Grid } from "@mui/joy";
+import { Typography, Button, Grid } from "@mui/joy";
 import Cookies from 'js-cookie'; // Import js-cookie
 import api from '../api'; // Import the api.js file
 import PropertyForm from './PropertyForm';
@@ -58,7 +58,6 @@ const Profile = () => {
                     <PropertyForm property={property}  onDelete={handleDeleteProperty} />
                 </Grid>
             ))}
-
         </Grid>
         </>
     )
