@@ -19,24 +19,46 @@ const Profile = () => {
                 });
         }
     }, []);
+    const handleAddProperty = () => {
+        const userId = Cookies.get('user_id');
+        const newPropertyData = {
+            user: userId,
+        };
+        api.addProperty(newPropertyData)
+            .then(response => {
+                setProperties([...properties, response.data]);
+            })
+            .catch(error => {
+                console.error('Error adding property:', error);
+            });
+    };
+    const handleDeleteProperty = (propertyId) => {
+        api.deleteProperty(propertyId)
+            .then(() => {
+                console.log('Property deleted successfully');
+                setProperties(properties.filter(property => property.id !== propertyId));
+            })
+            .catch(error => {
+                console.error('Error deleting property:', error);
+            });
+    };
+
     return(
         <>
-        <Typography level="h3" align="left">My Properties</Typography>
+        
         <Grid container spacing={2} sx={{ flexGrow: 1 }} alignItems="stretch">
-            
+            <Grid item xs={10}>
+                <Typography level="h3" align="left">My Properties</Typography>
+            </Grid>
+            <Grid item xs={2}>
+                <Button onClick={handleAddProperty} color='success' sx={{marginLeft:"25%"}} >New Property</Button>
+            </Grid>
             {properties.map(property => (
-                <Grid item xs={4} key={property.id}>
-                    <PropertyForm property={property} />
+                <Grid item xs={6} key={property.id}>
+                    <PropertyForm property={property}  onDelete={handleDeleteProperty} />
                 </Grid>
             ))}
-            <Grid item xs={4}>
-                <Card sx={{height: "95%"}}>
-                    <Button sx={{marginTop:"80%",}}>+</Button>
-                    <Typography level="body-md">
-                        New Property
-                    </Typography>
-                </Card>
-            </Grid>
+
         </Grid>
         </>
     )

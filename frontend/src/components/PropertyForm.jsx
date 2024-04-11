@@ -1,14 +1,11 @@
 import  { useEffect, useState, useCallback } from 'react';
-import { Button,Typography, Card, Input, Grid, Divider, Select, Option, selectClasses } from "@mui/joy";
+import { Typography, Card, Input, Grid, Select, Option, selectClasses, Button } from "@mui/joy";
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import PropTypes from 'prop-types';
 import api from '../api';
 
-const PropertyForm = ({ property }) => {
-    const [isLawnEditMode, setLawnEditMode] = useState(false);
-    const [isInteriorEditMode, setInteriorEditMode] = useState(false);
-    const [isPhoneEditMode, setPhoneEditMode] = useState(false);
-    const [isInternetEditMode, setInternetEditMode] = useState(false);
+const PropertyForm = ({ property, onDelete }) => {
+
 
     const [lawnDetails, setLawnDetails] = useState({
         lawn_size: null,
@@ -38,7 +35,6 @@ const PropertyForm = ({ property }) => {
         budget_weight: null,
     });
     const [interiorDetails, setInteriorDetails] = useState({
-        number_of_rooms: null,
         floor_space: null,
         budget: null,
         budget_tolerance: null,
@@ -77,217 +73,375 @@ const PropertyForm = ({ property }) => {
     }, [property]); // Depend on the property object to refetch if it changes
 
 
-    // Functions to persist the lawn, interior, phone, internet changes
-    const persistLawnChanges = async () => {
+    const persistChanges = async (apiMethod, propertyDetails, details) => {
+        console.log(apiMethod);
         try {
-            await api.putLawn(property.lawn, { 
-                ...lawnDetails
+            await api[apiMethod](propertyDetails, {
+                ...details
             });
         } catch (error) {
-            console.error('Error updating lawn changes:', error);
-        }
-    };
-
-    const persistInteriorChanges = async () => {
-        try{
-            await api.putInterior(property.interior, 
-            {
-               ...interiorDetails
-            });
-        }catch (error) {
             console.error('Error updating property details:', error);
         }
     };
-
-    const persistPhoneChanges = async () => {
-        try{
-            await api.putPhone(property.phone, {
-                ...phoneDetails
-            });
-        }catch (error) {
-            console.error('Error updating property details:', error);
+    const handleInputChange = useCallback((event, setDetails) => {
+        const { name, value } = event.target;
+        setDetails(prevDetails => ({
+            ...prevDetails,
+            [name]: value
+        }));
+    }, []);    
+    const handleInputBlur = (event, propertyDetails, details, apiMethod) => {
+        if (JSON.stringify(propertyDetails) !== JSON.stringify(details)) {
+            persistChanges(apiMethod, propertyDetails, details);
         }
     };
-
-    const persistInternetChanges = async () =>
-    {
-        try{
-            await api.putInternet(property.internet, {
-                ...internetDetails
-            });
-        }catch (error) {
-            console.error('Error updating property details:', error);
-        }
+    const handleDeleteProperty = () => {
+        onDelete(property.id);
     };
-    const handleLawnInputChange = useCallback((event) => {
-        const { name, value } = event.target;
-        setLawnDetails(prevDetails => ({
-            ...prevDetails,
-            [name]: value
-        }));
-    }, []); 
 
-    const handleInteriorInputChange = useCallback((event) => {
-        const { name, value } = event.target;
-        setInteriorDetails(prevDetails => ({
-            ...prevDetails,
-            [name]: value
-        }));
-    }, []);
-    const handlePhoneInputChange = useCallback((event) =>{
-        const { name, value } = event.target;
-        setPhoneDetails(prevDetails => ({
-            ...prevDetails,
-            [name]: value
-        }));
-    }, []);
-    const handleInternetInputChange = useCallback((event) => {
-        const { name, value } = event.target;
-        setInternetDetails(prevDetails => ({
-            ...prevDetails,
-            [name]: value
-        }));
-    }, []);
-    const handleInputFocus = (event, sectionType) => {
-        const { name, value } = event.target;
-        setInitialValues(prevValues => ({
-            ...prevValues,
-            [sectionType]: {
-                ...prevValues[sectionType],
-                [name]: value
-            }
-        }));
-        //   fix function to set the edit mode for each section
-        setEditMode(sectionType, true);
-
-    const handleInputBlur = (event, sectionType) => {
-        const { name, value } = event.target;
-        if (value === initialValues[sectionType][name]) {
-            setEditMode(sectionType, false);
-        }
-    };
     return(
     
 
     
     <Card size="sm">
         <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
-            <Grid item xs={9}>
-                <Typography paddingTop="6px" align="left" level="title-lg">Property ID: {property.id}</Typography>
+            <Grid item xs={11}>
+                <Typography paddingTop="6px" align="left" level="title-lg">{property.address}</Typography>
+            </Grid>
+            <Grid item xs={1}>
+                <Button variant="solid" color="danger" size='sm' onClick={handleDeleteProperty} >x</Button>
             </Grid>
             
-            <Grid item xs={12}>
+            <Grid item xs={6}>
                 <Card size="sm">
                     <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
                         <Grid item xs={9}>
                             <Typography align="left" level="title-lg">Lawn</Typography>
                         </Grid>
-                        <Grid item xs={3}>
-                            <Button onClick={() => setLawnEditMode(prevMode => !prevMode)}>Edit</Button>
-                        </Grid>
+                        
                     </Grid>
                         <Input
-                            onChange={handleLawnInputChange}
-                            onFocus={() => setLawnEditMode(true)}
+                            onChange={(event) => handleInputChange(event, setLawnDetails)}
+                            onBlur={(event) => handleInputBlur(event,  property.lawn, lawnDetails, 'putLawn')}
                             variant="soft"
-                            size='md'
-                            placeholder='Lawn Size'
+                            size='sm'
+                            placeholder='0.0'
                             name='lawn_size'
                             value={lawnDetails.lawn_size}
                             endDecorator={
                                 <Typography variant="body2">ft<sup>2</sup></Typography>
                             }
+                            startDecorator={
+                                <Typography level="body-sm">Lawn Size:</Typography>
+                            }
                         />
                         <Input
-                            onChange={handleLawnInputChange}
-                            onFocus={() => setLawnEditMode(true)}
-                            variant="outlined"
-                            size='md'
-                            placeholder='Budget'
+                            onChange={(event) => handleInputChange(event, setLawnDetails)}
+                            onBlur={(event) => handleInputBlur(event,   property.lawn, lawnDetails, 'putLawn')}                             variant="soft"
+                            size='sm'
+                            placeholder='0.0'
                             name='budget'
                             value={lawnDetails.budget}
                             endDecorator={
                                 <Typography variant="body2">$</Typography>
                             }
+                            startDecorator={
+                                <Typography level="body-sm">Budget:</Typography>
+                            }
                         />
                         <Input
-                            onChange={handleLawnInputChange}
-                            onFocus={() => setLawnEditMode(true)}
-                            variant="outlined"
-                            placeholder='Budget Tolerance'
+                            onChange={(event) => handleInputChange(event, setLawnDetails)}
+                            onBlur={(event) => handleInputBlur(event,   property.lawn, lawnDetails, 'putLawn')}                             variant="soft"
+                            placeholder='0.0'
                             name='budget_tolerance'
                             value={lawnDetails.budget_tolerance}
-                            size='md'                                        
+                            size='sm'                                        
                             endDecorator={
                                 <Typography variant="body2">%</Typography>
                             }
+                            startDecorator={
+                                <Typography level="body-sm">Budget Tolerance:</Typography>
+                            }
                         />
                         <Input
-                            onChange={handleLawnInputChange}
-                            onFocus={() => setLawnEditMode(true)}
-                            variant="outlined"
-                            placeholder='Budget Weight'
+                            onChange={(event) => handleInputChange(event, setLawnDetails)}
+                            onBlur={(event) => handleInputBlur(event,   property.lawn, lawnDetails, 'putLawn')}                             variant="soft"
+                            placeholder='0.0'
                             name='budget_weight'
                             value={lawnDetails.budget_weight}
-                            size='md'                                         
+                            size='sm'                                         
                             endDecorator={
                                 <Typography variant="body2">%</Typography>
                             }
+                            startDecorator={
+                                <Typography level="body-sm">Budget Weight:</Typography>
+                            }
                         />
                         <Input
-                            onChange={handleLawnInputChange}
-                            onFocus={() => setLawnEditMode(true)}
-                            value={lawnDetails.frequency}
-                            variant="outlined"
-                            placeholder='Frequency'
+                            onChange={(event) => handleInputChange(event, setLawnDetails)}
+                             onBlur={(event) => handleInputBlur(event,   property.lawn, lawnDetails, 'putLawn')}                            value={lawnDetails.frequency}
+                             variant="soft"
+                            placeholder='0'
                             name='frequency'
-                            size='md'                                       
+                            size='sm'                                       
                             endDecorator={
                                 <Typography variant="body2">per month</Typography>
                             }
+                            startDecorator={
+                                <Typography level="body-sm">Frequency:</Typography>
+                            }
                         />
                         <Input
-                            onChange={handleLawnInputChange}
+                            onChange={(event) => handleInputChange(event, setLawnDetails)}
                             value={lawnDetails.frequency_weight}
-                            onFocus={() => setLawnEditMode(true)}
-                            variant="outlined"
-                            placeholder='Frequency Weight'
+                             onBlur={(event) => handleInputBlur(event,   property.lawn, lawnDetails, 'putLawn')}                             variant="soft"
+                            placeholder='0.0'
                             name='frequency_weight'
-                            size='md'                                          
+                            size='sm'                                          
                             endDecorator={
                                 <Typography variant="body2">%</Typography>
                             }
+                            startDecorator={
+                                <Typography level="body-sm">Frequency Weight:</Typography>
+                            }
                         />
-                    {isLawnEditMode ? <Button onClick={persistLawnChanges}> Save</Button> : <></>}
-                    <Divider></Divider>
-                    <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
-                        <Grid item xs={9}>
-                            <Typography align="left" level="title-lg">Phones</Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                        <Button onClick={() => setPhoneEditMode(prevMode => !prevMode)}>Edit</Button>
-
-                        </Grid>
-                    </Grid>                    
+                </Card>
+            </Grid>
+            <Grid item xs={6}>
+            <Card size="sm">
+                    <Typography align="left" level="title-lg">Interior</Typography>                        
                     <Input
-                        onChange={handlePhoneInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        variant='outlined'
-                        placeholder='Users'
-                        name='Users'
-                        value={phoneDetails.users}
-                        size='md'
+                        onChange={(event) => handleInputChange(event, setInteriorDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.interior, interiorDetails, 'putInterior')}
+                        value={interiorDetails.floor_space}
+                         variant="soft"
+                        size='sm'
+                        placeholder='0.0'
+                        name='floor_space'
+                        endDecorator={
+                            <Typography variant="body2">ft<sup>2</sup></Typography>
+                        }
+                        startDecorator={
+                            <Typography level="body-sm">Interior Size:</Typography>
+                        }
+                    />
+
+                    <Input
+                        onChange={(event) => handleInputChange(event, setInteriorDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.interior, interiorDetails, 'putInterior')}
+                        value={interiorDetails.budget}
+                         variant="soft"
+                        size='sm'
+                        placeholder='0.0'
+                        name='budget'
+                        endDecorator={
+                            <Typography variant="body2">$</Typography>
+                        }
+                        startDecorator={
+                            <Typography level="body-sm">Budget:</Typography>
+                        }
                     />
                     <Input
-                        onChange={handlePhoneInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        value={phoneDetails.users_weight} 
-                        variant='outlined'
-                        placeholder='User Weight'
-                        name='users_weight'
-                        size='md'
+                        onChange={(event) => handleInputChange(event, setInteriorDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.interior, interiorDetails, 'putInterior')}
+                        value={interiorDetails.budget_tolerance}
+                         variant="soft"
+                        placeholder='0.0'
+                        name='budget_tolerance'
+                        size='sm'                                           
                         endDecorator={
                             <Typography variant="body2">%</Typography>
+                        }
+                        startDecorator={
+                            <Typography level="body-sm">Budget Tolerance:</Typography>
+                        }
+                    />
+                    <Input
+                        onChange={(event) => handleInputChange(event, setInteriorDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.interior, interiorDetails, 'putInterior')}
+                        value={interiorDetails.budget_weight}
+                         variant="soft"
+                        placeholder='0.0'
+                        name='budget_weight'
+                        size='sm'                                          
+                        endDecorator={
+                            <Typography variant="body2">%</Typography>
+                        }
+                        startDecorator={
+                            <Typography level="body-sm">Budget Weight:</Typography>
+                        }
+                    />
+                    <Input
+                        onChange={(event) => handleInputChange(event, setInteriorDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.interior, interiorDetails, 'putInterior')}
+                        value={interiorDetails.frequency}
+                         variant="soft"
+                        placeholder='0'
+                        size='sm'
+                        name='frequency'
+                        endDecorator={
+                            <Typography variant="body2">per month</Typography>
+                        }
+                        startDecorator={
+                            <Typography level="body-sm">Frequency:</Typography>
+                        }
+                    />
+                    <Input
+                        onChange={(event) => handleInputChange(event, setInteriorDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.interior, interiorDetails, 'putInterior')}
+                        value={interiorDetails.frequency_weight}
+                         variant="soft"
+                        placeholder='0.0'
+                        name='frequency_weight'
+                        size='sm'
+                                                                
+                        endDecorator={
+                            <Typography variant="body2">%</Typography>
+                        }
+                        startDecorator={
+                            <Typography level="body-sm">Frequency Weight</Typography>
+                        }
+                    />
+        
+                </Card>
+            </Grid>
+            
+
+            <Grid item xs={6}>
+                <Card size="sm">
+                    <Typography align="left" level="title-lg">Internet</Typography>     
+                    <Input
+                        onChange={(event) => handleInputChange(event, setInternetDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.internet, internetDetails, 'putInternet')}                        value={internetDetails.users}
+                         variant="soft"
+                        size='sm'
+                        placeholder='Devices'
+                        name='users'
+                        startDecorator={
+                            <Typography level="body-sm">Devices:</Typography>
+                        }
+                    />
+                    <Input
+                        onChange={(event) => handleInputChange(event, setInternetDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.internet, internetDetails, 'putInternet')}                        value={internetDetails.users_weight}
+                         variant="soft"
+                        size='sm'
+                        placeholder='0.0'
+                        name='users_weight'
+                        startDecorator={
+                            <Typography level="body-sm">Device Weight:</Typography>
+                        }
+                        
+                    />
+                    <Input
+                        onChange={(event) => handleInputChange(event, setInternetDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.internet, internetDetails, 'putInternet')}                        value={internetDetails.speed_requirements}
+                         variant="soft"
+                        size='sm'
+                        placeholder='0'
+                        name='speed_requirements'
+                        endDecorator={
+                            <Typography variant="body2">mb/s</Typography>
+                        }
+                        startDecorator={
+                            <Typography level="body-sm">Preferred Speed:</Typography>
+                        }
+                    />     
+                    <Input
+                        onChange={(event) => handleInputChange(event, setInternetDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.internet, internetDetails, 'putInternet')}                        value={internetDetails.speed_tolerance}
+                         variant="soft"
+                        size='sm'
+                        placeholder='0.0'
+                        name='speed_tolerance'
+                        startDecorator={
+                            <Typography level="body-sm">Speed Tolerance:</Typography>
+                        }
+                    />    
+                    <Input
+                        onChange={(event) => handleInputChange(event, setInternetDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.internet, internetDetails, 'putInternet')}                        value={internetDetails.speed_weight}
+                         variant="soft"
+                        size='sm'
+                        placeholder='0.0'
+                        name='speed_weight'
+                        startDecorator={
+                            <Typography level="body-sm">Speed Weight:</Typography>
+                        }
+                    />                       
+                    <Input
+                        onChange={(event) => handleInputChange(event, setInternetDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.internet, internetDetails, 'putInternet')}                        value={internetDetails.budget}
+                         variant="soft"
+                        size='sm'
+                        placeholder='0.0'
+                        name='budget'
+                        endDecorator={
+                            <Typography variant="body2">$</Typography>
+                        }
+                        startDecorator={
+                            <Typography level="body-sm">Budget:</Typography>
+                        }
+                    />
+                    <Input
+                        onChange={(event) => handleInputChange(event, setInternetDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.internet, internetDetails, 'putInternet')}                        value={internetDetails.budget_tolerance}
+                         variant="soft"
+                        size='sm'
+                        placeholder='0.0'
+                        name='budget_tolerance'
+                        endDecorator={
+                            <Typography variant="body2">%</Typography>
+                        }
+                        startDecorator={
+                            <Typography level="body-sm">Budget Tolerance:</Typography>
+                        }
+                    />
+                    <Input
+                        onChange={(event) => handleInputChange(event, setInternetDetails)}
+                         onBlur={(event) => handleInputBlur(event,   property.internet, internetDetails, 'putInternet')}                        value={internetDetails.budget_weight}
+                         variant="soft"
+                        size='sm'
+                        placeholder='0.0'
+                        startDecorator={
+                            <Typography level="body-sm">Budget Weight:</Typography>
+                        }
+                        name='budget_weight'
+                        endDecorator={
+                            <Typography variant="body2">%</Typography>
+                        }
+                        
+                    />
+            </Card>
+            </Grid>
+            <Grid item xs={6}>
+                <Card size="sm">
+                    <Typography align="left" level="title-lg">Phones</Typography>
+                    <Input
+                        onChange={(event) => handleInputChange(event, setPhoneDetails)}
+                        onBlur={(event) => handleInputBlur(event,   property.phone, phoneDetails, 'putPhone')}
+                        value={phoneDetails.users}
+                        variant="soft"
+                        placeholder='0'
+                        name='users'
+                        size='sm'
+                        startDecorator={
+                            <Typography level="body-sm">Users:</Typography>
+                        }
+                    />
+                    <Input
+                        onChange={(event) => handleInputChange(event, setPhoneDetails)}
+                        onBlur={(event) => handleInputBlur(event,   property.phone, phoneDetails, 'putPhone')}
+                        value={phoneDetails.users_weight} 
+                         variant="soft"
+                        placeholder='0.0'
+                        name='users_weight'
+                        size='sm'
+                        endDecorator={
+                            <Typography variant="body2">%</Typography>
+                        }
+                        startDecorator={
+                            <Typography level="body-sm">Users Weight:</Typography>
                         }
                     />
                     <Select
@@ -295,6 +449,8 @@ const PropertyForm = ({ property }) => {
                         placeholder="Preferred Plan Type"
                         indicator={<KeyboardArrowDown />}
                         name='phonePreferredPlanType'
+                        variant='soft'
+                        size='sm'
                         //defaultValue={phoneDetails.data.preferred_plan_type}
                         sx={{
                             [`& .${selectClasses.indicator}`]: {
@@ -310,244 +466,76 @@ const PropertyForm = ({ property }) => {
                         <Option value="unlimited">Unlimited</Option>
                     </Select>
                     <Input
-                        onChange={handlePhoneInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        value={phoneDetails.plan_weight}
-                        variant="outlined"
-                        size='md'
-                        placeholder='Plan Weight'
+                        onChange={(event) => handleInputChange(event, setPhoneDetails)}
+                     
+                        onBlur={(event) => handleInputBlur(event,   property.phone, phoneDetails, 'putPhone')}                        value={phoneDetails.plan_weight}
+                         variant="soft"
+                        size='sm'
+                        placeholder='0.0'
                         name='plan_weight'
                         endDecorator={
                             <Typography variant="body2">%</Typography>
                         }
-                    />
-                    <Input
-                        onChange={handlePhoneInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        value={phoneDetails.budget}
-                        placeholder='Budget'
-                        name='budget'
-                        variant="outlined"
-                        size='md'
-                        endDecorator={
-                            <Typography variant="body2">$</Typography>
+                        startDecorator={
+                            <Typography level="body-sm">Plan Weight:</Typography>
                         }
                     />
                     <Input
-                        onChange={handlePhoneInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        value={phoneDetails.budget_tolerance}
-                        variant="outlined"
-                        size='md'
-                        placeholder='Budget Tolerance'
+                        onChange={(event) => handleInputChange(event, setPhoneDetails)}
+                     
+                        onBlur={(event) => handleInputBlur(event,   property.phone, phoneDetails, 'putPhone')}                        value={phoneDetails.budget}
+                        placeholder='0.0'
+                        name='budget'
+                         variant="soft"
+                        size='sm'
+                        endDecorator={
+                            <Typography variant="body2">$</Typography>
+                        }
+                        startDecorator={
+                            <Typography level="body-sm">Budget:</Typography>
+                        }
+                    />
+                    <Input
+                        onChange={(event) => handleInputChange(event, setPhoneDetails)}
+                     
+                        onBlur={(event) => handleInputBlur(event,   property.phone, phoneDetails, 'putPhone')}                        value={phoneDetails.budget_tolerance}
+                         variant="soft"
+                        size='sm'
+                        placeholder='0.0'
                         name='budget_tolerance'
                         endDecorator={
                             <Typography variant="body2">%</Typography>
                         }
+                        startDecorator={
+                            <Typography level="body-sm">Budget Tolerance:</Typography>
+                        }
                     />
                     <Input
-                        onChange={handlePhoneInputChange}
-                        onFocus={() => setLawnEditMode(true)}
+                        onChange={(event) => handleInputChange(event, setPhoneDetails)}
+                     
+                        onBlur={(event) => handleInputBlur(event,   property.phone, phoneDetails, 'putPhone')}                        
                         value={phoneDetails.budget_weight}
-                        variant="outlined"
-                        size='md'
+                        variant="soft"
+                        size='sm'
                         placeholder='Budget Weight'
                         name='budget_weight'
                         endDecorator={
                             <Typography variant="body2">%</Typography>
                         }
-                    />
-                    {isPhoneEditMode ? <Button onClick={persistPhoneChanges}> Save</Button> : <></>}
-
-                    <Divider></Divider>
-
-                    <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
-                        <Grid item xs={9}>
-                            <Typography align="left" level="title-lg">Internet</Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Button onClick={() => setInternetEditMode(prevMode => !prevMode)}>Edit</Button>
-                        </Grid>
-                    </Grid>       
-                    <Input
-                        onChange={handleInternetInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        value={internetDetails.users}
-                        variant='outlined'
-                        size='md'
-                        placeholder='Devices'
-                        name='users'
-                    />
-                    <Input
-                        onChange={handleInternetInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        value={internetDetails.users_weight}
-                        variant='outlined'
-                        size='md'
-                        placeholder='Device Weight'
-                        name='users_weight'
-                    />
-                    <Input
-                        onChange={handleInternetInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        value={internetDetails.speed_requirements}
-                        variant="outlined"
-                        size='md'
-                        placeholder='Preferred Speed:'
-                        name='speed_requirements'
-                        endDecorator={
-                            <Typography variant="body2">mb/s</Typography>
-                        }
-                    />     
-                    <Input
-                        onChange={handleInternetInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        value={internetDetails.speed_tolerance}
-                        variant='outlined'
-                        size='md'
-                        placeholder='Speed Tolerance'
-                        name='speed_tolerance'
-                    />    
-                    <Input
-                        onChange={handleInternetInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        value={internetDetails.speed_weight}
-                        variant='outlined'
-                        size='md'
-                        placeholder='Speed Weight'
-                        name='speed_weight'
-                    />                       
-                    <Input
-                        onChange={handleInternetInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        value={internetDetails.budget}
-                        variant="outlined"
-                        size='md'
-                        placeholder='Budget'
-                        name='budget'
-                        endDecorator={
-                            <Typography variant="body2">$</Typography>
+                        startDecorator={
+                            <Typography level="body-sm">Budget Weight:</Typography>
                         }
                     />
-                    <Input
-                        onChange={handleInternetInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        value={internetDetails.budget_tolerance}
-                        variant="outlined"
-                        size='md'
-                        placeholder='Budget Tolerance'
-                        name='budget_tolerance'
-                        endDecorator={
-                            <Typography variant="body2">%</Typography>
-                        }
-                    />
-                    <Input
-                        onChange={handleInternetInputChange}
-                        onFocus={() => setLawnEditMode(true)}
-                        value={internetDetails.budget_weight}
-                        variant="outlined"
-                        size='md'
-                        placeholder='Budget Weight'
-                        name='budget_weight'
-                        endDecorator={
-                            <Typography variant="body2">%</Typography>
-                        }
-                    />
-                    {isInternetEditMode ? <Button onClick={persistInternetChanges}> Save</Button> : <></>}
-
-                    <Divider></Divider>
-                    <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
-                        <Grid item xs={9}>
-                            <Typography align="left" level="title-lg">Interior</Typography>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Button onClick={() => setInteriorEditMode(prevMode => !prevMode)}>Edit</Button>
-                        </Grid>
-                    </Grid>                         
-                    <Input
-                        onChange={handleInteriorInputChange}
-                        value={interiorDetails.floor_space}
-                        variant="outlined"
-                        size='md'
-                        placeholder='Size'
-                        name='floor_space'
-                        endDecorator={
-                            <Typography variant="body2">ft<sup>2</sup></Typography>
-                        }
-                    />
-                    <Input
-                        onChange={handleInteriorInputChange}
-                        value={interiorDetails.number_of_rooms}
-                        variant="outlined"
-                        size='md'
-                        placeholder='Number of Rooms'
-                        name='number_of_rooms'
-                    />
-                    <Input
-                        onChange={handleInteriorInputChange}
-                        value={interiorDetails.budget}
-                        variant="outlined"
-                        size='md'
-                        placeholder='Budget'
-                        name='budget'
-                        endDecorator={
-                            <Typography variant="body2">$</Typography>
-                        }
-                    />
-                    <Input
-                        onChange={handleInteriorInputChange}
-                        value={interiorDetails.budget_tolerance}
-                        variant="outlined"
-                        placeholder='Budget Tolerance'
-                        name='budget_tolerance'
-                        size='md'                                           
-                        endDecorator={
-                            <Typography variant="body2">%</Typography>
-                        }
-                    />
-                    <Input
-                        onChange={handleInteriorInputChange}
-                        value={interiorDetails.budget_weight}
-                        variant="outlined"
-                        placeholder='Budget Weight'
-                        name='budget_weight'
-                        size='md'                                          
-                        endDecorator={
-                            <Typography variant="body2">%</Typography>
-                        }
-                    />
-                    <Input
-                        onChange={handleInteriorInputChange}
-                        value={interiorDetails.frequency}
-                        variant="outlined"
-                        placeholder='Frequency'
-                        size='md'
-                        name='frequency'
-                        endDecorator={
-                            <Typography variant="body2">per month</Typography>
-                        }
-                    />
-                    <Input
-                        onChange={handleInteriorInputChange}
-                        value={interiorDetails.frequency_weight}
-                        variant="outlined"
-                        placeholder='Frequency Weight'
-                        name='frequency_weight'
-                        size='md'
-                                                                
-                        endDecorator={
-                            <Typography variant="body2">%</Typography>
-                        }
-                    />
-                    {isInteriorEditMode ? <Button onClick={persistInteriorChanges}> Save</Button> : <></>}
-
                 </Card>
-            </Grid>
+            </Grid> 
+        
         </Grid>
     </Card>
     );
 };
 export default PropertyForm;
 PropertyForm.propTypes = {
-    property: PropTypes.object.isRequired
+    property: PropTypes.object.isRequired,
+    onDelete: PropTypes.func.isRequired,
+
 };
