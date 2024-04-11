@@ -60,10 +60,22 @@ export default{
         return apiClient.get(`/users/${userId}/properties`);
     },
     addProperty(userId){
-        return apiClient.post(`/properties/`, userId);
+        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
+        return apiClient.post(`/property/`, userId,
+         {
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+        });
     },
     deleteProperty(propertyId){
-        return apiClient.delete(`/properties/${propertyId}`);
+        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
+        return apiClient.delete(`/property/${propertyId}`,
+        {
+           headers: {
+               'X-CSRFToken': csrfToken,
+           },
+       });
     },
     putProperty(propertyId, propertyData){
         return apiClient.put(`/properties/${propertyId}`, propertyData);
@@ -81,17 +93,38 @@ export default{
         return apiClient.get(`/phone/${phoneId}/`);
     },
     putLawn(lawnId, lawnData){
-        return apiClient.put(`/lawn/${lawnId}/`, lawnData);
+        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
+        return apiClient.put(`/lawn/${lawnId}/`, lawnData, {
+            headers: {
+                'X-CSRFToken': csrfToken,
+            },
+        });
     },
     putInterior(interiorId, interiorData){
-        return apiClient.put(`/interior/${interiorId}/`, interiorData);
+        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
+        return apiClient.put(`/interior/${interiorId}/`, interiorData, {
+            headers: {
+                'X-CSRFToken': csrfToken, 
+            },
+        });
     },
     putInternet(internetId, internetData){
-        return apiClient.put(`/internet/${internetId}/`, internetData);
+        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
+        return apiClient.put(`/internet/${internetId}/`, internetData, {
+            headers: {
+                'X-CSRFToken': csrfToken, 
+            },
+        });
     },
     putPhone(phoneId, phoneData){
-        return apiClient.put(`/lawn/${phoneId}/`, phoneData);
+        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
+        return apiClient.put(`/phone/${phoneId}/`, phoneData, {
+            headers: {
+                'X-CSRFToken': csrfToken, 
+            },
+        });
     },
+    
 
     
     

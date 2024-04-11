@@ -12,6 +12,7 @@ export default function Navbar() {
         api.logout()
         .then(() => {
            console.log('Logged out successfully');
+           window.location.reload();
         })
         .catch(error => {
            console.error('Error logging out:', error);

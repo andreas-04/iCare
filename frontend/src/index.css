@@ -5,7 +5,8 @@
 
   color-scheme: light dark;
   color:red;
-  background-color: rgb(193, 208, 228);
+  background-image: url('/gradient.jpg');
+
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
