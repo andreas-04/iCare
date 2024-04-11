@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator
 
 class Property(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    address = models.CharField(max_length=32, null=True, blank=True)
     lawn = models.OneToOneField('Lawn', on_delete=models.CASCADE, null=True, blank=True, related_name='property_lawn')
     phone = models.OneToOneField('Phone', on_delete=models.CASCADE, null=True, blank=True, related_name='property_phone')
     internet = models.OneToOneField('Internet', on_delete=models.CASCADE, null=True, blank=True, related_name='property_internet')
@@ -26,7 +27,6 @@ class Lawn(models.Model):
 
 class Interior(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True, related_name='interiors')
-    number_of_rooms = models.IntegerField(null=True, blank=True)
     floor_space = models.FloatField(null=True, blank=True)
     budget = models.FloatField(null=True, blank=True)
     budget_tolerance = models.FloatField(null=True, blank=True) 
