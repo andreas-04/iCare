@@ -51,7 +51,7 @@ const Profile = () => {
                 <Typography level="h3" align="left">My Properties</Typography>
             </Grid>
             <Grid item xs={2}>
-                <Button onClick={handleAddProperty} color='success' sx={{marginLeft:"25%"}} >New Property</Button>
+                <Button onClick={handleAddProperty} color='success' size='sm' sx={{marginLeft:"33%"}} >New Property</Button>
             </Grid>
             {properties.map(property => (
                 <Grid item xs={6} key={property.id}>

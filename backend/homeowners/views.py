@@ -80,6 +80,8 @@ class PhoneViewSet(viewsets.ModelViewSet):
 class LawnServicePlanViewSet(viewsets.ModelViewSet):
     queryset = LawnServicePlan.objects.all()
     serializer_class = LawnServicePlanSerializer
+
+
 class InteriorServicePlanViewSet(viewsets.ModelViewSet):
     queryset = InteriorServicePlan.objects.all()
     serializer_class = InteriorServicePlanSerializer
@@ -111,16 +113,17 @@ class ScoredLawnPlans(APIView):
         for plan in service_plans:
             score = calculate_lawn_interior_score(plan.cost, lawn.budget, lawn.budget_tolerance, lawn.budget_weight, plan.frequency, lawn.frequency, lawn.frequency_weight)
             # Append the plan and its score to the list
-            scored_service_plans.append({
-                'service_plan': plan,
-                'score': score
-            })
+            if score > 0:
+                scored_service_plans.append({
+                    'service_plan': plan,
+                    'score': score
+                })
         
         # Sort the scored service plans by score in descending order
         scored_service_plans.sort(key=lambda x: x['score'], reverse=True)
         
         # Serialize the scored service plans
-        serializer = ScoredLawnServicePlanSerializer(scored_service_plans, many=True)
+        serializer = ScoredLawnServicePlanSerializer(scored_service_plans[:5], many=True)
         
         return Response(serializer.data)
 
@@ -137,16 +140,17 @@ class ScoredInteriorPlans(APIView):
         for plan in service_plans:
             score = calculate_lawn_interior_score(plan.cost, interior.budget, interior.budget_tolerance, interior.budget_weight, plan.frequency, interior.frequency, interior.frequency_weight)
             # Append the plan and its score to the list
-            scored_service_plans.append({
-                'service_plan': plan,
-                'score': score
-            })
+            if score > 0:
+                scored_service_plans.append({
+                    'service_plan': plan,
+                    'score': score
+                })
         
         # Sort the scored service plans by score in descending order
         scored_service_plans.sort(key=lambda x: x['score'], reverse=True)
         
         # Serialize the scored service plans
-        serializer = ScoredInteriorServicePlanSerializer(scored_service_plans, many=True)
+        serializer = ScoredInteriorServicePlanSerializer(scored_service_plans[:5], many=True)
         
         return Response(serializer.data)
     
@@ -163,16 +167,18 @@ class ScoredInternetPlans(APIView):
         for plan in service_plans:
             score = calculate_internet_score(plan.cost, internet.budget, internet.budget_tolerance, internet.budget_weight, plan.frequency, internet.frequency, internet.frequency_weight)
             # Append the plan and its score to the list
-            scored_service_plans.append({
-                'service_plan': plan,
-                'score': score
-            })
+            if score > 0:
+                scored_service_plans.append({
+                    'service_plan': plan,
+                    'score': score
+                })
         
         # Sort the scored service plans by score in descending order
         scored_service_plans.sort(key=lambda x: x['score'], reverse=True)
         
+
         # Serialize the scored service plans
-        serializer = ScoredInternetServicePlanSerializer(scored_service_plans, many=True)
+        serializer = ScoredInternetServicePlanSerializer(scored_service_plans[:5], many=True)
         
         return Response(serializer.data)
 class ScoredPhonePlans(APIView):
@@ -188,15 +194,18 @@ class ScoredPhonePlans(APIView):
         for plan in service_plans:
             score = calculate_phone_score(plan.cost, phone.budget, phone.budget_tolerance, phone.budget_weight, phone.users, plan.users, phone.users_weight, phone.preferred_plan_type, plan.plan_type, phone.plan_weight)
             # Append the plan and its score to the list
-            scored_service_plans.append({
-                'service_plan': plan,
-                'score': score
-            })
-        
+            if score > 0:
+                scored_service_plans.append({
+                    'service_plan': plan,
+                    'score': score
+                })
+            
         # Sort the scored service plans by score in descending order
         scored_service_plans.sort(key=lambda x: x['score'], reverse=True)
-        
+
+        top_5_scored_service_plans = scored_service_plans[:5]
+
         # Serialize the scored service plans
-        serializer = ScoredPhoneServicePlanSerializer(scored_service_plans, many=True)
+        serializer = ScoredPhoneServicePlanSerializer(top_5_scored_service_plans, many=True)
         
         return Response(serializer.data)

@@ -3,6 +3,7 @@ import { Typography, Card, Input, Grid, Select, Option, selectClasses, Button } 
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import PropTypes from 'prop-types';
 import api from '../api';
+import Cookies from 'js-cookie';
 
 const PropertyForm = ({ property, onDelete }) => {
 
@@ -42,7 +43,9 @@ const PropertyForm = ({ property, onDelete }) => {
         frequency: null,
         frequency_weight: null,
     });
-
+    const [propName, setPropName] = useState({
+        address:"",
+    }) 
 
     useEffect(() => {
         //populate form
@@ -52,6 +55,7 @@ const PropertyForm = ({ property, onDelete }) => {
                 const internetData = await api.getInternet(property.internet);
                 const interiorData = await api.getInterior(property.interior);
                 const phoneData = await api.getPhone(property.phone);
+                const propData = await api.getProperty(property.id);
                 setLawnDetails({
                   ...lawnData.data
                 });
@@ -64,6 +68,11 @@ const PropertyForm = ({ property, onDelete }) => {
                 setPhoneDetails({
                   ...phoneData.data
                 });
+                setPropName(
+                    {
+                        ...propData.data
+                    } 
+                );
             } catch (error) {
                 console.error('Error fetching property details:', error);
             }
@@ -99,6 +108,25 @@ const PropertyForm = ({ property, onDelete }) => {
         onDelete(property.id);
     };
 
+
+    const handleNameUpdate = async (event, propertyId) => {
+        try{
+            const daAddy = propName.address;
+            const userId = Cookies.get('user_id');
+
+            await api.putProperty(propertyId, {
+                address: daAddy,
+                user: userId,
+
+
+            });
+        }catch (error) {
+            console.error('Error updating property name:', error);
+        }
+       
+    };
+
+
     return(
     
 
@@ -110,6 +138,14 @@ const PropertyForm = ({ property, onDelete }) => {
      }}>
         <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
             <Grid item xs={10}>
+                <Input
+                    onChange={(event) => handleInputChange(event, setPropName)}
+                    onBlur={(event) => handleNameUpdate(event, property.id) }
+                    variant='plain'
+                    name="address"
+                    placeholder='Address'
+                    value={propName.address}
+                />
                 <Typography paddingTop="6px" align="left" level="title-lg">{property.address}</Typography>
             </Grid>
             <Grid item xs={2}>
@@ -319,7 +355,7 @@ const PropertyForm = ({ property, onDelete }) => {
                          onBlur={(event) => handleInputBlur(event,   property.internet, internetDetails, 'putInternet')}                        value={internetDetails.users}
                          variant="soft"
                         size='sm'
-                        placeholder='Devices'
+                        placeholder='0'
                         name='users'
                         startDecorator={
                             <Typography level="body-sm">Devices:</Typography>

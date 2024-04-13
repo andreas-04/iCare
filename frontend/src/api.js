@@ -59,6 +59,9 @@ export default{
     getProperties(userId){
         return apiClient.get(`/users/${userId}/properties`);
     },
+    getProperty(propId){
+        return apiClient.get(`/property/${propId}/`);
+    },
     addProperty(userId){
         const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
         return apiClient.post(`/property/`, userId,
@@ -78,7 +81,14 @@ export default{
        });
     },
     putProperty(propertyId, propertyData){
-        return apiClient.put(`/properties/${propertyId}`, propertyData);
+        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
+
+        return apiClient.put(`/property/${propertyId}/`, propertyData,
+        {
+           headers: {
+               'X-CSRFToken': csrfToken,
+           },
+       });
     },
     getLawn(lawnId){
         return apiClient.get(`/lawn/${lawnId}/`);
