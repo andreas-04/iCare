@@ -165,7 +165,7 @@ class ScoredInternetPlans(APIView):
         # Calculate scores for each service plan and store them in a list
         scored_service_plans = []
         for plan in service_plans:
-            score = calculate_internet_score(plan.cost, internet.budget, internet.budget_tolerance, internet.budget_weight, plan.frequency, internet.frequency, internet.frequency_weight)
+            score = calculate_internet_score(plan.cost, internet.budget, internet.budget_tolerance, internet.budget_weight, plan.speed, internet.speed_requirements, internet.speed_tolerance, internet.speed_weight, plan.users, internet.users, internet.users_weight)
             # Append the plan and its score to the list
             if score > 0:
                 scored_service_plans.append({

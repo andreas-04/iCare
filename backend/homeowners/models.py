@@ -9,8 +9,11 @@ class Property(models.Model):
     phone = models.OneToOneField('Phone', on_delete=models.CASCADE, null=True, blank=True, related_name='property_phone')
     internet = models.OneToOneField('Internet', on_delete=models.CASCADE, null=True, blank=True, related_name='property_internet')
     interior = models.OneToOneField('Interior', on_delete=models.CASCADE, null=True, blank=True, related_name='property_interior')
-
-  
+    interestedInLawn = models.BooleanField(default=False)
+    interestedInInterior = models.BooleanField(default=False)
+    interestedInPhone = models.BooleanField(default=False)
+    interestedInInternet = models.BooleanField(default=False)
+    
 class MortgageInsurance(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
     mortgage_details = models.TextField()
@@ -80,7 +83,7 @@ class LawnServicePlan(models.Model):
     notification_date = models.DateTimeField(null=True, blank=True)
 
 class InteriorServicePlan(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
     business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='interior_service_plans')
     service_name = models.CharField(max_length=64)
     service_description = models.CharField(max_length=524)
@@ -90,7 +93,7 @@ class InteriorServicePlan(models.Model):
     notification_date = models.DateTimeField(null=True, blank=True)
 
 class InternetServicePlan(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
     business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='internet_service_plans')
     service_name = models.CharField(max_length=64)
     service_description = models.CharField(max_length=524)
@@ -101,7 +104,7 @@ class InternetServicePlan(models.Model):
     notification_date = models.DateTimeField(null=True, blank=True)
 
 class PhoneServicePlan(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
     business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='phone_service_plans')
     service_name = models.CharField(max_length=64)
     service_description = models.CharField(max_length=524)

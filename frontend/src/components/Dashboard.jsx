@@ -164,26 +164,6 @@ const Dashboard = () => {
                             </Box>
                         </Card>
                     </Stack>
-                    <Stack item>
-                        <Card>
-                            <Typography level="title-lg" align="left">Interested In:</Typography>
-                            <Divider></Divider>
-                            <List size="sm">
-                                <ListItem>
-                                    <Checkbox label="Lawn Care Services" defaultChecked />
-                                </ListItem>
-                                <ListItem>
-                                    <Checkbox label="Internet Services" />
-                                </ListItem>
-                                <ListItem>
-                                    <Checkbox label="Phone Services" />
-                                </ListItem>
-                                <ListItem>
-                                    <Checkbox label="Miscellaneous Services" />
-                                </ListItem>
-                            </List>
-                        </Card>
-                    </Stack>
                 </Stack>
             </Grid>
 

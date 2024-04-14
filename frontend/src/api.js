@@ -127,14 +127,49 @@ export default{
         });
     },
     putPhone(phoneId, phoneData){
-        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
+        const csrfToken = getCookie('csrftoken');
         return apiClient.put(`/phone/${phoneId}/`, phoneData, {
             headers: {
                 'X-CSRFToken': csrfToken, 
             },
         });
     },
-    
+    getLawnMatches(propId){
+        const csrfToken = getCookie('csrftoken'); 
+        return apiClient.get(`/scored-lawn-plans/${propId}`, {
+            headers: {
+                'X-CSRFToken': csrfToken, 
+            },
+        });
+
+    },
+    getInteriorMatches(propId){
+        const csrfToken = getCookie('csrftoken');
+        return apiClient.get(`/scored-interior-plans/${propId}`, {
+            headers: {
+                'X-CSRFToken': csrfToken, 
+            },
+        });
+
+    },
+    getPhoneMatches(propId){
+        const csrfToken = getCookie('csrftoken');
+        return apiClient.get(`/scored-phone-plans/${propId}`, {
+            headers: {
+                'X-CSRFToken': csrfToken, 
+            },
+        });
+
+    },
+    getInternetMatches(propId){
+        const csrfToken = getCookie('csrftoken');
+        return apiClient.get(`/scored-internet-plans/${propId}`, {
+            headers: {
+                'X-CSRFToken': csrfToken, 
+            },
+        });
+
+    },
 
     
     
