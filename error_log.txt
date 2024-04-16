@@ -1,8 +1,18 @@
 - session persistence 
+    -FIXED
 - creating service plans doesnt include some fields
     - issue from form_data json definition 
     - different definition for different form_types
     - FIXED
 
 - Phone service plan creation plan_type not functional
+    - Has to do with Select componenet from MUI
+    - same issue with user group selection in registration
+
+- Match generator has a slight issue with generating less matches after an initial query
+    - for example, i genereate matches for Lawn and Internet. Then i try generating lawn matches only 
+    - wont update match list with the correct matches unless refresshed. 
+    not a huge issue
+    
+
 
