@@ -106,7 +106,7 @@ class ScoredLawnPlans(APIView):
         lawn = get_object_or_404(Lawn, property_id=property_id)
         
         # Fetch all LawnServicePlans
-        service_plans = LawnServicePlan.objects.all()
+        service_plans = LawnServicePlan.objects.filter(property_id__isnull=True)
         
         # Calculate scores for each service plan and store them in a list
         scored_service_plans = []
@@ -133,7 +133,7 @@ class ScoredInteriorPlans(APIView):
         interior = get_object_or_404(Interior, property_id=property_id)
         
         # Fetch all InteriorServicePlans
-        service_plans = InteriorServicePlan.objects.all()
+        service_plans = InteriorServicePlan.objects.filter(property_id__isnull=True)
         
         # Calculate scores for each service plan and store them in a list
         scored_service_plans = []
@@ -160,7 +160,7 @@ class ScoredInternetPlans(APIView):
         internet = get_object_or_404(Internet, property_id=property_id)
         
         # Fetch all InternetServicePlans
-        service_plans = InternetServicePlan.objects.all()
+        service_plans = InternetServicePlan.objects.filter(property_id__isnull=True)
         
         # Calculate scores for each service plan and store them in a list
         scored_service_plans = []
@@ -187,7 +187,7 @@ class ScoredPhonePlans(APIView):
         phone = get_object_or_404(Phone, property_id=property_id)
         
         # Fetch all PhoneServicePlans
-        service_plans = PhoneServicePlan.objects.all()
+        service_plans = PhoneServicePlan.objects.filter(property_id__isnull=True)
         
         # Calculate scores for each service plan and store them in a list
         scored_service_plans = []
