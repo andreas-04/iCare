@@ -9,10 +9,7 @@ class Property(models.Model):
     phone = models.OneToOneField('Phone', on_delete=models.CASCADE, null=True, blank=True, related_name='property_phone')
     internet = models.OneToOneField('Internet', on_delete=models.CASCADE, null=True, blank=True, related_name='property_internet')
     interior = models.OneToOneField('Interior', on_delete=models.CASCADE, null=True, blank=True, related_name='property_interior')
-    interestedInLawn = models.BooleanField(default=False)
-    interestedInInterior = models.BooleanField(default=False)
-    interestedInPhone = models.BooleanField(default=False)
-    interestedInInternet = models.BooleanField(default=False)
+
     
 class MortgageInsurance(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
