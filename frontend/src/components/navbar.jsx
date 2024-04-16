@@ -2,8 +2,8 @@ import ButtonGroup from '@mui/joy/ButtonGroup';
 import IconButton from '@mui/joy/IconButton';
 import AppsIcon from '@mui/icons-material/Apps';
 import HomeIcon from '@mui/icons-material/Home';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import LogoutIcon from '@mui/icons-material/Logout';
+import JoinInnerIcon from '@mui/icons-material/JoinInner';
 import { Link } from 'react-router-dom';
 import api from '../api.js';
 
@@ -21,27 +21,28 @@ export default function Navbar() {
     return (
       <ButtonGroup
         aria-label="radius button group"
-        sx={{ '--ButtonGroup-radius': '10px',
+        sx={{ '--ButtonGroup-radius': '8px',
         backgroundColor: 'white',
         }}
+        variant='outlined'
         orientation='vertical'
       >
         <Link to={"/"}>
-          <IconButton variant='plain'>
-              <AppsIcon/>
+          <IconButton variant='plain' size='lg'>
+              <AppsIcon />
           </IconButton>
         </Link>
         <Link to={"/profile"}>
-          <IconButton variant='plain'>
-              <HomeIcon/>
+          <IconButton variant='plain' size='lg'>
+              <HomeIcon />
           </IconButton>
         </Link>
         <Link to={"/notifications"}>
-          <IconButton variant='plain'>
-              <NotificationsIcon/>
+          <IconButton variant='plain' size='lg'>
+              <JoinInnerIcon />
           </IconButton>
         </Link>
-          <IconButton variant='plain' onClick={handleLogout}>
+          <IconButton variant='plain' onClick={handleLogout} size='lg'>
               <LogoutIcon />
           </IconButton>
       </ButtonGroup>
