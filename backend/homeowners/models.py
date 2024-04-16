@@ -74,30 +74,30 @@ class Phone(models.Model):
 
 class LawnServicePlan(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
-    business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lawn_service_plans')
-    service_name = models.CharField(max_length=64)
-    service_description = models.CharField(max_length=524)
-    cost = models.FloatField()
+    business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lawn_service_plans', blank=True)
+    service_name = models.CharField(max_length=64, blank=True)
+    service_description = models.CharField(max_length=524, blank=True)
+    cost = models.FloatField( blank=True)
     frequency = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
     notification_sent = models.BooleanField(default=False)
     notification_date = models.DateTimeField(null=True, blank=True)
 
 class InteriorServicePlan(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
-    business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='interior_service_plans')
-    service_name = models.CharField(max_length=64)
-    service_description = models.CharField(max_length=524)
-    cost = models.FloatField()
+    business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='interior_service_plans', blank=True)
+    service_name = models.CharField(max_length=64, blank=True)
+    service_description = models.CharField(max_length=524, blank=True)
+    cost = models.FloatField(blank=True)
     frequency = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
     notification_sent = models.BooleanField(default=False)
     notification_date = models.DateTimeField(null=True, blank=True)
 
 class InternetServicePlan(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
-    business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='internet_service_plans')
-    service_name = models.CharField(max_length=64)
-    service_description = models.CharField(max_length=524)
-    cost = models.FloatField()
+    business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='internet_service_plans', blank=True)
+    service_name = models.CharField(max_length=64, blank=True)
+    service_description = models.CharField(max_length=524, blank=True)
+    cost = models.FloatField(blank=True)
     users = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
     speed = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
     notification_sent = models.BooleanField(default=False)
@@ -105,10 +105,10 @@ class InternetServicePlan(models.Model):
 
 class PhoneServicePlan(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
-    business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='phone_service_plans')
-    service_name = models.CharField(max_length=64)
-    service_description = models.CharField(max_length=524)
-    cost = models.FloatField()
+    business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='phone_service_plans', blank=True)
+    service_name = models.CharField(max_length=64, blank=True)
+    service_description = models.CharField(max_length=524, blank=True)
+    cost = models.FloatField(blank=True)
     users = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
     plan_type = models.CharField(
         max_length=255,
