@@ -23,6 +23,7 @@ const apiClient = axios.create({
             },
         });
     };
+    const csrfToken = getCookie('csrftoken');
 export default{
     postPlan,
     userLogin: async (credentials) => {
@@ -38,10 +39,7 @@ export default{
     },
     logout: async () => {
         try {
-            // Retrieve the CSRF token from cookies or another source
-            const csrfToken = document.cookie.split('; ').find(row => row.startsWith('csrftoken')).split('=')[1];
 
-            // Include the CSRF token in the request headers
             const response = await apiClient.post('/logout/', {}, {
                 headers: {
                     'X-CSRFToken': csrfToken,
@@ -72,7 +70,6 @@ export default{
         });
     },
     deleteProperty(propertyId){
-        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
         return apiClient.delete(`/property/${propertyId}`,
         {
            headers: {
@@ -81,7 +78,6 @@ export default{
        });
     },
     putProperty(propertyId, propertyData){
-        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
 
         return apiClient.put(`/property/${propertyId}/`, propertyData,
         {
@@ -103,7 +99,6 @@ export default{
         return apiClient.get(`/phone/${phoneId}/`);
     },
     putLawn(lawnId, lawnData){
-        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
         return apiClient.put(`/lawn/${lawnId}/`, lawnData, {
             headers: {
                 'X-CSRFToken': csrfToken,
@@ -111,7 +106,6 @@ export default{
         });
     },
     putInterior(interiorId, interiorData){
-        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
         return apiClient.put(`/interior/${interiorId}/`, interiorData, {
             headers: {
                 'X-CSRFToken': csrfToken, 
@@ -119,7 +113,6 @@ export default{
         });
     },
     putInternet(internetId, internetData){
-        const csrfToken = getCookie('csrftoken'); // Retrieve the CSRF token
         return apiClient.put(`/internet/${internetId}/`, internetData, {
             headers: {
                 'X-CSRFToken': csrfToken, 
@@ -127,7 +120,6 @@ export default{
         });
     },
     putPhone(phoneId, phoneData){
-        const csrfToken = getCookie('csrftoken');
         return apiClient.put(`/phone/${phoneId}/`, phoneData, {
             headers: {
                 'X-CSRFToken': csrfToken, 
@@ -135,7 +127,6 @@ export default{
         });
     },
     getLawnMatches(propId){
-        const csrfToken = getCookie('csrftoken'); 
         return apiClient.get(`/scored-lawn-plans/${propId}`, {
             headers: {
                 'X-CSRFToken': csrfToken, 
@@ -144,7 +135,6 @@ export default{
 
     },
     getInteriorMatches(propId){
-        const csrfToken = getCookie('csrftoken');
         return apiClient.get(`/scored-interior-plans/${propId}`, {
             headers: {
                 'X-CSRFToken': csrfToken, 
@@ -153,7 +143,6 @@ export default{
 
     },
     getPhoneMatches(propId){
-        const csrfToken = getCookie('csrftoken');
         return apiClient.get(`/scored-phone-plans/${propId}`, {
             headers: {
                 'X-CSRFToken': csrfToken, 
@@ -162,7 +151,6 @@ export default{
 
     },
     getInternetMatches(propId){
-        const csrfToken = getCookie('csrftoken');
         return apiClient.get(`/scored-internet-plans/${propId}`, {
             headers: {
                 'X-CSRFToken': csrfToken, 
@@ -171,6 +159,11 @@ export default{
 
     },
 
-    
+    putPlan(planId, planType, userId){
+        return apiClient.put(`/${planType}_service_plan/${planId}/`, userId, {headers: {
+            'X-CSRFToken': csrfToken, 
+        },
+    });
+    }
     
 }
