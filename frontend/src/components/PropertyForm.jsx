@@ -145,8 +145,9 @@ const PropertyForm = ({ property, onDelete }) => {
                     name="address"
                     placeholder='Address'
                     value={propName.address}
+                    size='lg'
+                    
                 />
-                <Typography paddingTop="6px" align="left" level="title-lg">{property.address}</Typography>
             </Grid>
             <Grid item xs={2}>
                 <Button variant="solid" color="danger" size='sm' onClick={handleDeleteProperty} >Delete</Button>
