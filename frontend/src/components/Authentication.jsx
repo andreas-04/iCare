@@ -35,13 +35,14 @@ const Authentication = ({ onAuthenticated }) => {
                 onAuthenticated();
                 // Handle successful login
             } else {
+                const group = selectedGroup.toLowerCase();
                 const response = await apiClient.post(`/register/`, {
                     username,
                     email,
                     first_name: firstName,
                     last_name: lastName,
                     password,
-                    groups: [selectedGroup], // Send the selected group as an array
+                    groups: [group], // Send the selected group as an array
                 });
                 console.log(response.data);
                 console.log("Registration successful!!")
@@ -53,7 +54,10 @@ const Authentication = ({ onAuthenticated }) => {
             // Handle error
         }
     };
+    const handleSelectChange = (event, newValue) => {
+        setSelectedGroup(newValue);
 
+    }
     return (
         <Card sx={{ width:"30%", display: 'flex', flexDirection: 'column', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'
     }}>
@@ -75,10 +79,10 @@ const Authentication = ({ onAuthenticated }) => {
                         placeholder="Choose Account Type"
                         variant="soft"
                         value={selectedGroup}
-                        onChange={(e) => setSelectedGroup(e.target.value)}
+                        onChange={handleSelectChange}
                     >
-                        {groups.map((group) => (
-                            <Option key={group} value={group}>{group}</Option>
+                        {groups.map((group, index) => (
+                            <Option key={index} value={group}>{group}</Option>
                         ))}
                     </Select>
                 </>
