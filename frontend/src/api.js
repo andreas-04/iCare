@@ -164,6 +164,12 @@ export default{
             'X-CSRFToken': csrfToken, 
         },
     });
-    }
+    },
+    getActivePlans(propertyId){
+        return apiClient.get(`/active-plans/${propertyId}/`, {headers: {
+            'X-CSRFToken': csrfToken, 
+        },
+    });
+    },
     
 }
