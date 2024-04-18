@@ -231,7 +231,26 @@ class active_plans(APIView):
             'internet_plans': internet_plans_data,
         }
         return Response(all_active_plans_data, status=status.HTTP_200_OK)
+class active_business_plans(APIView):
+    def get(self, request, user_id):
+        active_lawn_plans = LawnServicePlan.objects.filter(business_id = user_id)
+        active_interior_plans = InteriorServicePlan.objects.filter(business_id = user_id)
+        active_phone_plans = PhoneServicePlan.objects.filter(business_id = user_id)
+        active_internet_plans = InternetServicePlan.objects.filter(business_id = user_id)
 
+        lawn_plans_data = LawnServicePlanSerializer(active_lawn_plans, many=True).data
+        interior_plans_data = InteriorServicePlanSerializer(active_interior_plans, many=True).data
+        phone_plans_data = PhoneServicePlanSerializer(active_phone_plans, many=True).data
+        internet_plans_data = InternetServicePlanSerializer(active_internet_plans, many=True).data
+        
+        # Combine all serialized data into a single dictionary
+        all_active_plans_data = {
+            'lawn_plans': lawn_plans_data,
+            'interior_plans': interior_plans_data,
+            'phone_plans': phone_plans_data,
+            'internet_plans': internet_plans_data,
+        }
+        return Response(all_active_plans_data, status=status.HTTP_200_OK)
 class budget(APIView):
     def get(self, request, property_id):
         property_instance = get_object_or_404(Property, id=property_id)
