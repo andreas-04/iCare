@@ -47,6 +47,17 @@ const ActivePlans = ({propertyId}) => {
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+    const handleCancel = async(planId, category) => {
+        const extractedPart = category.split('_')[0];
+        const planData = {
+            property: null
+        }
+        try{
+            await api.putPlan(planId, extractedPart, planData);
+        }catch(error) {
+            console.log(error);
+        }
+    };
     console.log(activePlans);
     return (
         <>
@@ -56,19 +67,20 @@ const ActivePlans = ({propertyId}) => {
                     <Grid item xs={6} key={`${categoryIndex}-${planIndex}`}>
                         <Card size='sm'>
                             <Typography level="body-lg" align="left">
-                            {   plan.service_name}
+                            {plan.service_name}
                             </Typography>
                             <Divider></Divider>
                             <Typography align="left" level="body-md">📥 Provider: {plan.business}</Typography>
                             <Typography align="left" level="body-md">💰 Cost: ${plan.cost} </Typography>
-                            {category === ("lawn_plans" || "interior_plans") && (<Typography align="left" level="body-md">📊 Frequency: {plan.frequency}x per month </Typography>)}
+                            {category === ("lawn_plans") && (<Typography align="left" level="body-md">📊 Frequency: {plan.frequency}x per month </Typography>)}
+                            {category === ("interior_plans") && (<Typography align="left" level="body-md">📊 Frequency: {plan.frequency}x per month </Typography>)}
                             {category === ("phone_plans" || "internet_plans") && (<Typography align="left" level="body-md">👥 Users: {plan.users}</Typography>)}
                             {category === ("phone_plans") && (<Typography align="left" level="body-md">🌐 Plan Type: {capitalizeFirstLetter(plan.plan_type)}</Typography>)}
                             {category === ("internet_plans") && (<Typography align="left" level="body-md">🚀 Plan Speed: {plan.plan_type}</Typography>)}
                             <Divider></Divider>
                             <Grid container spacing={1} sx={{flexGrow:1 }} alignItems="stretch">
                                 <Grid item xs={3}>
-                                    <Chip color="danger" size="md">Cancel</Chip>
+                                    <Chip color="danger" size="md" onClick={() => handleCancel(plan.id, category)}>Cancel</Chip>
                                 </Grid>
                                 <Grid item xs={3}>
                                     <Chip color="primary" size="md" onClick={handleOpen} >Contact Provider</Chip>
