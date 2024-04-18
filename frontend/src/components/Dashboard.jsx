@@ -1,6 +1,7 @@
 import  { useEffect, useState } from 'react';
-import { Card, Divider, Grid, Typography, Chip, Button, Option, Box, Select, CircularProgress  } from "@mui/joy";
+import { Card, Grid, Typography, Option, Select  } from "@mui/joy";
 import ActivePlans from './ActivePlans.jsx';
+import BudgetView from './BudgetView.jsx';
 import api from '../api';
 import Cookies from 'js-cookie';
 const Dashboard = () => {
@@ -51,30 +52,7 @@ const Dashboard = () => {
                 </Card>
             </Grid>
             <Grid item xs={4}>
-                <Card>
-                    <Typography level="title-lg" align="left">My Budget</Typography>
-                    <Divider></Divider>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            height: '100%', 
-                        }}
-                    >
-                        <CircularProgress
-                            determinate value={45}
-                            variant='solid'
-                            sx={{
-                                "--CircularProgress-size": "275px",
-                                "--CircularProgress-trackThickness": "40px",
-                                "--CircularProgress-progressThickness": "35px",
-                            }}
-                        >
-                            <Typography level='h3'>$183.97/$400</Typography>
-                        </CircularProgress>
-                    </Box>
-                </Card>
+                <BudgetView propertyId={property}/>
             </Grid>
 
         </Grid>
