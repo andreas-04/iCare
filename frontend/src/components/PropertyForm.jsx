@@ -19,7 +19,7 @@ const PropertyForm = ({ property, onDelete }) => {
     const [phoneDetails, setPhoneDetails] = useState({
         users: null,
         users_weight: null,
-        preferred_plan_type: "unlimited",
+        preferred_plan_type: "",
         plan_weight: null,
         budget: null,
         budget_tolerance: null,
@@ -77,7 +77,6 @@ const PropertyForm = ({ property, onDelete }) => {
                 console.error('Error fetching property details:', error);
             }
         };
-
         fetchPropertyDetails();
     }, [property]); // Depend on the property object to refetch if it changes
 

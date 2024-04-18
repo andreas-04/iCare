@@ -177,5 +177,11 @@ export default{
         }
     });
     },
+    getActiveBusinessPlans(userId){
+        return apiClient.get(`/active-business-plans/${userId}`, {headers: {
+            'X-CSRFToken': csrfToken, 
+        }
+    });
+    },
     
 }

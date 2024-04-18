@@ -10,7 +10,6 @@ const Dashboard = () => {
     const [propertyList, setPropertyList] = useState([]);
     const handleSelectChange = (event, newValue) => {
         setProperty(newValue);
-
     }
     useEffect(() => {
         const fetchProperties = async () => {

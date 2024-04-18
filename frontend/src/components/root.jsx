@@ -4,8 +4,8 @@ import { Route, Routes } from 'react-router-dom';
 import Navbar from "./navbar";
 import Profile from "./Profile"
 import Dashboard  from "./Dashboard";
-import Service_Plan_Form from "./service_form_temp";
 import MatchCreator from "./MatchCreator";
+import BusinessDash from "./BusinessDash";
 const Root = () => {
     return(
     <>
@@ -29,7 +29,7 @@ const Root = () => {
                         <Route path="/" element={<Dashboard/>}/>
                         <Route path = "/profile" element={<Profile/>}/>
                         <Route path = "/notifications" element={<MatchCreator/>}/>
-                        <Route path = "/test" element={<Service_Plan_Form/>}/>
+                        <Route path = "/test" element={<BusinessDash/>}/>
                     </Routes>
                 </Card>
 

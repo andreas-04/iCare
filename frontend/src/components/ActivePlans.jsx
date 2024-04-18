@@ -76,7 +76,7 @@ const ActivePlans = ({propertyId}) => {
                             {category === ("interior_plans") && (<Typography align="left" level="body-md">📊 Frequency: {plan.frequency}x per month </Typography>)}
                             {category === ("phone_plans" || "internet_plans") && (<Typography align="left" level="body-md">👥 Users: {plan.users}</Typography>)}
                             {category === ("phone_plans") && (<Typography align="left" level="body-md">🌐 Plan Type: {capitalizeFirstLetter(plan.plan_type)}</Typography>)}
-                            {category === ("internet_plans") && (<Typography align="left" level="body-md">🚀 Plan Speed: {plan.plan_type}</Typography>)}
+                            {category === ("internet_plans") && (<Typography align="left" level="body-md">🚀 Plan Speed: {plan.speed}</Typography>)}
                             <Divider></Divider>
                             <Grid container spacing={1} sx={{flexGrow:1 }} alignItems="stretch">
                                 <Grid item xs={3}>

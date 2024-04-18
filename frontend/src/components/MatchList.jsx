@@ -40,7 +40,6 @@ const MatchList = ({matches, matchesUpdated, propertyId}) => {
                 variant="plain"
                 transition="0.2s"
                 sx={{
-                    // maxWidth: 400,
                     borderRadius: 'lg',
                     [`& .${accordionSummaryClasses.button}:hover`]: {
                     bgcolor: 'transparent',
