@@ -70,7 +70,7 @@ class Phone(models.Model):
 
 
 class LawnServicePlan(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
+    property = models.ForeignKey(Property,on_delete=models.SET_NULL, null=True, blank=True)
     business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lawn_service_plans', blank=True)
     service_name = models.CharField(max_length=64, blank=True)
     service_description = models.CharField(max_length=524, blank=True)
@@ -80,7 +80,7 @@ class LawnServicePlan(models.Model):
     notification_date = models.DateTimeField(null=True, blank=True)
 
 class InteriorServicePlan(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
+    property = models.ForeignKey(Property,on_delete=models.SET_NULL, null=True, blank=True)
     business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='interior_service_plans', blank=True)
     service_name = models.CharField(max_length=64, blank=True)
     service_description = models.CharField(max_length=524, blank=True)
@@ -90,7 +90,7 @@ class InteriorServicePlan(models.Model):
     notification_date = models.DateTimeField(null=True, blank=True)
 
 class InternetServicePlan(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
+    property = models.ForeignKey(Property,on_delete=models.SET_NULL, null=True, blank=True)
     business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='internet_service_plans', blank=True)
     service_name = models.CharField(max_length=64, blank=True)
     service_description = models.CharField(max_length=524, blank=True)
@@ -101,7 +101,7 @@ class InternetServicePlan(models.Model):
     notification_date = models.DateTimeField(null=True, blank=True)
 
 class PhoneServicePlan(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
+    property = models.ForeignKey(Property, on_delete=models.SET_NULL, null=True, blank=True)
     business = models.ForeignKey(User, on_delete=models.CASCADE, related_name='phone_service_plans', blank=True)
     service_name = models.CharField(max_length=64, blank=True)
     service_description = models.CharField(max_length=524, blank=True)
