@@ -63,7 +63,7 @@ const MatchCreator = () => {
         <Grid container spacing={2} sx={{ flexGrow: 1 }} alignItems="stretch">
             <Grid item xs={9}><Typography textAlign="left" level='h3' >Match Maker</Typography></Grid>
             <Grid item xs={3}>
-                <Select onChange={handleSelectChange}>
+                <Select onChange={handleSelectChange} placeholder="Select a Property">
                     {propertyList.map((property, index) => (
                         <Option key={index} value={property.id}>
                             {property.address}

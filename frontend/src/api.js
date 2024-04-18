@@ -171,5 +171,11 @@ export default{
         },
     });
     },
+    getBudgetAndCosts(propertyId){
+        return apiClient.get(`/costs-budget/${propertyId}/`, {headers: {
+            'X-CSRFToken': csrfToken, 
+        }
+    });
+    },
     
 }

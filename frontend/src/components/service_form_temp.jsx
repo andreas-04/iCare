@@ -10,7 +10,7 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 const Service_Plan_Form = ({form_type}) => {
-    // form_type = "phone";
+     form_type = "phone";
     const userId = getCookie('user_id');
     const [formData, setFormData] = useState({
         service_name: "",
@@ -54,11 +54,11 @@ const Service_Plan_Form = ({form_type}) => {
         }
     };
     const handleSelectChange = (event, newValue) => {
-        setFormData(prevState => ({
-            ...prevState,
+        setFormData(({
             preferred_plan_type: newValue
         }));
     };
+
     return(
         <>
             <Card sx = {{width:"250px"}}>
@@ -95,12 +95,6 @@ const Service_Plan_Form = ({form_type}) => {
                             variant="outlined"
                             name='frequency'
                             onChange={handleInputChange}
-                            slotProps={{
-                                input:{
-                                    min: 0,
-
-                                }
-                            }}
                             placeholder="Plan Frequency"
                             endDecorator={
                                 <Typography variant="body2">per month</Typography>
@@ -119,12 +113,6 @@ const Service_Plan_Form = ({form_type}) => {
                                 onChange={handleInputChange}
                                 variant="outlined"
                                 placeholder='Users:'
-                                slotProps={{
-                                    input:{
-                                        min: 0,
-
-                                    }
-                                }}
                                 error={errors.cost}
                             />
                             <Input
@@ -132,12 +120,6 @@ const Service_Plan_Form = ({form_type}) => {
                                 placeholder='Speed:'
                                 name="speed"
                                 onChange={handleInputChange}
-                                slotProps={{
-                                    input:{
-                                        min: 0,
-
-                                    }
-                                }}
                                 endDecorator={
                                     <Typography >mbs +/-</Typography>
                                 }
@@ -152,21 +134,14 @@ const Service_Plan_Form = ({form_type}) => {
                     <>
                             <Input
                                 name="users"
-
                                 variant="outlined"
-                                slotProps={{
-                                    input:{
-                                        min: 0,
-
-                                    }
-                                }}
                                 placeholder='Users:'
                                 onChange={handleInputChange}
 
                             />
                             <Select
                                 name="preferred_plan_type"
-                                onChange={(event) => handleSelectChange(event, "preferred_plan_type")}
+                                onChange={handleSelectChange}                                
                                 placeholder="Select Plan Type"
                                 indicator={<KeyboardArrowDown />}
                                 sx={{
