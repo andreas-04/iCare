@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.contrib.auth import logout
 from .complex_scoring_functions import calculate_internet_score, calculate_lawn_interior_score, calculate_phone_score
 from .serializers import ScoredLawnServicePlanSerializer, ScoredInteriorServicePlanSerializer, ScoredInternetServicePlanSerializer, ScoredPhoneServicePlanSerializer
+from django.db.models import Sum
 
 class RegisterView(APIView):
     def post(self, request):
@@ -230,3 +231,28 @@ class active_plans(APIView):
             'internet_plans': internet_plans_data,
         }
         return Response(all_active_plans_data, status=status.HTTP_200_OK)
+
+class budget(APIView):
+    def get(self, request, property_id):
+        property_instance = get_object_or_404(Property, id=property_id)
+        total_lawn_budget = Lawn.objects.filter(property=property_instance).aggregate(total_budget=Sum('budget'))['total_budget'] or 0
+        total_interior_budget = Interior.objects.filter(property=property_instance).aggregate(total_budget=Sum('budget'))['total_budget'] or 0
+        total_phone_budget = Phone.objects.filter(property=property_instance).aggregate(total_budget=Sum('budget'))['total_budget'] or 0
+        total_internet_budget = Internet.objects.filter(property=property_instance).aggregate(total_budget=Sum('budget'))['total_budget'] or 0
+        
+        total_budget = total_lawn_budget + total_interior_budget + total_phone_budget + total_internet_budget
+
+        active_lawn_plans = LawnServicePlan.objects.filter(property=property_instance).aggregate(total_cost=Sum('cost'))['total_cost'] or 0
+        active_interior_plans = InteriorServicePlan.objects.filter(property=property_instance).aggregate(total_cost=Sum('cost'))['total_cost'] or 0
+        active_phone_plans = PhoneServicePlan.objects.filter(property=property_instance).aggregate(total_cost=Sum('cost'))['total_cost'] or 0
+        active_internet_plans = InternetServicePlan.objects.filter(property=property_instance).aggregate(total_cost=Sum('cost'))['total_cost'] or 0
+
+        # Calculate the total cost of all active plans
+        total_active_plans_cost = active_lawn_plans + active_interior_plans + active_phone_plans + active_internet_plans
+        # Return the total budget and total cost of all active plans
+        return Response({
+            'total_budget': total_budget,
+            'total_active_plans_cost': total_active_plans_cost
+        }, status=status.HTTP_200_OK)
+
+        
