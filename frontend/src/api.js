@@ -183,5 +183,11 @@ export default{
         }
     });
     },
+    deletePlan(planId, planType){
+        return apiClient.delete(`/${planType}_service_plan/${planId}`, {headers: {
+            'X-CSRFToken': csrfToken, 
+        }
+    });
+    },
     
 }
