@@ -1,5 +1,5 @@
 import  { useEffect, useState } from 'react';
-import { Card, Grid, Typography, Option, Select  } from "@mui/joy";
+import { Grid, Typography, Option, Select  } from "@mui/joy";
 import ActivePlans from './ActivePlans.jsx';
 import BudgetView from './BudgetView.jsx';
 import api from '../api';
@@ -29,7 +29,7 @@ const Dashboard = () => {
         <>
         <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
             <Grid item xs={9}>
-                <Typography level="h3" align="left">My Dashboard</Typography>
+                <Typography level="h2" align="left">My Dashboard</Typography>
 
             </Grid>
             <Grid item xs={3}>
@@ -44,14 +44,12 @@ const Dashboard = () => {
         </Grid>
      
         <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
-            <Grid item xs={8}>
-                <Card size='sm'>
-                    <Typography level="title-lg" align="left">Active Plans</Typography>
-                    <ActivePlans propertyId={property}/>
-                </Card>
-            </Grid>
             <Grid item xs={4}>
-                <BudgetView propertyId={property}/>
+                    <BudgetView propertyId={property}/>
+            </Grid>
+            <Grid item xs={8}>
+                {/* <Typography level="title-lg" align="left">Active Plans</Typography> */}
+                <ActivePlans propertyId={property}/>
             </Grid>
 
         </Grid>

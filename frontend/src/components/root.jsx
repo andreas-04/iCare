@@ -1,4 +1,4 @@
-import { Card, Sheet, Grid, Typography, Divider } from "@mui/joy";
+import { Card, Grid, Typography, Divider } from "@mui/joy";
 import { Route, Routes } from 'react-router-dom';
 
 import Navbar from "./navbar";
@@ -19,12 +19,12 @@ const Root = () => {
             <Navbar/>
         </Grid>
         <Grid item xs={11} sx={{padding: "25px"}}>
-            <Sheet
+            <Card
             variant='outlined'
-            sx={{ borderRadius: '10px', padding: '20px',}}>
+            size="lg">
                 <Typography align="left" level="h1">iCare</Typography>
-                <Divider orientation="horizontal" flexitem="true" sx={{ width: '50%' }} />
-                <Card sx={{marginTop: "25px"}}>
+                <Divider orientation="horizontal" flexitem="true" />
+                <Card size="md">
                     <Routes>
                         <Route path="/" element={<Dashboard/>}/>
                         <Route path = "/profile" element={<Profile/>}/>
@@ -34,7 +34,7 @@ const Root = () => {
                 </Card>
 
 
-            </Sheet>
+            </Card>
         </Grid>
       </Grid>
     </>

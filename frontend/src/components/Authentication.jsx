@@ -59,8 +59,7 @@ const Authentication = ({ onAuthenticated }) => {
 
     }
     return (
-        <Card sx={{ width:"30%", display: 'flex', flexDirection: 'column', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'
-    }}>
+        <Card sx={{ width:"30%", display: 'flex', flexDirection: 'column', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
             <Typography level='h2' color='primary' align='left'>{view.charAt(0).toUpperCase() + view.slice(1)}</Typography>
             {view === 'login' ? (
                 <>

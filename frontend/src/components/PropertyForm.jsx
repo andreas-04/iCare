@@ -140,7 +140,7 @@ const PropertyForm = ({ property, onDelete }) => {
                 <Input
                     onChange={(event) => handleInputChange(event, setPropName)}
                     onBlur={(event) => handleNameUpdate(event, property.id) }
-                    variant='plain'
+                    variant='outlined'
                     name="address"
                     placeholder='Address'
                     value={propName.address}

@@ -35,7 +35,9 @@ const MatchList = ({matches, matchesUpdated, propertyId}) => {
     }, {});
     return(
         <>
-            <Card >
+            <Card
+            size='sm'
+            variant='outlined'>
                 <AccordionGroup
                 variant="plain"
                 transition="0.2s"

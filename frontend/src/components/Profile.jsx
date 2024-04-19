@@ -47,11 +47,11 @@ const Profile = () => {
         <>
         
         <Grid container spacing={2} sx={{ flexGrow: 1 }} alignItems="stretch">
-            <Grid item xs={10}>
-                <Typography level="h3" align="left">My Properties</Typography>
+            <Grid item xs={9}>
+                <Typography level="h2" align="left">My Properties</Typography>
             </Grid>
-            <Grid item xs={2}>
-                <Button onClick={handleAddProperty} color='success' size='sm' sx={{marginLeft:"33%"}} >New Property</Button>
+            <Grid item xs={3}>
+                <Button onClick={handleAddProperty} color='success' size='md' sx={{marginLeft:"130px"}} >New Property</Button>
             </Grid>
             {properties.map(property => (
                 <Grid item xs={6} key={property.id}>

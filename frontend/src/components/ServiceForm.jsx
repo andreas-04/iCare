@@ -105,6 +105,22 @@ const ServiceForm = ({form_type}) => {
                     :
                     <></>
                 }
+                {form_type === ("interior")
+                    ?
+                        <>
+                        <Input
+                            variant="outlined"
+                            name='frequency'
+                            onChange={handleInputChange}
+                            placeholder="Plan Frequency"
+                            endDecorator={
+                                <Typography variant="body2">per month</Typography>
+                            }
+                        />
+                        </>
+                    :
+                    <></>
+                }
                 {form_type === "internet" 
                     ?
                     <>
@@ -163,7 +179,7 @@ const ServiceForm = ({form_type}) => {
                     <></>
                 }
                 <Divider></Divider>
-                <Button onClick={handleSubmit}>Create</Button>
+                <Button onClick={handleSubmit} color='success'>Create</Button>
             </Card>
         </>
     )
