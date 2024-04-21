@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import RegisterView, LoginView, UserViewSet, MortgageInsuranceViewSet, LawnViewSet, InteriorViewSet, InternetViewSet, PhoneViewSet, LawnServicePlanViewSet, InteriorServicePlanViewSet, InternetServicePlanViewSet, PhoneServicePlanViewSet, logout_view, PropertyViewSet, ScoredLawnPlans, ScoredInteriorPlans, ScoredInternetPlans, ScoredPhonePlans, active_plans, budget, active_business_plans
+from .views import RegisterView, LoginView, UserViewSet, MortgageInsuranceViewSet, LawnViewSet, InteriorViewSet, InternetViewSet, PhoneViewSet, LawnServicePlanViewSet, InteriorServicePlanViewSet, InternetServicePlanViewSet, PhoneServicePlanViewSet, logout_view, PropertyViewSet, ScoredLawnPlans, ScoredInteriorPlans, ScoredInternetPlans, ScoredPhonePlans, active_plans, budget, active_business_plans, pending_business_plans, all_business_plans
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -25,6 +25,8 @@ urlpatterns = [
     path('scored-phone-plans/<int:property_id>/', ScoredPhonePlans.as_view(), name='scored-phone-plans'),
     path('active-plans/<int:property_id>/', active_plans.as_view(), name="active-plans"),
     path('active-business-plans/<int:user_id>/', active_business_plans.as_view(), name="active-business-plans"),
+    path('pending-business-plans/<int:user_id>/', pending_business_plans.as_view(), name="pending-business-plans"),
+    path('all-business-plans/<int:user_id>/', all_business_plans.as_view(), name="all-business-plans"),
     path('costs-budget/<int:property_id>/', budget.as_view(), name="budgets" ),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', logout_view, name='logout'),
