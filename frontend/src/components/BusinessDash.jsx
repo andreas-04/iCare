@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import api from "../api";
 import Cookies from 'js-cookie';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
@@ -13,10 +13,13 @@ import AccordionSummary, {
 } from '@mui/joy/AccordionSummary';
 import ServiceForm from "./ServiceForm";
 const BusinessDash = () => {
-    const [activePlans, setActivePlans] = useState({});
+    const [plans, setPlans] = useState({});
+    const [fetchType, setFetchType] = useState("all");
     const [formType, setFormType] = useState("");
-    const [addresses, setAddresses] = useState({}); // New state to store addresses
+    const [addresses, setAddresses] = useState({});
+
     const userId = Cookies.get('user_id');
+
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -47,61 +50,109 @@ const BusinessDash = () => {
 
         try {
             await api.deletePlan(planId, extractedPart);
-            fetchActivePlans();
+            fetchPlans(fetchType);
 
         } catch (error) {
             console.log(error);
         }
     };
 
-    async function getAddress(propertyId) {
-        try {
-            if (propertyId === null) {
-                return null;
-            } else {
-                const response = await api.getProperty(propertyId);
-                if (response && response.data) {
-                    // Update addresses state with the new address
-                    setAddresses(prevAddresses => ({
-                        ...prevAddresses,
-                        [propertyId]: response.data.address
-                    }));
-                } else {
-                    console.error("Response data is undefined or missing");
+
+    const fetchPlans = useCallback(async (fetchType) => {
+        async function getAddress(propertyId) {
+            try {
+                if (propertyId === null) {
                     return null;
+                } else {
+                    const response = await api.getProperty(propertyId);
+                    if (response && response.data) {
+                        // Update addresses state with the new address
+                        setAddresses(prevAddresses => ({
+                            ...prevAddresses,
+                            [propertyId]: response.data.address
+                        }));
+                    } else {
+                        console.error("Response data is undefined or missing");
+                        return null;
+                    }
                 }
+            } catch (error) {
+                console.error("Failed to fetch property data:", error);
+                return null;
+            }
+        }
+        try {
+            const planData = await api.getBusinessPlans(userId, fetchType);
+            setPlans({
+                ...planData.data
+            });
+
+            // Create a set to store unique property IDs
+            const uniquePropertyIds = new Set();
+
+            // Iterate over each plan type and plan to collect unique property IDs
+            for (const planType of Object.keys(planData.data)) {
+                for (const plan of planData.data[planType]) {
+                    if (plan.property) {
+                        uniquePropertyIds.add(plan.property);
+                    }
+                }
+            }
+
+            // Fetch addresses for unique property IDs
+            for (const propertyId of uniquePropertyIds) {
+                getAddress(propertyId);
             }
         } catch (error) {
-            console.error("Failed to fetch property data:", error);
-            return null;
-        }
-    }
-    const fetchActivePlans = async() => {
-        try{
-            const activePlanData = await api.getActiveBusinessPlans(userId);
-            setActivePlans({
-                ...activePlanData.data
-            });
-            for (const planType of Object.keys(activePlanData.data)) {
-                for (const plan of activePlanData.data[planType]) {
-                    getAddress(plan.property);
-                }
-            }
-        
-        }catch(error){
             console.log(error);
         }
-    }
+    }, [userId]); 
+
     useEffect(() => {
-        fetchActivePlans();
-    })
+        fetchPlans(fetchType);
+    }, [fetchType, fetchPlans]);
+
     const handleSelectChange = (event, newValue) => {
         setFormType(newValue);
     }
+    const handleSelectChangePlan = (event, newVal) => {
+        setFetchType(newVal);
+    }
+
+    const handleAccept = (planId, planType) => {
+        const extractedPart = planType.split('_')[0];
+        console.log(extractedPart, planId, planType)
+        api.putPlan(planId, extractedPart, {
+            handshake: true,
+        });
+        fetchPlans(fetchType);
+    }
     return (
         <>
-        <Typography level="h2" align="left">My Dashboard</Typography>
-            <Grid container spacing={2} sx={{ flexGrow: 1 }} alignItems="stretch">
+        <Grid container spacing={2} sx={{ flexGrow: 1 }} alignItems="stretch">
+            <Grid item xs={9}>
+                <Typography level="h2" align="left">My Dashboard</Typography>
+            </Grid>
+            <Grid item xs={3}>
+                <Select
+                    indicator={<KeyboardArrowDown />}
+                    sx={{
+                        [`& .${selectClasses.indicator}`]: {
+                        transition: '0.2s',
+                        [`&.${selectClasses.expanded}`]: {
+                            transform: 'rotate(-180deg)',
+                        },
+                        },
+                    }}
+                    defaultValue={"all"}
+                    size="lg"
+                    onChange={handleSelectChangePlan}
+                >
+                    <Option value={"all"}>All Plans</Option>
+                    <Option value={"pending"}>Pending Plans</Option>
+                    <Option value={"active"}>Active Plans</Option>
+                </Select>
+            </Grid>
                 <Grid item xs={3}>
                     <Card  size="sm">
                         <Typography level="h4" align="left">Create New Service Plan</Typography>
@@ -148,8 +199,8 @@ const BusinessDash = () => {
                             },
                         }}
                         >
-                            {Object.keys(activePlans).map((planType) => (
-                                activePlans[planType].map((plan, index) => (
+                            {Object.keys(plans).map((planType) => (
+                                plans[planType].map((plan, index) => (
                                 <Accordion key={`${planType}-${index}`} >
                                     <AccordionSummary>
                                     <Grid container spacing={2} sx={{ flexGrow: 1 }} alignItems="stretch">
@@ -185,7 +236,10 @@ const BusinessDash = () => {
                                                     {planType === ("phone_plans") && (<><Typography level="body-md" align="left">Users: {plan.users} </Typography><Typography level="body-md" align="left">Plan Type: {plan.plan_type}</Typography></>) }
                                                     {planType === ("internet_plans") && (<><Typography level="body-md" align="left">Devices: {plan.users}</Typography><Typography level="body-md" align="left"><Typography level="body-md" align="left">Plan Speed: {plan.speed} mb/s</Typography></Typography></>)}
 
-                                                    <Button size="sm" onClick={handleOpen}>Contact Customer</Button>
+                                                    {fetchType === ("active") && (<Button size="sm" onClick={handleOpen}>Contact Customer</Button>)}
+                                                    {fetchType === ("pending") && (<Button size="sm" onClick={() => handleAccept(plan.id, planType)}>Accept Customer</Button>)}
+                                                    {((fetchType ===("all")) && (plan.handshake === false) && (addresses[plan.property])) && (<Button size="sm">Accept Customer</Button>)}
+                                                    {((fetchType ===("all")) && (plan.handshake === true) && (addresses[plan.property])) && (<Button size="sm" onClick={handleOpen}>Contact Customer</Button>)}
                                                     <Button size="sm" color="danger" onClick={() => handleCancel(plan.id, planType)}>Delete Plan</Button>
                                                 </Card>
                                                 

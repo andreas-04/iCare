@@ -177,8 +177,8 @@ export default{
         }
     });
     },
-    getActiveBusinessPlans(userId){
-        return apiClient.get(`/active-business-plans/${userId}`, {headers: {
+    getBusinessPlans(userId, fetchType){
+        return apiClient.get(`/${fetchType}-business-plans/${userId}`, {headers: {
             'X-CSRFToken': csrfToken, 
         }
     });
