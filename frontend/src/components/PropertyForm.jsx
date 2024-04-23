@@ -131,12 +131,12 @@ const PropertyForm = ({ property, onDelete }) => {
 
     
     <Card size="sm" variant='soft'  sx={{
-        border: '1px solid',
+        border: '2px solid',
         borderColor: 'divider',
-        borderRadius: '4px', 
+        borderRadius: '5px', 
      }}>
         <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
-            <Grid item xs={10}>
+            <Grid item xs={10.75}>
                 <Input
                     onChange={(event) => handleInputChange(event, setPropName)}
                     onBlur={(event) => handleNameUpdate(event, property.id) }
@@ -148,7 +148,7 @@ const PropertyForm = ({ property, onDelete }) => {
                     
                 />
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={1.25}>
                 <Button variant="solid" color="danger" size='sm' onClick={handleDeleteProperty} >Delete</Button>
             </Grid>
             

@@ -60,39 +60,41 @@ const MatchList = ({matches, matchesUpdated, propertyId}) => {
                             <AccordionSummary>
                             <Grid container spacing={2} sx={{ flexGrow: 1 }} alignItems="stretch">
                                 <Grid item xs={4.5}>
-                                    <Typography>{match.service_plan.service_name}</Typography>
+                                    <Typography level='title-md'>{match.service_plan.service_name}</Typography>
                                 </Grid>
                                 <Grid item xs={3.3}>
-                                    <Typography>{category}</Typography>
+                                    <Typography level='title-md'>{category}</Typography>
                                 </Grid>
                                 <Grid item xs={3.25}>
-                                    <Typography>{match.service_plan.business}</Typography>
+                                    <Typography level='title-md'>{match.service_plan.business}</Typography>
                                 </Grid>
                                 <Grid item xs={.5}>
-                                    <Typography>{match.score.toFixed(3)}</Typography>
+                                    <Typography level='title-md'>{match.score.toFixed(3)}</Typography>
                                 </Grid>
                             </Grid>
                             </AccordionSummary>
                             <AccordionDetails variant="soft">
                                 <Grid container spacing={2} sx={{ flexGrow: 1 }} alignItems="stretch">
                                     <Grid item xs={8}>
-                                        <Card variant='outlined' size='sm' >
-                                            <Typography level="title-md" align="left">Service Description </Typography>
+                                        <Card variant='outlined' size='md' >
+                                            <Typography level="title-lg" align="left">Service Description </Typography>
                                             <Divider orientation="horizontal" flexitem="true" ></Divider>
-                                            <Typography level="body-md" align="left">{match.service_plan.service_description}</Typography>
+                                            <Typography level="body-lg" align="left">{match.service_plan.service_description}</Typography>
                                         </Card>
                                     </Grid>
                                     <Grid item xs={4}>
-                                        <Card size='sm'>
-                                            <List aria-labelledby="decorated-list-demo">
+                                        <Card size='md'>
+                                            <Typography level="title-lg" align="left">Service Details</Typography>
+                                            <Divider></Divider>
+                                            <List size='md'>
                                                 <ListItem>
-                                                <ListItemDecorator>💰</ListItemDecorator> <Typography align="right" level='body-md'>Cost: ${match.service_plan.cost}</Typography>
+                                                <ListItemDecorator>💰</ListItemDecorator> <Typography align="right" level='body-lg'>Cost: ${match.service_plan.cost}</Typography>
                                                 </ListItem>
                                                 <ListDivider inset="gutter" />
                                                 {(category === 'Lawn' || category === 'Interior') && (
                                                     <>
                                                         <ListItem>
-                                                            <ListItemDecorator>🗓️</ListItemDecorator><Typography align="right" level='body-md'>Frequency: {match.service_plan.frequency}x per month</Typography>
+                                                            <ListItemDecorator>🗓️</ListItemDecorator><Typography align="right" level='body-lg'>Frequency: {match.service_plan.frequency}x per month</Typography>
                                                         </ListItem>
                                                         <ListDivider inset="gutter" />
                                                     </>
@@ -100,7 +102,7 @@ const MatchList = ({matches, matchesUpdated, propertyId}) => {
                                                 {(category === 'Phone' || category === 'Internet') && (
                                                     <>
                                                         <ListItem>
-                                                            <ListItemDecorator>👥</ListItemDecorator><Typography align="right" level='body-md'>Users: {match.service_plan.users}</Typography>
+                                                            <ListItemDecorator>👥</ListItemDecorator><Typography align="right" level='body-lg'>Users: {match.service_plan.users}</Typography>
                                                         </ListItem>
                                                         <ListDivider inset="gutter" />
                                                     </>
@@ -108,7 +110,7 @@ const MatchList = ({matches, matchesUpdated, propertyId}) => {
                                                 {(category === 'Phone' ) && (
                                                     <>
                                                         <ListItem>
-                                                            <ListItemDecorator>📶</ListItemDecorator><Typography align="right" level='body-md'>Plan Type: {match.service_plan.plan_type}</Typography>
+                                                            <ListItemDecorator>📶</ListItemDecorator><Typography align="right" level='body-lg'>Plan Type: {match.service_plan.plan_type}</Typography>
                                                         </ListItem>
                                                         <ListDivider inset="gutter" />
                                                     </>
@@ -116,7 +118,7 @@ const MatchList = ({matches, matchesUpdated, propertyId}) => {
                                                 {(category === 'Internet' ) && (
                                                     <>
                                                         <ListItem>
-                                                            <ListItemDecorator>📶</ListItemDecorator><Typography align="right" level='body-md'>Plan Speed: {match.service_plan.speed} mb/s</Typography>
+                                                            <ListItemDecorator>📶</ListItemDecorator><Typography align="right" level='body-lg'>Plan Speed: {match.service_plan.speed} mb/s</Typography>
                                                         </ListItem>
                                                         <ListDivider inset="gutter" />
                                                     </>
@@ -126,7 +128,7 @@ const MatchList = ({matches, matchesUpdated, propertyId}) => {
                                                 <Button
                                                     color="success"
                                                     size='sm'
-                                                    variant="soft"
+                                                    variant="solid"
                                                     onClick={() => acceptServicePlan(match.service_plan.id, category.toLowerCase())}
                                                     >Accept</Button>
                   

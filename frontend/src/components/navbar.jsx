@@ -1,4 +1,4 @@
-import ButtonGroup from '@mui/joy/ButtonGroup';
+import {ButtonGroup, Card} from '@mui/joy';
 import IconButton from '@mui/joy/IconButton';
 import AppsIcon from '@mui/icons-material/Apps';
 import HomeIcon from '@mui/icons-material/Home';
@@ -19,32 +19,39 @@ export default function Navbar() {
         });
     };
     return (
-      <ButtonGroup
-        aria-label="radius button group"
-        sx={{ '--ButtonGroup-radius': '8px',
-        backgroundColor: 'white',
-        }}
-        variant='outlined'
-        orientation='vertical'
-      >
-        <Link to={"/"}>
-          <IconButton variant='plain' size='lg'>
-              <AppsIcon />
-          </IconButton>
-        </Link>
-        <Link to={"/profile"}>
-          <IconButton variant='plain' size='lg'>
-              <HomeIcon />
-          </IconButton>
-        </Link>
-        <Link to={"/notifications"}>
-          <IconButton variant='plain' size='lg'>
-              <JoinInnerIcon />
-          </IconButton>
-        </Link>
-          <IconButton variant='plain' onClick={handleLogout} size='lg'>
-              <LogoutIcon />
-          </IconButton>
-      </ButtonGroup>
+      <>
+      <Card size="sm">
+        <ButtonGroup
+          aria-label="radius button group"
+          sx={{ '--ButtonGroup-radius': '8px',
+          // backgroundColor: 'white',
+          }}
+          variant='outlined'
+          orientation='horizontal'
+          size='lg'
+        >
+          <Link to={"/"}>
+            <IconButton variant='plain' size='lg'>
+                <AppsIcon />
+            </IconButton>
+          </Link>
+          <Link to={"/profile"}>
+            <IconButton variant='plain' size='lg'>
+                <HomeIcon />
+            </IconButton>
+          </Link>
+          <Link to={"/notifications"}>
+            <IconButton variant='plain' size='lg'>
+                <JoinInnerIcon />
+            </IconButton>
+          </Link>
+            <IconButton variant='plain' onClick={handleLogout} size='lg'>
+                <LogoutIcon />
+            </IconButton>
+        </ButtonGroup>
+      </Card>
+      </>
+
+      
     );
   }

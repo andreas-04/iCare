@@ -75,9 +75,10 @@ const MatchCreator = () => {
                 <Card size='sm'>
                     <Typography level="h4" align="left">Interested In:</Typography>
                     <Divider></Divider>
-                    <List size="sm">
+                    <List size="md">
                         <ListItem>
-                            <Checkbox                            
+                            <Checkbox     
+                                size='lg'                       
                                 name='interestedInLawn'
                                 checked={interestedIn.interestedInLawn}  
                                 label="Lawn Services"
@@ -86,6 +87,7 @@ const MatchCreator = () => {
                         </ListItem>
                         <ListItem>
                             <Checkbox
+                                size='lg' 
                                 name='interestedInInterior'
                                 checked={interestedIn.interestedInInterior}  
                                 label="Interior Services"
@@ -94,6 +96,7 @@ const MatchCreator = () => {
                         </ListItem>
                         <ListItem>
                             <Checkbox 
+                                size='lg' 
                                 name='interestedInPhone'
                                 checked={interestedIn.interestedInPhone}  
                                 label="Phone Services" 
@@ -101,7 +104,8 @@ const MatchCreator = () => {
                             />
                         </ListItem>
                         <ListItem>
-                            <Checkbox                            
+                            <Checkbox  
+                                size='lg'                           
                                 name='interestedInInternet'
                                 checked={interestedIn.interestedInInternet}  
                                 label="Internet Services"

@@ -161,7 +161,7 @@ const BusinessDash = () => {
             </Grid>
                 <Grid item xs={3}>
                     <Card  size="sm">
-                        <Typography level="h4" align="left">Create New Service Plan</Typography>
+                        <Typography level="h3" align="left">Create New Service Plan</Typography>
                         <Divider></Divider>
                         <Select
                             placeholder="Plan Type"
@@ -188,7 +188,7 @@ const BusinessDash = () => {
                 </Grid>
                 <Grid item xs={9}>
                     <Card size="sm">
-                        <Typography level="h4" align="left">My Plans</Typography>
+                        <Typography level="h3" align="left">My Plans</Typography>
                         <AccordionGroup
                         variant="outlined"
                         transition="0.2s"
@@ -211,32 +211,32 @@ const BusinessDash = () => {
                                     <AccordionSummary>
                                     <Grid container spacing={2} sx={{ flexGrow: 1 }} alignItems="stretch">
                                         <Grid item xs={4.5}>
-                                            <Typography level="title-md">{plan.service_name}</Typography>
+                                            <Typography level="title-lg">{plan.service_name}</Typography>
                                         </Grid>
-                                        <Divider  orientation="vertical"></Divider>
                                         <Grid item xs={3.3}>
-                                            <Typography level="title-md">{planType}</Typography>
+                                            <Typography level="title-lg">{planType}</Typography>
                                         </Grid>
-                                        <Divider  orientation="vertical"></Divider>
+
+                                    
                                         <Grid item xs={3.25}>
-                                            <Typography level="title-md">{addresses[plan.property] || 'No Match...'}</Typography>
+                                            <Typography level="title-lg">{addresses[plan.property] || 'No Match...'}</Typography>
                                         </Grid>
                                     </Grid>
                                     </AccordionSummary>
                                     <AccordionDetails variant="soft">
                                         <Grid container spacing={1} sx={{ flexGrow: 1 }} alignItems="stretch">
                                             <Grid item xs={8}>
-                                                <Card variant='outlined' size='sm' >
-                                                    <Typography level="title-md" align="left">Service Description </Typography>
+                                                <Card variant='outlined' size='md' >
+                                                    <Typography level="title-lg" align="left">Service Description </Typography>
                                                     <Divider orientation="horizontal" flexitem="true" ></Divider>
                                                     <Typography level="body-md" align="left">{plan.service_description}</Typography>
                                                 </Card>
                                             </Grid>
                                             <Grid item xs={4}>
-                                                <Card size="sm">
+                                                <Card size="md">
                                                     <Grid container spacing={1} sx={{ flexGrow: 1 }} alignItems="stretch">
                                                         <Grid item xs={8}>
-                                                            <Typography level="title-md" align="left" >Plan Details</Typography>
+                                                            <Typography level="title-lg" align="left" >Service Details</Typography>
                                                         </Grid>
                                                         <Grid item xs={4}>
                                                             <Button size="sm" color="danger" onClick={() => handleCancel(plan.id, planType)}>Delete Plan</Button>
@@ -248,19 +248,33 @@ const BusinessDash = () => {
                                                     {planType === ("interior_plans") && (<Typography level="body-md" align="left">Frequency: {plan.frequency} per month</Typography>)}
                                                     {planType === ("phone_plans") && (<><Typography level="body-md" align="left">Users: {plan.users} </Typography><Typography level="body-md" align="left">Plan Type: {plan.plan_type}</Typography></>) }
                                                     {planType === ("internet_plans") && (<><Typography level="body-md" align="left">Devices: {plan.users}</Typography><Typography level="body-md" align="left"><Typography level="body-md" align="left">Plan Speed: {plan.speed} mb/s</Typography></Typography></>)}
-                                                    <Divider></Divider>
-                                                    {fetchType === ("active") && (<Button size="sm" onClick={handleOpen}>Contact Customer</Button>)}
-                                                    {fetchType === ("pending") && (<>
-                                                        <Button color="success" size="sm" onClick={() => handleAccept(plan.id, planType)} >Accept</Button>
-                                                        <Button color="danger" size="sm" onClick={() => handleDeny(plan.id, planType)}>Deny</Button>
-                                                    </>)}    
+                                                    
+                                                    {fetchType === ("active") && (
+                                                        <>
+                                                            <Divider></Divider>
+                                                            <Button size="sm" onClick={handleOpen}>Contact Customer</Button>
+                                                        </>
+                                                    )}
+                                                    {fetchType === ("pending") && (
+                                                        <>
+                                                            <Divider></Divider>
+                                                            <Button color="success" size="sm" onClick={() => handleAccept(plan.id, planType)} >Accept</Button>
+                                                            <Button color="danger" size="sm" onClick={() => handleDeny(plan.id, planType)}>Deny</Button>
+                                                        </>
+                                                    )}    
                                                     {((fetchType ===("all")) && (plan.handshake === false) && (addresses[plan.property])) && (
                                                         <>
+                                                            <Divider></Divider>
                                                             <Button size="sm" onClick={() => handleAccept(plan.id, planType)}>Accept</Button>
                                                             <Button color="danger" size="sm" onClick={() => handleDeny(plan.id, planType)}>Deny</Button>
                                                         </>
                                                     )}
-                                                    {((fetchType ===("all")) && (plan.handshake === true) && (addresses[plan.property])) && (<Button size="sm" onClick={handleOpen}>Contact Customer</Button>)}
+                                                    {((fetchType ===("all")) && (plan.handshake === true) && (addresses[plan.property])) && (
+                                                        <>
+                                                            <Divider></Divider>
+                                                            <Button size="sm" onClick={handleOpen}>Contact Customer</Button>
+                                                        </>
+                                                    )}
                                                 </Card>
                                                 
                                             </Grid>

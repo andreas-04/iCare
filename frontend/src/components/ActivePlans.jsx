@@ -70,10 +70,10 @@ const ActivePlans = ({ propertyId }) => {
                 <Typography level="title-lg" align="center">No active plans found. Try creating some matches!</Typography>
             ) : (
             <>
-                <Grid container spacing={1} sx={{flexGrow:1 }} alignItems="stretch">
+                <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
                     {Object.keys(activePlans).map((category, categoryIndex) => (
                         activePlans[category].map((plan, planIndex) => (
-                            <Grid item xs={6} key={`${categoryIndex}-${planIndex}`}>
+                            <Grid item xs={3} key={`${categoryIndex}-${planIndex}`}>
                                 <Card size='sm'>
                                     <Typography level="body-lg" align="left">
                                     {plan.service_name}
@@ -88,11 +88,11 @@ const ActivePlans = ({ propertyId }) => {
                                     {category === ("internet_plans") && (<Typography align="left" level="body-md">🚀 Plan Speed: {plan.speed}</Typography>)}
                                     <Divider></Divider>
                                     <Grid container spacing={1} sx={{flexGrow:1 }} alignItems="stretch">
-                                        <Grid item xs={3}>
-                                            <Chip color="danger" size="md" onClick={() => handleCancel(plan.id, category)}>Cancel</Chip>
+                                        <Grid item xs={4}>
+                                            <Chip variant="solid" color="danger" size="md" onClick={() => handleCancel(plan.id, category)}>Cancel</Chip>
                                         </Grid>
-                                        <Grid item xs={3}>
-                                            <Chip color="primary" size="md" onClick={handleOpen} >Contact Provider</Chip>
+                                        <Grid item xs={6}>
+                                            <Chip variant="solid" color="primary" size="md" onClick={handleOpen} >Contact Provider</Chip>
                                         </Grid>
                                     </Grid>
                                 </Card>
