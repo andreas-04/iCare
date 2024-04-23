@@ -63,8 +63,13 @@ const ActivePlans = ({ propertyId }) => {
             console.log(error);
         }
     };
+    const allPlansEmpty = Object.values(activePlans).every(plans => plans.length === 0);
     return (
         <>
+            {allPlansEmpty ? (
+                <Typography level="title-lg" align="center">No active plans found. Try creating some matches!</Typography>
+            ) : (
+            <>
                 <Grid container spacing={1} sx={{flexGrow:1 }} alignItems="stretch">
                     {Object.keys(activePlans).map((category, categoryIndex) => (
                         activePlans[category].map((plan, planIndex) => (
@@ -95,10 +100,12 @@ const ActivePlans = ({ propertyId }) => {
                         ))
                     ))}
                 </Grid>
-            <Modal open={open} onClose={handleClose}>
-                {modalContent}
-            </Modal>
-        </>
+                <Modal open={open} onClose={handleClose}>
+                    {modalContent}
+                </Modal>
+            </>
+        )}
+    </>
     )
 }
 export default ActivePlans;

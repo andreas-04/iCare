@@ -121,9 +121,15 @@ const BusinessDash = () => {
 
     const handleAccept = (planId, planType) => {
         const extractedPart = planType.split('_')[0];
-        console.log(extractedPart, planId, planType)
         api.putPlan(planId, extractedPart, {
             handshake: true,
+        });
+        fetchPlans(fetchType);
+    }
+    const handleDeny = (planId, planType) => {
+        const extractedPart = planType.split('_')[0];
+        api.putPlan(planId, extractedPart, {
+            property: null,
         });
         fetchPlans(fetchType);
     }
@@ -228,19 +234,33 @@ const BusinessDash = () => {
                                             </Grid>
                                             <Grid item xs={4}>
                                                 <Card size="sm">
-                                                    <Typography level="title-md" align="left" >Plan Details</Typography>
+                                                    <Grid container spacing={1} sx={{ flexGrow: 1 }} alignItems="stretch">
+                                                        <Grid item xs={8}>
+                                                            <Typography level="title-md" align="left" >Plan Details</Typography>
+                                                        </Grid>
+                                                        <Grid item xs={4}>
+                                                            <Button size="sm" color="danger" onClick={() => handleCancel(plan.id, planType)}>Delete Plan</Button>
+                                                        </Grid>
+                                                    </Grid>
                                                     <Divider></Divider>
                                                     <Typography level="body-md" align="left">Cost: ${plan.cost}</Typography>
                                                     {planType === ("lawn_plans") && (<Typography level="body-md" align="left">Frequency: {plan.frequency} per month</Typography>)}
                                                     {planType === ("interior_plans") && (<Typography level="body-md" align="left">Frequency: {plan.frequency} per month</Typography>)}
                                                     {planType === ("phone_plans") && (<><Typography level="body-md" align="left">Users: {plan.users} </Typography><Typography level="body-md" align="left">Plan Type: {plan.plan_type}</Typography></>) }
                                                     {planType === ("internet_plans") && (<><Typography level="body-md" align="left">Devices: {plan.users}</Typography><Typography level="body-md" align="left"><Typography level="body-md" align="left">Plan Speed: {plan.speed} mb/s</Typography></Typography></>)}
-
+                                                    <Divider></Divider>
                                                     {fetchType === ("active") && (<Button size="sm" onClick={handleOpen}>Contact Customer</Button>)}
-                                                    {fetchType === ("pending") && (<Button size="sm" onClick={() => handleAccept(plan.id, planType)}>Accept Customer</Button>)}
-                                                    {((fetchType ===("all")) && (plan.handshake === false) && (addresses[plan.property])) && (<Button size="sm">Accept Customer</Button>)}
+                                                    {fetchType === ("pending") && (<>
+                                                        <Button color="success" size="sm" onClick={() => handleAccept(plan.id, planType)} >Accept</Button>
+                                                        <Button color="danger" size="sm" onClick={() => handleDeny(plan.id, planType)}>Deny</Button>
+                                                    </>)}    
+                                                    {((fetchType ===("all")) && (plan.handshake === false) && (addresses[plan.property])) && (
+                                                        <>
+                                                            <Button size="sm" onClick={() => handleAccept(plan.id, planType)}>Accept</Button>
+                                                            <Button color="danger" size="sm" onClick={() => handleDeny(plan.id, planType)}>Deny</Button>
+                                                        </>
+                                                    )}
                                                     {((fetchType ===("all")) && (plan.handshake === true) && (addresses[plan.property])) && (<Button size="sm" onClick={handleOpen}>Contact Customer</Button>)}
-                                                    <Button size="sm" color="danger" onClick={() => handleCancel(plan.id, planType)}>Delete Plan</Button>
                                                 </Card>
                                                 
                                             </Grid>
