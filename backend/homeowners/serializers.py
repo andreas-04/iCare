@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, LawnServicePlan, Property, InteriorServicePlan, InternetServicePlan, PhoneServicePlan
+from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, LawnServicePlan, Property, InteriorServicePlan, InternetServicePlan, PhoneServicePlan, LawnMatchNotification, InteriorMatchNotification, InternetMatchNotification, PhoneMatchNotification, Notification
 
 class UserSerializer(serializers.ModelSerializer):
     groups = serializers.SlugRelatedField(
@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'groups']
+        fields = ['username','password', 'email', 'first_name', 'last_name', 'groups']
     def create(self, validated_data):
         groups = validated_data.pop('groups', [])
         user = User.objects.create(**validated_data)
@@ -104,5 +104,27 @@ class PropertySerializer(serializers.ModelSerializer):
         property_instance.save()
         return property_instance
 
+class LawnMatchNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LawnMatchNotification
+        fields = "__all__"
 
+class InteriorMatchNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InteriorMatchNotification
+        fields = "__all__"
 
+class InternetMatchNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InternetMatchNotification
+        fields = "__all__"
+
+class PhoneMatchNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PhoneMatchNotification
+        fields = "__all__"
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = "__all__"

@@ -77,8 +77,7 @@ class LawnServicePlan(models.Model):
     service_description = models.CharField(max_length=524, blank=True)
     cost = models.FloatField( blank=True)
     frequency = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
-    notification_sent = models.BooleanField(default=False)
-    notification_date = models.DateTimeField(null=True, blank=True)
+
 
 class InteriorServicePlan(models.Model):
     property = models.ForeignKey(Property,on_delete=models.SET_NULL, null=True, blank=True)
@@ -88,8 +87,7 @@ class InteriorServicePlan(models.Model):
     service_description = models.CharField(max_length=524, blank=True)
     cost = models.FloatField(blank=True)
     frequency = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
-    notification_sent = models.BooleanField(default=False)
-    notification_date = models.DateTimeField(null=True, blank=True)
+
 
 class InternetServicePlan(models.Model):
     property = models.ForeignKey(Property,on_delete=models.SET_NULL, null=True, blank=True)
@@ -100,8 +98,7 @@ class InternetServicePlan(models.Model):
     cost = models.FloatField(blank=True)
     users = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
     speed = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
-    notification_sent = models.BooleanField(default=False)
-    notification_date = models.DateTimeField(null=True, blank=True)
+
 
 class PhoneServicePlan(models.Model):
     property = models.ForeignKey(Property, on_delete=models.SET_NULL, null=True, blank=True)
@@ -119,5 +116,29 @@ class PhoneServicePlan(models.Model):
             ('unlimited','Unlimited Plan'),
         ], null=True, blank=True
     )
-    notification_sent = models.BooleanField(default=False)
-    notification_date = models.DateTimeField(null=True, blank=True)
+
+
+class Notification(models.Model):
+    message = models.CharField(max_length=255, null=True, blank=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, related_name='sent_notifications')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, related_name='received_notifications')
+
+class LawnMatchNotification(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, related_name='sent_lawn_match_notifications')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, related_name='received_lawn_match_notifications')
+    match = models.ForeignKey(LawnServicePlan, on_delete=models.CASCADE, blank=False)
+
+class InteriorMatchNotification(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, related_name='sent_interior_match_notifications')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, related_name='received_interior_match_notifications')
+    match = models.ForeignKey(InteriorServicePlan, on_delete=models.CASCADE, blank=False)
+
+class InternetMatchNotification(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, related_name='sent_internet_match_notifications')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, related_name='received_internet_match_notifications')
+    match = models.ForeignKey(InternetServicePlan, on_delete=models.CASCADE, blank=False)
+
+class PhoneMatchNotification(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, related_name='sent_phone_match_notifications')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, related_name='received_phone_match_notifications')
+    match = models.ForeignKey(PhoneServicePlan, on_delete=models.CASCADE, blank=False)

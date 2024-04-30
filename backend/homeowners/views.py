@@ -8,8 +8,8 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from homeowners.serializers import UserSerializer
-from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, Property, LawnServicePlan, InternetServicePlan, InteriorServicePlan, PhoneServicePlan
-from .serializers import UserSerializer, MortgageInsuranceSerializer, LawnSerializer, InteriorSerializer, InternetSerializer, PhoneSerializer, LawnServicePlanSerializer, InteriorServicePlanSerializer, InternetServicePlanSerializer, PhoneServicePlanSerializer, PropertySerializer
+from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, Property, LawnServicePlan, InternetServicePlan, InteriorServicePlan, PhoneServicePlan, Notification, LawnMatchNotification, InteriorMatchNotification, InternetMatchNotification, PhoneMatchNotification
+from .serializers import UserSerializer, MortgageInsuranceSerializer, LawnSerializer, InteriorSerializer, InternetSerializer, PhoneSerializer, LawnServicePlanSerializer, InteriorServicePlanSerializer, InternetServicePlanSerializer, PhoneServicePlanSerializer, PropertySerializer, NotificationSerializer, LawnMatchNotificationSerializer, InteriorMatchNotificationSerializer, InternetMatchNotificationSerializer, PhoneMatchNotificationSerializer
 from django.http import JsonResponse
 from django.contrib.auth import logout
 from .complex_scoring_functions import calculate_internet_score, calculate_lawn_interior_score, calculate_phone_score
@@ -81,8 +81,6 @@ class PhoneViewSet(viewsets.ModelViewSet):
 class LawnServicePlanViewSet(viewsets.ModelViewSet):
     queryset = LawnServicePlan.objects.all()
     serializer_class = LawnServicePlanSerializer
-
-
 class InteriorServicePlanViewSet(viewsets.ModelViewSet):
     queryset = InteriorServicePlan.objects.all()
     serializer_class = InteriorServicePlanSerializer
@@ -92,12 +90,29 @@ class InternetServicePlanViewSet(viewsets.ModelViewSet):
 class PhoneServicePlanViewSet(viewsets.ModelViewSet):
     queryset = PhoneServicePlan.objects.all()
     serializer_class = PhoneServicePlanSerializer
-
-
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
     serializer_class = PropertySerializer
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
 
+class LawnMatchNotificationViewSet(viewsets.ModelViewSet):
+    queryset = LawnMatchNotification.objects.all()
+    serializer_class = LawnMatchNotificationSerializer
+
+class InteriorMatchNotificationViewSet(viewsets.ModelViewSet):
+    queryset = InteriorMatchNotification.objects.all()
+    serializer_class = InteriorMatchNotificationSerializer
+
+class InternetMatchNotificationViewSet(viewsets.ModelViewSet):
+    queryset = InternetMatchNotification.objects.all()
+    serializer_class = InternetMatchNotificationSerializer
+
+class PhoneMatchNotificationViewSet(viewsets.ModelViewSet):
+    queryset = PhoneMatchNotification.objects.all()
+    serializer_class = PhoneMatchNotificationSerializer
+    
 
 
 
@@ -319,4 +334,35 @@ class budget(APIView):
             'total_active_plans_cost': total_active_plans_cost
         }, status=status.HTTP_200_OK)
 
+class UserNotificationsView(APIView):
+    def get(self, request, user_id):
+        # Fetch the user instance
+        user = get_object_or_404(User, id=user_id)
         
+        # Fetch all notifications sent to the user
+        notifications = Notification.objects.filter(receiver=user)
+        
+        # Fetch all match notifications sent to the user
+        lawn_match_notifications = LawnMatchNotification.objects.filter(receiver=user)
+        interior_match_notifications = InteriorMatchNotification.objects.filter(receiver=user)
+        internet_match_notifications = InternetMatchNotification.objects.filter(receiver=user)
+        phone_match_notifications = PhoneMatchNotification.objects.filter(receiver=user)
+        
+        # Serialize the notifications and match notifications
+        notification_serializer = NotificationSerializer(notifications, many=True)
+        lawn_match_notification_serializer = LawnMatchNotificationSerializer(lawn_match_notifications, many=True)
+        interior_match_notification_serializer = InteriorMatchNotificationSerializer(interior_match_notifications, many=True)
+        internet_match_notification_serializer = InternetMatchNotificationSerializer(internet_match_notifications, many=True)
+        phone_match_notification_serializer = PhoneMatchNotificationSerializer(phone_match_notifications, many=True)
+        
+        # Combine all serialized data into a single dictionary
+        all_notifications_data = {
+            'notifications': notification_serializer.data,
+            'lawn_match_notifications': lawn_match_notification_serializer.data,
+            'interior_match_notifications': interior_match_notification_serializer.data,
+            'internet_match_notifications': internet_match_notification_serializer.data,
+            'phone_match_notifications': phone_match_notification_serializer.data,
+        }
+        
+        # Return the combined serialized data
+        return Response(all_notifications_data, status=status.HTTP_200_OK)
