@@ -46,6 +46,7 @@ const ServiceForm = ({form_type}) => {
             try {
                 formData.business = userId;
                 const response = await api.postPlan(formData, form_type);
+                await api.notifyBestMatch(response.data.id, form_type);
                 console.log(response);
                 // Handle successful submission, e.g., show a success message or redirect
             } catch (error) {

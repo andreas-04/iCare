@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Cookies from 'js-cookie'; // Import js-cookie
 import api from '../api'; // Import the api.js file
-import { Stack, Card, Typography, Sheet , Button} from "@mui/joy";
+import { Stack, Card, Typography, Sheet , Button, Grid, IconButton} from "@mui/joy";
 import { styled } from '@mui/joy/styles';
+import ClearIcon from '@mui/icons-material/Clear';
 const Item = styled(Sheet)(({ theme }) => ({
     ...theme.typography['body-sm'],
     textAlign: 'center',
@@ -25,7 +26,19 @@ const Notifications = () => {
             console.log(error)
         });
 
-    })
+    }, []);
+    const handleDelete = async(notifId) => {
+        try{
+             await api.deleteNotification(notifId);
+            setNotifications(prevNotifications => {
+                // Filter out the deleted notification
+                const updatedNotifications = prevNotifications.notifications.filter(notification => notification.id !== notifId);
+                return { ...prevNotifications, notifications: updatedNotifications };
+            });
+        }catch(error){
+            console.log(error)
+        }
+    };
     console.log(notifications)
     return(
         <>
@@ -37,7 +50,16 @@ const Notifications = () => {
                 {notifications.notifications && notifications.notifications.map((notification, index) => (
                     <Item key={index}>
                         <Card size="sm" variant="plain">
-                            <Typography level="title-lg" align="left">New Message</Typography>
+                            <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
+                                <Grid item xs={10.5}>
+                                    <Typography level="title-lg" align="left">New Message</Typography>
+                                </Grid>
+                                <Grid item xs={1.5}>
+                                    <IconButton variant="plain" sx={{marginTop: "-10px"}} onClick={() => handleDelete(notification.id)}>
+                                        <ClearIcon/>
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
                             <Typography level="body-lg" align="left">{notification.message}</Typography>
                         </Card>
                     </Item>

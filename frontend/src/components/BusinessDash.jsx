@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import api from "../api";
 import Cookies from 'js-cookie';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
-import { Typography, Grid, Card, Divider, Select, selectClasses, Option, Button, Modal, Box, Textarea} from '@mui/joy';
+import { Typography, Grid, Card, Divider, Select, selectClasses, Option, Button} from '@mui/joy';
 import AccordionGroup from '@mui/joy/AccordionGroup';
 import Accordion from '@mui/joy/Accordion';
 import AccordionDetails, {
@@ -17,37 +17,9 @@ const BusinessDash = () => {
     const [fetchType, setFetchType] = useState("all");
     const [formType, setFormType] = useState("");
     const [addresses, setAddresses] = useState({});
-
     const userId = Cookies.get('user_id');
-
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const modalContent = (
-        <>
-        <Box
-            sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '100%', 
-            }}
-        >
-            <Card sx={{ width: "50%", height: "30%" }}>
-                <Typography level="h4" align="left">Contact Customer</Typography>
-                <Typography level="body-md" align="left">
-                    Please fill out the form below to contact the customer.
-                </Typography>
-                <Textarea minRows={5} />
-                <Button onClick={handleClose}>Contact</Button>
-            </Card>
-        </Box>
-
-        </>
-    );
     const handleCancel = async(planId, category) => {
         const extractedPart = category.split('_')[0];
-
         try {
             await api.deletePlan(planId, extractedPart);
             fetchPlans(fetchType);
@@ -249,12 +221,6 @@ const BusinessDash = () => {
                                                     {planType === ("phone_plans") && (<><Typography level="body-md" align="left">Users: {plan.users} </Typography><Typography level="body-md" align="left">Plan Type: {plan.plan_type}</Typography></>) }
                                                     {planType === ("internet_plans") && (<><Typography level="body-md" align="left">Devices: {plan.users}</Typography><Typography level="body-md" align="left"><Typography level="body-md" align="left">Plan Speed: {plan.speed} mb/s</Typography></Typography></>)}
                                                     
-                                                    {fetchType === ("active") && (
-                                                        <>
-                                                            <Divider></Divider>
-                                                            <Button size="sm" onClick={handleOpen}>Contact Customer</Button>
-                                                        </>
-                                                    )}
                                                     {fetchType === ("pending") && (
                                                         <>
                                                             <Divider></Divider>
@@ -269,12 +235,6 @@ const BusinessDash = () => {
                                                             <Button color="danger" size="sm" onClick={() => handleDeny(plan.id, planType)}>Deny</Button>
                                                         </>
                                                     )}
-                                                    {((fetchType ===("all")) && (plan.handshake === true) && (addresses[plan.property])) && (
-                                                        <>
-                                                            <Divider></Divider>
-                                                            <Button size="sm" onClick={handleOpen}>Contact Customer</Button>
-                                                        </>
-                                                    )}
                                                 </Card>
                                                 
                                             </Grid>
@@ -287,9 +247,7 @@ const BusinessDash = () => {
                     </Card>
                 </Grid>
             </Grid>
-            <Modal  open={open} onClose={handleClose}>
-                {modalContent}
-            </Modal>
+
         </>
     )
 }

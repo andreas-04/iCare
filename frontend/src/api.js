@@ -201,5 +201,10 @@ export default{
         }
     });
     },
-    
+    deleteNotification(notifId){
+        return apiClient.delete(`/notification/${notifId}/`, {headers:{'X-CSRFToken': csrfToken,}});
+    },
+    notifyBestMatch(planId, planType){
+        return apiClient.get(`/scored-plan-properties/${planId}/${planType}`, {headers:{'X-CSRFToken': csrfToken,}});
+    },
 }
