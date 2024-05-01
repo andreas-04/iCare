@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import RegisterView, LoginView, UserViewSet, MortgageInsuranceViewSet, LawnViewSet, InteriorViewSet, InternetViewSet, PhoneViewSet, LawnServicePlanViewSet, InteriorServicePlanViewSet, InternetServicePlanViewSet, PhoneServicePlanViewSet, logout_view, PropertyViewSet, ScoredLawnPlans, ScoredInteriorPlans, ScoredInternetPlans, ScoredPhonePlans, active_plans, budget, active_business_plans, pending_business_plans, all_business_plans, UserNotificationsView, NotificationViewSet, LawnMatchNotificationViewSet, InteriorMatchNotificationViewSet, InternetMatchNotificationViewSet, PhoneMatchNotificationViewSet
+from .views import RegisterView, LoginView, UserViewSet, MortgageInsuranceViewSet, LawnViewSet, InteriorViewSet, InternetViewSet, PhoneViewSet, LawnServicePlanViewSet, InteriorServicePlanViewSet, InternetServicePlanViewSet, PhoneServicePlanViewSet, logout_view, PropertyViewSet, ScoredLawnPlans, ScoredInteriorPlans, ScoredInternetPlans, ScoredPhonePlans, active_plans, budget, active_business_plans, pending_business_plans, all_business_plans, UserNotificationsView, NotificationViewSet, LawnMatchNotificationViewSet, InteriorMatchNotificationViewSet, InternetMatchNotificationViewSet, PhoneMatchNotificationViewSet, ScoredPlanProperties
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -37,5 +37,5 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', logout_view, name='logout'),
     path('notifications/user/<int:user_id>/', UserNotificationsView.as_view(), name="notifications" ),
-
+    path('scored-plan-properties/<int:plan_id>/<str:plan_type>/', ScoredPlanProperties.as_view(), name='scored-plan-properties'),
 ]

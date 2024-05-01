@@ -366,3 +366,67 @@ class UserNotificationsView(APIView):
         
         # Return the combined serialized data
         return Response(all_notifications_data, status=status.HTTP_200_OK)
+    
+class ScoredPlanProperties(APIView):
+    def get(self, request, plan_id, plan_type):
+        # Map plan types to their corresponding models, scoring functions, and notification models
+        plan_info_mapping = {
+            'lawn': (LawnServicePlan, calculate_lawn_interior_score, LawnMatchNotification),
+            'interior': (InteriorServicePlan, calculate_lawn_interior_score, InteriorMatchNotification),
+            'internet': (InternetServicePlan, calculate_internet_score, InternetMatchNotification),
+            'phone': (PhoneServicePlan, calculate_phone_score, PhoneMatchNotification),
+        }
+
+        # Fetch the plan instance based on the plan_id and plan_type
+        PlanModel, scoring_function, NotificationModel = plan_info_mapping.get(plan_type, (None, None, None))
+        if not PlanModel or not scoring_function or not NotificationModel:
+            return Response({"detail": "Invalid plan type."}, status=status.HTTP_400_BAD_REQUEST)
+
+        plan = get_object_or_404(PlanModel, id=plan_id)
+
+        # Calculate scores for all properties based on the plan
+        scored_properties = []
+        for property in Property.objects.all():
+            # Fetch the plan type instance associated with the property
+            if plan_type == 'lawn':
+                plan_instance = property.lawn
+            elif plan_type == 'interior':
+                plan_instance = property.interior
+            elif plan_type == 'internet':
+                plan_instance = property.internet
+            elif plan_type == 'phone':
+                plan_instance = property.phone
+            else:
+                continue # Skip this property if the plan type is not recognized
+
+            # Ensure the plan instance exists
+            if not plan_instance:
+                continue # Skip this property if there's no associated plan type instance
+
+            # Calculate the score using the plan instance data
+            score = scoring_function(plan.cost, plan_instance.budget, plan_instance.budget_tolerance, plan_instance.budget_weight, plan.frequency, plan_instance.frequency, plan_instance.frequency_weight)
+            if score > 0:
+                scored_properties.append({
+                    'property': property,
+                    'score': score
+                })
+
+        # Sort the scored properties by score in descending order
+        scored_properties.sort(key=lambda x: x['score'], reverse=True)
+
+        # Find the property with the highest score
+        best_match_property = scored_properties[0]['property'] if scored_properties else None
+
+        if best_match_property:
+            # Extract the user ID from the property
+            user_id = best_match_property.user_id
+
+            sender_id = plan.business.id
+
+            # Create and send a notification to the user using the specific notification model
+            notification = NotificationModel.objects.create(receiver_id=user_id, match_id=plan_id, sender_id = sender_id)
+            notification_serializer = globals()[f"{NotificationModel.__name__}Serializer"](notification)
+
+            return Response(notification_serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"detail": "No properties matched the plan."}, status=status.HTTP_404_NOT_FOUND)
