@@ -30,7 +30,7 @@ const theme = extendTheme({ cssVarPrefix: 'demo' });
       //
       theme={theme}
       // the selector to apply CSS theme variables stylesheet.
-      colorSchemeSelector="#demo_dark-mode-by-default"
+      colorSchemeSelector="body"
       //
       // the local storage key to use
       modeStorageKey="demo_dark-mode-by-default"

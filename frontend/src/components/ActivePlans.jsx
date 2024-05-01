@@ -2,11 +2,33 @@ import { useState, useEffect } from 'react';
 import { Card, Divider, Grid, Typography, Chip, Box, Textarea, Button, Modal } from "@mui/joy";
 import PropTypes from 'prop-types';
 import api from '../api';
+import Cookies from 'js-cookie'; 
 
 const ActivePlans = ({ propertyId }) => {
     const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const userId = Cookies.get('user_id');
+    const [messageData, setMessageData] = useState({
+        sender: userId,
+        receiver: null,
+        message: ""
+    })
+    const handleOpen = (businessId) => {
+        setMessageData(prevState => ({
+            ...prevState,
+            receiver: businessId
+        }));
+        setOpen(true);
+    }
+    const handleClose = () => {
+        api.postNotification(messageData);
+        setOpen(false);
+    }
+    const updateMessage = (event) => {
+        setMessageData(prevState => ({
+            ...prevState,
+            message: event.target.value
+        }));
+    }
     const modalContent = (
         <>
         <Box
@@ -22,7 +44,7 @@ const ActivePlans = ({ propertyId }) => {
                 <Typography level="body-md" align="left">
                     Please fill out the form below to contact the provider.
                 </Typography>
-                <Textarea minRows={5} />
+                <Textarea minRows={5} onChange={updateMessage}/>
                 <Button onClick={handleClose}>Contact</Button>
             </Card>
         </Box>
@@ -49,7 +71,8 @@ const ActivePlans = ({ propertyId }) => {
     const handleCancel = async(planId, category) => {
         const extractedPart = category.split('_')[0];
         const planData = {
-            property: null
+            property: null,
+            handshake: false,
         };
         try {
             await api.putPlan(planId, extractedPart, planData);
@@ -92,7 +115,7 @@ const ActivePlans = ({ propertyId }) => {
                                             <Chip variant="solid" color="danger" size="md" onClick={() => handleCancel(plan.id, category)}>Cancel</Chip>
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <Chip variant="solid" color="primary" size="md" onClick={handleOpen} >Contact Provider</Chip>
+                                            <Chip variant="solid" color="primary" size="md" onClick={() => handleOpen(plan.business)} >Contact Provider</Chip>
                                         </Grid>
                                     </Grid>
                                 </Card>

@@ -189,5 +189,17 @@ export default{
         }
     });
     },
+    getNotifications(userId){
+        return apiClient.get(`/notifications/user/${userId}/`,{headers: {
+            'X-CSRFToken': csrfToken, 
+        }
+    });
+    },
+    postNotification(notifData){
+        return apiClient.post(`/notification/`, notifData, {headers: {
+            'X-CSRFToken': csrfToken, 
+        }
+    });
+    },
     
 }
