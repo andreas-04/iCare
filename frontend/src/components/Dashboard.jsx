@@ -14,6 +14,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchProperties = async () => {
             try{
+                const userId = Cookies.get('user_id'); 
                 const properties = await api.getProperties(userId);
                 setPropertyList(properties.data);
                 if (properties.data.length > 0) {

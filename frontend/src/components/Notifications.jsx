@@ -69,8 +69,8 @@ const Notifications = () => {
                         <Card size="sm" variant="plain">
                             <Typography level="title-lg" align="left">New Potential Lawn Match</Typography>
                             <Typography level="body-lg" align="left">Provider: {notification.sender}</Typography>
-                            <Button>Accept</Button>
-                            <Button>Reject</Button>
+                            <Button variant="solid" size='sm' color="primary">Accept</Button>
+                            <Button variant="solid" size='sm' color="danger">Reject</Button>
                         </Card>
                     </Item>
                 ))}
@@ -79,8 +79,8 @@ const Notifications = () => {
                         <Card size="sm" variant="plain">
                             <Typography level="title-lg" align="left">New Potential Interior Match</Typography>
                             <Typography level="body-lg" align="left">Provider: {notification.sender}</Typography>
-                            <Button>Accept</Button>
-                            <Button>Reject</Button>
+                            <Button variant="solid" size='sm' color="primary">Accept</Button>
+                            <Button variant="solid" size='sm' color="danger">Reject</Button>
                         </Card>
                     </Item>
                 ))}
@@ -89,8 +89,8 @@ const Notifications = () => {
                         <Card size="sm" variant="plain">
                             <Typography level="title-lg" align="left">New Potential Internet Match</Typography>
                             <Typography level="body-lg" align="left">Provider: {notification.sender}</Typography>
-                            <Button>Accept</Button>
-                            <Button>Reject</Button>
+                            <Button variant="solid" size='sm' color="primary">Accept</Button>
+                            <Button variant="solid" size='sm' color="danger">Reject</Button>
                         </Card>
                     </Item>
                 ))}
@@ -99,8 +99,8 @@ const Notifications = () => {
                         <Card size="sm" variant="plain">
                             <Typography level="title-lg" align="left">New Potential Phone Match</Typography>
                             <Typography level="body-lg" align="left">Provider: {notification.sender}</Typography>
-                            <Button>Accept</Button>
-                            <Button>Reject</Button>
+                            <Button variant="solid" size='sm' color="primary">Accept</Button>
+                            <Button variant="solid" size='sm' color="danger">Reject</Button>
                         </Card>
                     </Item>
                 ))}

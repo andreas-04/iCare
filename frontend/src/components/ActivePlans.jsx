@@ -60,7 +60,7 @@ const ActivePlans = ({ propertyId }) => {
                 });
 
             }catch(error){
-                console.log("error fetching active plans, ", error);
+                // console.log("error fetching active plans, ", error);
             }
         }
         fetchActivePlans();

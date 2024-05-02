@@ -13,7 +13,7 @@ const BudgetView = ({propertyId}) => {
                 setBudget(budgetCostsData.data.total_budget || 0);
                 setCosts(budgetCostsData.data.total_active_plans_cost || 0);
             }catch(error){
-                console.log("Errror grabbing budget and costs for property ", propertyId, error)
+                // console.log("Errror grabbing budget and costs for property ", propertyId, error)
             }
         }
         fetchBudgetAndCosts();
