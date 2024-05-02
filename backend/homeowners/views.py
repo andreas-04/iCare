@@ -8,13 +8,16 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from homeowners.serializers import UserSerializer
-from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, Property, LawnServicePlan, InternetServicePlan, InteriorServicePlan, PhoneServicePlan, Notification, LawnMatchNotification, InteriorMatchNotification, InternetMatchNotification, PhoneMatchNotification
+from .models import UserProfile, MortgageInsurance, Lawn, Interior, Internet, Phone, Property, LawnServicePlan, InternetServicePlan, InteriorServicePlan, PhoneServicePlan, Notification, LawnMatchNotification, InteriorMatchNotification, InternetMatchNotification, PhoneMatchNotification
 from .serializers import UserSerializer, MortgageInsuranceSerializer, LawnSerializer, InteriorSerializer, InternetSerializer, PhoneSerializer, LawnServicePlanSerializer, InteriorServicePlanSerializer, InternetServicePlanSerializer, PhoneServicePlanSerializer, PropertySerializer, NotificationSerializer, LawnMatchNotificationSerializer, InteriorMatchNotificationSerializer, InternetMatchNotificationSerializer, PhoneMatchNotificationSerializer
 from django.http import JsonResponse
-from django.contrib.auth import logout
+from django.contrib.auth import logout, get_user_model
 from .complex_scoring_functions import calculate_internet_score, calculate_lawn_interior_score, calculate_phone_score
 from .serializers import ScoredLawnServicePlanSerializer, ScoredInteriorServicePlanSerializer, ScoredInternetServicePlanSerializer, ScoredPhoneServicePlanSerializer
 from django.db.models import Sum
+
+User = get_user_model()
+
 
 class RegisterView(APIView):
     def post(self, request):
@@ -45,7 +48,7 @@ def logout_view(request):
     return response
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = UserProfile.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 

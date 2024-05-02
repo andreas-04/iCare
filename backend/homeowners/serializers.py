@@ -1,23 +1,17 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import MortgageInsurance, Lawn, Interior, Internet, Phone, LawnServicePlan, Property, InteriorServicePlan, InternetServicePlan, PhoneServicePlan, LawnMatchNotification, InteriorMatchNotification, InternetMatchNotification, PhoneMatchNotification, Notification
 
+UserProfile = get_user_model()
+
 class UserSerializer(serializers.ModelSerializer):
-    groups = serializers.SlugRelatedField(
-        queryset=Group.objects.all(),
-        slug_field='name',
-        many=True,
-        required=False,  # Make this field optional
-        help_text='Select the group to add the user to.'
-    )
     class Meta:
-        model = User
-        fields = ['username','password', 'email', 'first_name', 'last_name', 'groups']
+        model = UserProfile
+        fields = ('id', 'username', 'email', 'phone_number', 'user_type', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
+
     def create(self, validated_data):
-        groups = validated_data.pop('groups', [])
-        user = User.objects.create(**validated_data)
-        for group in groups:
-            user.groups.add(group) 
+        user = UserProfile.objects.create_user(**validated_data)
         return user
     
 class MortgageInsuranceSerializer(serializers.ModelSerializer):

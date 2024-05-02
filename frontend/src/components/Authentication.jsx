@@ -18,7 +18,7 @@ const Authentication = ({ onAuthenticated }) => {
     const [email, setEmail] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [selectedGroup, setSelectedGroup] = useState('Homeowner'); // Default group is Homeowner
+    const [userType, setUserType] = useState('Homeowner'); // Default group is Homeowner
 
     const groups = ['Homeowner', 'Business'];
 
@@ -35,17 +35,18 @@ const Authentication = ({ onAuthenticated }) => {
                 onAuthenticated();
                 // Handle successful login
             } else {
-                const group = selectedGroup.toLowerCase();
+                const group = userType.toLowerCase();
                 const response = await apiClient.post(`/register/`, {
                     username,
                     email,
                     first_name: firstName,
                     last_name: lastName,
                     password,
-                    groups: [group], // Send the selected group as an array
+                    user_type: group
                 });
                 console.log(response.data);
                 console.log("Registration successful!!")
+                onAuthenticated();
                 // Handle successful registration, e.g., redirect to login page
             }
         } catch (error) {
@@ -55,7 +56,7 @@ const Authentication = ({ onAuthenticated }) => {
         }
     };
     const handleSelectChange = (event, newValue) => {
-        setSelectedGroup(newValue);
+        setUserType(newValue);
 
     }
     return (
@@ -77,7 +78,7 @@ const Authentication = ({ onAuthenticated }) => {
                         color="neutral"
                         placeholder="Choose Account Type"
                         variant="soft"
-                        value={selectedGroup}
+                        value={userType}
                         onChange={handleSelectChange}
                     >
                         {groups.map((group, index) => (
