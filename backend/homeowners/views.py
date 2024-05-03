@@ -352,10 +352,10 @@ class UserNotificationsView(APIView):
         notifications = Notification.objects.filter(receiver=user)
         
         # Fetch all match notifications sent to the user
-        lawn_match_notifications = LawnMatchNotification.objects.filter(receiver=user)
-        interior_match_notifications = InteriorMatchNotification.objects.filter(receiver=user)
-        internet_match_notifications = InternetMatchNotification.objects.filter(receiver=user)
-        phone_match_notifications = PhoneMatchNotification.objects.filter(receiver=user)
+        lawn_match_notifications = LawnMatchNotification.objects.filter(receiver=user, property=None)
+        interior_match_notifications = InteriorMatchNotification.objects.filter(receiver=user, property=None)
+        internet_match_notifications = InternetMatchNotification.objects.filter(receiver=user, property=None)
+        phone_match_notifications = PhoneMatchNotification.objects.filter(receiver=user,property=None)
         
         # Serialize the notifications and match notifications
         notification_serializer = NotificationSerializer(notifications, many=True)
@@ -413,12 +413,19 @@ class ScoredPlanProperties(APIView):
                 continue # Skip this property if there's no associated plan type instance
 
             # Calculate the score using the plan instance data
-            score = scoring_function(plan.cost, plan_instance.budget, plan_instance.budget_tolerance, plan_instance.budget_weight, plan.frequency, plan_instance.frequency, plan_instance.frequency_weight)
+            if plan_type == 'lawn' or plan_type == 'interior':
+                score = scoring_function(plan.cost, plan_instance.budget, plan_instance.budget_tolerance, plan_instance.budget_weight, plan.frequency, plan_instance.frequency, plan_instance.frequency_weight)
+            elif plan_type == 'internet':
+                score = scoring_function(plan.cost, plan_instance.budget, plan_instance.budget_tolerance, plan_instance.budget_weight, plan.speed, plan_instance.speed_requirements, plan_instance.speed_tolerance, plan_instance.speed_weight, plan.users, plan_instance.users, plan_instance.users_weight)
+            elif plan_type == 'phone':
+                score = scoring_function(plan.cost, plan_instance.budget, plan_instance.budget_tolerance, plan_instance.budget_weight, plan.users, plan_instance.users, plan_instance.users_weight, plan.preferred_plan_type, plan_instance.plan_type, plan_instance.plan_weight)
+
             if score > 0:
                 scored_properties.append({
                     'property': property,
                     'score': score
                 })
+
 
         # Sort the scored properties by score in descending order
         scored_properties.sort(key=lambda x: x['score'], reverse=True)
@@ -430,10 +437,12 @@ class ScoredPlanProperties(APIView):
             # Extract the user ID from the property
             user_id = best_match_property.user_id
 
+            property = best_match_property.id
+            print(property, "here")
             sender_id = plan.business.id
 
             # Create and send a notification to the user using the specific notification model
-            notification = NotificationModel.objects.create(receiver_id=user_id, match_id=plan_id, sender_id = sender_id)
+            notification = NotificationModel.objects.create(receiver_id=user_id, match_id=plan_id, sender_id = sender_id, property_id = property)
             notification_serializer = globals()[f"{NotificationModel.__name__}Serializer"](notification)
 
             return Response(notification_serializer.data, status=status.HTTP_200_OK)

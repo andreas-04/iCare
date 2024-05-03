@@ -7,9 +7,7 @@ from django.conf import settings
 class UserProfile(AbstractUser):
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     user_t = models.CharField(max_length=255, choices=[("homeowner", "Homeowner"),("business","Business")], blank=False)
-    # Specify a unique related_name for groups and user_permissions
-    # groups = models.ManyToManyField(Group, related_name='userprofile_groups')
-    # user_permissions = models.ManyToManyField(Permission, related_name='userprofile_permissions')
+    
 class Property(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     address = models.CharField(max_length=32, null=True, blank=True)
@@ -98,7 +96,7 @@ class InteriorServicePlan(models.Model):
 
 class InternetServicePlan(models.Model):
     property = models.ForeignKey(Property,on_delete=models.SET_NULL, null=True, blank=True)
-    business = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='internet_service_plans', blank=True)
+    business = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='internet_service_plans')
     handshake = models.BooleanField(default=False)
     service_name = models.CharField(max_length=64, blank=True)
     service_description = models.CharField(max_length=524, blank=True)
@@ -134,18 +132,22 @@ class LawnMatchNotification(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=False, related_name='sent_lawn_match_notifications')
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=False, related_name='received_lawn_match_notifications')
     match = models.ForeignKey(LawnServicePlan, on_delete=models.CASCADE, blank=False)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, blank=False, null=True, related_name='lawn_property')
 
 class InteriorMatchNotification(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=False, related_name='sent_interior_match_notifications')
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=False, related_name='received_interior_match_notifications')
     match = models.ForeignKey(InteriorServicePlan, on_delete=models.CASCADE, blank=False)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, blank=False, null=True, related_name='interior_property')
 
 class InternetMatchNotification(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=False, related_name='sent_internet_match_notifications')
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=False, related_name='received_internet_match_notifications')
     match = models.ForeignKey(InternetServicePlan, on_delete=models.CASCADE, blank=False)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, blank=False, null=True, related_name='internet_property')
 
 class PhoneMatchNotification(models.Model):
     sender = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=False, related_name='sent_phone_match_notifications')
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=False, related_name='received_phone_match_notifications')
     match = models.ForeignKey(PhoneServicePlan, on_delete=models.CASCADE, blank=False)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, blank=False, null=True, related_name='phone_property')
