@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Authentication from './components/Authentication.jsx'
 import Root from './components/root.jsx'
+import LandingPage from './components/LandingPage.jsx';
 import './App.css'
 import { CssVarsProvider, extendTheme } from '@mui/joy/styles';
 function App() {
