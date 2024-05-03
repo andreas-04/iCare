@@ -8,10 +8,9 @@ function App() {
   useEffect(() => {
     const sessionId = document.cookie.split('; ').find(row => row.startsWith('sessionid='));
     const userId = document.cookie.split('; ').find(row => row.startsWith('user_id='));
-    if (sessionId ) {
+    if (sessionId || userId) {
       setIsAuthenticated(true);
-    }else if(userId){
-      setIsAuthenticated(true);
+      // window.location.reload(); 
     }
   }, []);
   console.log(isAuthenticated);
@@ -27,7 +26,7 @@ const theme = extendTheme({ cssVarPrefix: 'demo' });
       disableNestedContext
     >
       <div id="demo_dark-mode-by-default">
-          {isAuthenticated ? <Root/> : <Authentication onAuthenticated={() => setIsAuthenticated(true)} />}
+          {isAuthenticated ? <Root/> : <Authentication onAuthenticated={() => {setIsAuthenticated(true);window.location.reload();}} />}
       </div>
     </CssVarsProvider>
     </>
