@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Cookies from 'js-cookie'; // Import js-cookie
 import api from '../api'; // Import the api.js file
 import { Stack, Card, Typography, Sheet , Button, Grid, IconButton} from "@mui/joy";
@@ -17,7 +17,7 @@ const Item = styled(Sheet)(({ theme }) => ({
 const Notifications = () => {
     const [notifications, setNotifications] = useState({});
 
-    useEffect(() =>{
+    const fetchNotifs = useCallback(async() =>{
         const userId = Cookies.get('user_id');
         //get notifications
         api.getNotifications(userId).then(response => {
@@ -25,20 +25,34 @@ const Notifications = () => {
         }).catch(error => {
             console.log(error)
         });
-
     }, []);
+    useEffect(() =>{
+        fetchNotifs();
+    }, [fetchNotifs]);
     const handleDelete = async(notifId) => {
         try{
-             await api.deleteNotification(notifId);
-            setNotifications(prevNotifications => {
-                // Filter out the deleted notification
-                const updatedNotifications = prevNotifications.notifications.filter(notification => notification.id !== notifId);
-                return { ...prevNotifications, notifications: updatedNotifications };
-            });
+            await api.deleteNotification(notifId);
+            fetchNotifs();
         }catch(error){
             console.log(error)
         }
     };
+    const handleAccept = async(matchId, property, planType) => {
+        try{
+            await api.putPlan(matchId, planType, {property: property});
+            fetchNotifs();
+        }catch (error){
+            console.error("Error accepting plan:", error);
+        }
+    };
+    const handleDeny = async(notifId, planType) => {
+        try{
+            await api.deletePlanNotification(notifId, planType);
+            fetchNotifs();
+        }catch(error){
+            console.error("error rejecting plan", error);
+        }
+    }
     console.log(notifications)
     return(
         <>
@@ -69,8 +83,8 @@ const Notifications = () => {
                         <Card size="sm" variant="plain">
                             <Typography level="title-lg" align="left">New Potential Lawn Match</Typography>
                             <Typography level="body-lg" align="left">Provider: {notification.sender}</Typography>
-                            <Button variant="solid" size='sm' color="primary">Accept</Button>
-                            <Button variant="solid" size='sm' color="danger">Reject</Button>
+                            <Button variant="solid" size='sm' color="primary" onClick={() => handleAccept(notification.match, notification.property, "lawn")}>Accept</Button>
+                            <Button variant="solid" size='sm' color="danger" onClick={() => handleDeny(notification.id, "lawn")}>Reject</Button>
                         </Card>
                     </Item>
                 ))}
@@ -79,8 +93,8 @@ const Notifications = () => {
                         <Card size="sm" variant="plain">
                             <Typography level="title-lg" align="left">New Potential Interior Match</Typography>
                             <Typography level="body-lg" align="left">Provider: {notification.sender}</Typography>
-                            <Button variant="solid" size='sm' color="primary">Accept</Button>
-                            <Button variant="solid" size='sm' color="danger">Reject</Button>
+                            <Button variant="solid" size='sm' color="primary" onClick={() => handleAccept(notification.match, notification.property, "interior")}>Accept</Button>
+                            <Button variant="solid" size='sm' color="danger" onClick={() => handleDeny(notification.id, "interior")}>Reject</Button>
                         </Card>
                     </Item>
                 ))}
@@ -89,8 +103,8 @@ const Notifications = () => {
                         <Card size="sm" variant="plain">
                             <Typography level="title-lg" align="left">New Potential Internet Match</Typography>
                             <Typography level="body-lg" align="left">Provider: {notification.sender}</Typography>
-                            <Button variant="solid" size='sm' color="primary">Accept</Button>
-                            <Button variant="solid" size='sm' color="danger">Reject</Button>
+                            <Button variant="solid" size='sm' color="primary" onClick={() => handleAccept(notification.match, notification.property, "internet")}>Accept</Button>
+                            <Button variant="solid" size='sm' color="danger" onClick={() => handleDeny(notification.id, "internet")}>Reject</Button>
                         </Card>
                     </Item>
                 ))}
@@ -99,8 +113,8 @@ const Notifications = () => {
                         <Card size="sm" variant="plain">
                             <Typography level="title-lg" align="left">New Potential Phone Match</Typography>
                             <Typography level="body-lg" align="left">Provider: {notification.sender}</Typography>
-                            <Button variant="solid" size='sm' color="primary">Accept</Button>
-                            <Button variant="solid" size='sm' color="danger">Reject</Button>
+                            <Button variant="solid" size='sm' color="primary" onClick={() => handleAccept(notification.match, notification.property, "phone")}>Accept</Button>
+                            <Button variant="solid" size='sm' color="danger" onClick={() => handleDeny(notification.id, "phone")}>Reject</Button>
                         </Card>
                     </Item>
                 ))}
