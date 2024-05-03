@@ -59,6 +59,12 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = PropertySerializer(properties, many=True)
         return Response(serializer.data)
     
+    @action(detail=True, methods=['get'])
+    def user_t(self, request, pk=None):
+        user_profile = self.get_object()
+        user_t = user_profile.user_t 
+        return Response({"user_t": user_t})
+
 
 
 class MortgageInsuranceViewSet(viewsets.ModelViewSet):

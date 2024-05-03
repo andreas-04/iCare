@@ -38,4 +38,5 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('notifications/user/<int:user_id>/', UserNotificationsView.as_view(), name="notifications" ),
     path('scored-plan-properties/<int:plan_id>/<str:plan_type>/', ScoredPlanProperties.as_view(), name='scored-plan-properties'),
+
 ]

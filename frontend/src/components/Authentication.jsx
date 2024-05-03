@@ -42,7 +42,7 @@ const Authentication = ({ onAuthenticated }) => {
                     first_name: firstName,
                     last_name: lastName,
                     password,
-                    user_type: group
+                    user_t: group
                 });
                 console.log(response.data);
                 console.log("Registration successful!!")
