@@ -53,7 +53,9 @@ export default{
             // Handle errors, e.g., show an error message
         }
     },
-
+    getUserT(userId){
+        return apiClient.get(`/users/${userId}/user_t`);
+    },
     getProperties(userId){
         return apiClient.get(`/users/${userId}/properties`);
     },

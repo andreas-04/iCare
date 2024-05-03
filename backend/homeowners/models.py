@@ -6,11 +6,10 @@ from django.conf import settings
 
 class UserProfile(AbstractUser):
     phone_number = models.CharField(max_length=15, null=True, blank=True)
-    user_type = models.CharField(max_length=255, choices=[("homeowner", "Homeowner"),("business","Business")], blank=False)
-
+    user_t = models.CharField(max_length=255, choices=[("homeowner", "Homeowner"),("business","Business")], blank=False)
     # Specify a unique related_name for groups and user_permissions
-    groups = models.ManyToManyField(Group, related_name='userprofile_groups')
-    user_permissions = models.ManyToManyField(Permission, related_name='userprofile_permissions')
+    # groups = models.ManyToManyField(Group, related_name='userprofile_groups')
+    # user_permissions = models.ManyToManyField(Permission, related_name='userprofile_permissions')
 class Property(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     address = models.CharField(max_length=32, null=True, blank=True)

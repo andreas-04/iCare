@@ -11,12 +11,8 @@ function App() {
     const userId = document.cookie.split('; ').find(row => row.startsWith('user_id='));
     if (sessionId ) {
       setIsAuthenticated(true);
-      //set userID cookie
     }else if(userId){
       setIsAuthenticated(true);
-    }else{
-      console.log("No sesh ID found :(");
-      console.log(document.cookie);
     }
   }, []);
   console.log(isAuthenticated);
@@ -26,17 +22,9 @@ const theme = extendTheme({ cssVarPrefix: 'demo' });
     <>
     <CssVarsProvider
       defaultMode="dark"
-      // the props below are specific to this demo,
-      // you might not need them in your app.
-      //
       theme={theme}
-      // the selector to apply CSS theme variables stylesheet.
       colorSchemeSelector="body"
-      //
-      // the local storage key to use
       modeStorageKey="demo_dark-mode-by-default"
-      //
-      // set as root provider
       disableNestedContext
     >
       <div id="demo_dark-mode-by-default">

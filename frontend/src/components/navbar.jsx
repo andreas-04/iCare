@@ -11,9 +11,9 @@ import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
 import Notifications from './Notifications.jsx';
+import PropTypes from 'prop-types';
 
-
-export default function Navbar() {
+export default function Navbar({userType}) {
     const handleLogout = () => {
         api.logout()
         .then(() => {
@@ -24,8 +24,10 @@ export default function Navbar() {
            console.error('Error logging out:', error);
         });
     };
-
+    console.log(userType)
     return (
+      <>
+      {userType === "homeowner" ? 
       <>
       <Card size="sm">
         <ButtonGroup
@@ -64,16 +66,35 @@ export default function Navbar() {
                 </Card>
               </Menu>
             </Dropdown>
-
-
+          <IconButton variant='plain' onClick={handleLogout} size='lg' color='primary'>
+            <LogoutIcon />
+          </IconButton>
+        </ButtonGroup>
+      </Card>
+      </> : <>
+      <Card variant="plain" size="sm">
+        <ButtonGroup
+          aria-label="radius button group"
+          sx={{ '--ButtonGroup-radius': '8px',
+          // backgroundColor: 'white',
+          }}
+          variant='outlined'
+          orientation='horizontal'
+          size='lg'
+        >
           <IconButton variant='plain' onClick={handleLogout} size='lg' color='primary'>
             <LogoutIcon />
           </IconButton>
 
         </ButtonGroup>
       </Card>
+      </>}
+  
       </>
 
       
     );
-  }
+}
+Navbar.propTypes = {
+  userType: PropTypes.string.isRequired,
+};

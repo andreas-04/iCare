@@ -132,7 +132,7 @@ const BusinessDash = () => {
                 </Select>
             </Grid>
                 <Grid item xs={3}>
-                    <Card  size="sm">
+                    <Card  size="md">
                         <Typography level="h3" align="left">Create New Service Plan</Typography>
                         <Divider></Divider>
                         <Select
@@ -159,7 +159,7 @@ const BusinessDash = () => {
                     
                 </Grid>
                 <Grid item xs={9}>
-                    <Card size="sm">
+                    <Card size="md">
                         <Typography level="h3" align="left">My Plans</Typography>
                         <AccordionGroup
                         variant="outlined"
