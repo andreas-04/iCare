@@ -48,7 +48,6 @@ const PropertyForm = ({ property, onDelete }) => {
     }) 
 
     useEffect(() => {
-        //populate form
         const fetchPropertyDetails = async () => {
             try {
                 const lawnData = await api.getLawn(property.lawn);

@@ -46,11 +46,10 @@ const Dashboard = () => {
      
         <Grid container spacing={2} sx={{flexGrow:1 }} alignItems="stretch">
             <Grid item xs={4}>
-                    <BudgetView propertyId={property}/>
+                    {property && <BudgetView propertyId={property}/>}
             </Grid>
             <Grid item xs={8}>
-                {/* <Typography level="title-lg" align="left">Active Plans</Typography> */}
-                <ActivePlans propertyId={property}/>
+                {property && <ActivePlans propertyId={property}/>}
             </Grid>
 
         </Grid>

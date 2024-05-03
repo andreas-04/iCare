@@ -91,19 +91,29 @@ const BusinessDash = () => {
         setFetchType(newVal);
     }
 
-    const handleAccept = (planId, planType) => {
+    const handleAccept = async(planId, planType) => {
         const extractedPart = planType.split('_')[0];
-        api.putPlan(planId, extractedPart, {
-            handshake: true,
-        });
-        fetchPlans(fetchType);
+        try{
+            await api.putPlan(planId, extractedPart, {
+                handshake: true,
+            });
+            fetchPlans(fetchType);
+        }catch(error){
+            console.error(error);
+        }
+
     }
-    const handleDeny = (planId, planType) => {
+    const handleDeny = async(planId, planType) => {
         const extractedPart = planType.split('_')[0];
-        api.putPlan(planId, extractedPart, {
-            property: null,
-        });
-        fetchPlans(fetchType);
+        try{
+            await api.putPlan(planId, extractedPart, {
+                property: null,
+            });
+            fetchPlans(fetchType);
+        }catch(error){
+            console.error(error);
+        }
+
     }
     return (
         <>
@@ -154,7 +164,7 @@ const BusinessDash = () => {
                             <Option value="internet">internet</Option>
                             
                         </Select>
-                        <ServiceForm form_type={formType}/>
+                        <ServiceForm form_type={formType} onPlanCreate={() => fetchPlans(fetchType)} />
                     </Card>
                     
                 </Grid>

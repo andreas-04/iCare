@@ -12,7 +12,6 @@ const Profile = () => {
             api.getProperties(userId)
                 .then(response => {
                     setProperties(response.data);
-                    //console.log(response.data)
                 })
                 .catch(error => {
                     console.error('Error fetching properties:', error);

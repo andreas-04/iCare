@@ -26,33 +26,25 @@ const Authentication = ({ onAuthenticated }) => {
         e.preventDefault();
         try {
             if (view === 'login') {
-                const response = await apiClient.post(`/login/`, {
+                await apiClient.post(`/login/`, {
                     username,
                     password,
                 });
-                console.log(response.data);
-                console.log("Success!!")
                 onAuthenticated();
-                // Handle successful login
             } else {
                 const group = userType.toLowerCase();
-                const response = await apiClient.post(`/register/`, {
+                await apiClient.post(`/register/`, {
                     username,
                     email,
                     first_name: firstName,
                     last_name: lastName,
                     password,
                     user_t: group
-                });
-                console.log(response.data);
-                console.log("Registration successful!!")
+                })
                 onAuthenticated();
-                // Handle successful registration, e.g., redirect to login page
             }
         } catch (error) {
             console.error(error);
-            console.log("Failure!!")
-            // Handle error
         }
     };
     const handleSelectChange = (event, newValue) => {

@@ -9,7 +9,7 @@ function getCookie(name) {
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
-const ServiceForm = ({form_type}) => {
+const ServiceForm = ({form_type, onPlanCreate}) => {
     const userId = getCookie('user_id');
     const [formData, setFormData] = useState({
         service_name: "",
@@ -47,9 +47,10 @@ const ServiceForm = ({form_type}) => {
                 formData.business = userId;
                 const response = await api.postPlan(formData, form_type);
                 await api.notifyBestMatch(response.data.id, form_type);
-                console.log(response);
-                // Handle successful submission, e.g., show a success message or redirect
-            } catch (error) {
+                if (onPlanCreate) {
+                    onPlanCreate();
+                }
+            }catch (error) {
                 console.error('Error submitting form:', error);
                 // Handle errors, e.g., show an error message
             }
@@ -188,4 +189,5 @@ const ServiceForm = ({form_type}) => {
 export default ServiceForm;
 ServiceForm.propTypes = {
     form_type: PropTypes.string.isRequired,
+    onPlanCreate: PropTypes.func,
 };

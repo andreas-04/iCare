@@ -14,17 +14,15 @@ import Notifications from './Notifications.jsx';
 import PropTypes from 'prop-types';
 
 export default function Navbar({userType}) {
-    const handleLogout = () => {
-        api.logout()
+    const  handleLogout = async() => {
+        await api.logout()
         .then(() => {
-           console.log('Logged out successfully');
-           window.location.reload();
+          window.location.reload();
         })
         .catch(error => {
            console.error('Error logging out:', error);
         });
     };
-    console.log(userType)
     return (
       <>
       {userType === "homeowner" ? 
@@ -82,9 +80,22 @@ export default function Navbar({userType}) {
           orientation='horizontal'
           size='lg'
         >
+          <Dropdown>
+              <MenuButton size='sm' variant='plain'>
+                <IconButton variant='plain' size='sm' color='primary'>
+                  <NotificationsIcon/>
+                </IconButton>
+              </MenuButton>
+              <Menu variant='plain'>
+                <Card variant="plain"sx={{width: 400 }}>
+                  <Notifications/>
+                </Card>
+              </Menu>
+          </Dropdown>
           <IconButton variant='plain' onClick={handleLogout} size='lg' color='primary'>
             <LogoutIcon />
           </IconButton>
+          
 
         </ButtonGroup>
       </Card>

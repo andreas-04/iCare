@@ -17,7 +17,6 @@ const Root = () => {
                 const userId = Cookies.get('user_id');
                 const userData = await api.getUserT(userId);
                 setUserType(userData.data.user_t);
-                console.log(userType);
             }catch(error){
                 console.log(error);
             }
@@ -47,8 +46,8 @@ const Root = () => {
         <>
         <Card variant='outlined' size="lg" sx={{marginTop:"20px"}}>
             <Grid container spacing={2}sx={{ flexGrow: 1 }} alignItems="stretch">
-                <Grid item xs={11.45}><Typography align="left" level="h1" color="primary">iCare</Typography></Grid>
-                <Grid item xs={.55}><Navbar userType={userType}/></Grid>
+                <Grid item xs={11}><Typography align="left" level="h1" color="primary">iCare</Typography></Grid>
+                <Grid item xs={1}><Navbar userType={userType}/></Grid>
             </Grid>
 
             <Card size="lg">

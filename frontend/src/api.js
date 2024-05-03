@@ -161,8 +161,8 @@ export default{
 
     },
 
-    putPlan(planId, planType, userId){
-        return apiClient.put(`/${planType}_service_plan/${planId}/`, userId, {headers: {
+    putPlan(planId, planType, putting){
+        return apiClient.put(`/${planType}_service_plan/${planId}/`, putting, {headers: {
             'X-CSRFToken': csrfToken, 
         },
     });
@@ -208,5 +208,8 @@ export default{
     },
     notifyBestMatch(planId, planType){
         return apiClient.get(`/scored-plan-properties/${planId}/${planType}`, {headers:{'X-CSRFToken': csrfToken,}});
+    },
+    deletePlanNotification(notifId, planType){
+        return apiClient.delete(`/${planType}_match_notification/${notifId}`, {headers:{'X-CSRFToken': csrfToken,}})
     },
 }

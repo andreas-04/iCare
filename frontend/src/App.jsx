@@ -10,10 +10,8 @@ function App() {
     const userId = document.cookie.split('; ').find(row => row.startsWith('user_id='));
     if (sessionId || userId) {
       setIsAuthenticated(true);
-      // window.location.reload(); 
     }
   }, []);
-  console.log(isAuthenticated);
 const theme = extendTheme({ cssVarPrefix: 'demo' });
 
   return (
