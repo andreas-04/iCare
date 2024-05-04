@@ -29,8 +29,8 @@ const Root = () => {
         <>
         <Card variant='outlined' size="lg" sx={{marginTop:"20px"}}>
             <Grid container spacing={2}sx={{ flexGrow: 1 }} alignItems="stretch">
-                <Grid item xs={10.2}><Typography align="left" level="h1" color="primary">iCare</Typography></Grid>
-                <Grid item xs={1.8}><Navbar userType={userType}/></Grid>
+                <Grid item xs={10.1}><Typography align="left" level="h1" color="primary">Property Hero</Typography></Grid>
+                <Grid item xs={1.9}><Navbar userType={userType}/></Grid>
             </Grid>
 
             <Card size="md">

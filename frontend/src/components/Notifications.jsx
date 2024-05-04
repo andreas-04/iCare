@@ -37,9 +37,11 @@ const Notifications = () => {
             console.log(error)
         }
     };
-    const handleAccept = async(matchId, property, planType) => {
+    const handleAccept = async(matchId, property, planType, notifId) => {
         try{
+            console.log(matchId, planType, {property: property});
             await api.putPlan(matchId, planType, {property: property});
+            await api.deletePlanNotification(notifId,planType);
             fetchNotifs();
         }catch (error){
             console.error("Error accepting plan:", error);
@@ -83,7 +85,7 @@ const Notifications = () => {
                         <Card size="sm" variant="plain">
                             <Typography level="title-lg" align="left">New Potential Lawn Match</Typography>
                             <Typography level="body-lg" align="left">Provider: {notification.sender}</Typography>
-                            <Button variant="solid" size='sm' color="primary" onClick={() => handleAccept(notification.match, notification.property, "lawn")}>Accept</Button>
+                            <Button variant="solid" size='sm' color="primary" onClick={() => handleAccept(notification.match, notification.property, "lawn", notification.id)}>Accept</Button>
                             <Button variant="solid" size='sm' color="danger" onClick={() => handleDeny(notification.id, "lawn")}>Reject</Button>
                         </Card>
                     </Item>
