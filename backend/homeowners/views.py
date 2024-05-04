@@ -352,10 +352,10 @@ class UserNotificationsView(APIView):
         notifications = Notification.objects.filter(receiver=user)
         
         # Fetch all match notifications sent to the user
-        lawn_match_notifications = LawnMatchNotification.objects.filter(receiver=user, property=None)
-        interior_match_notifications = InteriorMatchNotification.objects.filter(receiver=user, property=None)
-        internet_match_notifications = InternetMatchNotification.objects.filter(receiver=user, property=None)
-        phone_match_notifications = PhoneMatchNotification.objects.filter(receiver=user,property=None)
+        lawn_match_notifications = LawnMatchNotification.objects.filter(receiver=user)
+        interior_match_notifications = InteriorMatchNotification.objects.filter(receiver=user)
+        internet_match_notifications = InternetMatchNotification.objects.filter(receiver=user)
+        phone_match_notifications = PhoneMatchNotification.objects.filter(receiver=user)
         
         # Serialize the notifications and match notifications
         notification_serializer = NotificationSerializer(notifications, many=True)
@@ -418,7 +418,7 @@ class ScoredPlanProperties(APIView):
             elif plan_type == 'internet':
                 score = scoring_function(plan.cost, plan_instance.budget, plan_instance.budget_tolerance, plan_instance.budget_weight, plan.speed, plan_instance.speed_requirements, plan_instance.speed_tolerance, plan_instance.speed_weight, plan.users, plan_instance.users, plan_instance.users_weight)
             elif plan_type == 'phone':
-                score = scoring_function(plan.cost, plan_instance.budget, plan_instance.budget_tolerance, plan_instance.budget_weight, plan.users, plan_instance.users, plan_instance.users_weight, plan.preferred_plan_type, plan_instance.plan_type, plan_instance.plan_weight)
+                score = scoring_function(plan.cost, plan_instance.budget, plan_instance.budget_tolerance, plan_instance.budget_weight, plan.users, plan_instance.users, plan_instance.users_weight, plan.plan_type, plan_instance.preferred_plan_type, plan_instance.plan_weight)
 
             if score > 0:
                 scored_properties.append({
