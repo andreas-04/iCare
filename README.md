@@ -32,3 +32,18 @@ iCare is a web application designed to help homeowners manage various aspects of
      `sudo docker compose up --build`
   3. Access the frontend
      visit `http://localhost:5173/` in your browser to view the application
+## More Info
+For more information about the developement of iCare view the report pdf.
+## Screenshots
+
+### Homeowner Dashboard
+![Dashboars](https://github.com/andreas-04/iCare/aboutPics/main/dash.png?raw=true)
+
+### Business Owner Dashboard
+![Dashboars](https://github.com/andreas-04/iCare/aboutPics/main/bDash.png?raw=true)
+
+### Matchmaker
+![Dashboars](https://github.com/andreas-04/iCare/aboutPics/main/matchmaker.png?raw=true)
+
+### Property Dashboard
+![Dashboars](https://github.com/andreas-04/iCare/aboutPics/main/properties.png?raw=true)
