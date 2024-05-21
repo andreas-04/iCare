@@ -43,7 +43,7 @@ For more information about the developement of iCare view the report pdf.
 ![Dashboars](https://github.com/andreas-04/iCare/aboutPics/main/bDash.png?raw=true)
 
 ### Matchmaker
-![Dashboars](https://github.com/andreas-04/iCare/aboutPics/main/matchmaker.png?raw=true)
+<img width="700" alt="matchmaker" src="https://github.com/andreas-04/iCare/assets/82251948/ad5e8562-6961-491c-a1eb-b3b713b50f4e">
 
 ### Property Dashboard
 ![Dashboars](https://github.com/andreas-04/iCare/aboutPics/main/properties.png?raw=true)
