@@ -27,23 +27,23 @@ iCare is a web application designed to help homeowners manage various aspects of
 
 ## Install Instructions 
   1. Clone the repository 
-  2. create a virtual enviorment 
-     `python3 -m venv venv`
-  3. start the venv
-     `source venv/bin/activate`
-  4. Install python dependencies 
-      `pip install django`
-      `pip install django-cors-headers`
-      `pip install djangorestframework`
-  5. Install JS dependencies
-      `npm install react-router-dom`
-      `npm install js-cookie`
-      `npm install react-cookie`
-      `npm install axios`
-      `npm install @mui/joy @emotion/react @emotion/styled`
-      `npm install @mui/icons-material @mui/material`
-  6. Start the backend 
-      `python manage.py runserver`
-  7. Start the frontend
-      `npm run dev`
-      navigate to [localhost:5173/](http://localhost:5173/)
+    `git clone https://github.com/andreas-04/iCare/`
+  2. Build and Run the Application
+     `sudo docker compose up --build`
+  3. Access the frontend
+     visit `http://localhost:5173/` in your browser to view the application
+## More Info
+For more information about the developement of iCare view the report pdf.
+## Screenshots
+
+### Homeowner Dashboard
+![Dashboars](https://github.com/andreas-04/iCare/aboutPics/main/dash.png?raw=true)
+
+### Business Owner Dashboard
+![Dashboars](https://github.com/andreas-04/iCare/aboutPics/main/bDash.png?raw=true)
+
+### Matchmaker
+![Dashboars](https://github.com/andreas-04/iCare/aboutPics/main/matchmaker.png?raw=true)
+
+### Property Dashboard
+![Dashboars](https://github.com/andreas-04/iCare/aboutPics/main/properties.png?raw=true)
